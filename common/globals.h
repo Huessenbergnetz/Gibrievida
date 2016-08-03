@@ -1,6 +1,8 @@
 #ifndef GLOBALS
 #define GLOBALS
 
+#define APP_NAME "harbour-gibrievida"
+
 #define VERSION_STRING "0.1.0"
 #define VERSION 10
 #define VER_MAJ 0
