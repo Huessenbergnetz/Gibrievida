@@ -20,11 +20,38 @@
 #include <QtQuick>
 #endif
 
-#include <sailfishapp.h>
+#ifdef QT_DEBUG
+#include <QtDebug>
+#endif
 
+#ifndef CLAZY
+#include <sailfishapp.h>
+#endif
+
+#include "../common/globals.h"
 
 int main(int argc, char *argv[])
 {
-    return SailfishApp::main(argc, argv);
+    #ifndef CLAZY
+        QGuiApplication* app = SailfishApp::application(argc, argv);
+    #else
+        QGuiApplication* app = new QGuiApplication(argc, argv);
+    #endif
+
+//    app->setOrganizationName(QStringLiteral("harbour-arka"));
+//    app->setOrganizationDomain(QStringLiteral("buschmann23.de"));
+    app->setApplicationName(QStringLiteral("harbour-gibrievida"));
+    app->setApplicationDisplayName(QStringLiteral("Gibrievida"));
+    app->setApplicationVersion(QStringLiteral(VERSION_STRING));
+
+#ifndef CLAZY
+    QQuickView *view = SailfishApp::createView();
+
+    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));
+
+    view->show();
+#endif
+
+    return app->exec();
 }
 
