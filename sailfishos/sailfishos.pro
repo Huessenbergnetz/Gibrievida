@@ -32,5 +32,6 @@ DISTFILES += \
     harbour-gibrievida.desktop \
     rpm/harbour-gibrievida.changes.in \
     rpm/harbour-gibrievida.yaml \
-    qml/pages/MainPage.qml
+    qml/pages/MainPage.qml \
+    qml/common/ImageHighlight.qml
 
