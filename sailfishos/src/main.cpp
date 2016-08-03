@@ -29,6 +29,7 @@
 #endif
 
 #include "../common/globals.h"
+#include "../common/dbmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,11 +39,13 @@ int main(int argc, char *argv[])
         QGuiApplication* app = new QGuiApplication(argc, argv);
     #endif
 
-//    app->setOrganizationName(QStringLiteral("harbour-arka"));
-//    app->setOrganizationDomain(QStringLiteral("buschmann23.de"));
-    app->setApplicationName(QStringLiteral("harbour-gibrievida"));
+    app->setApplicationName(QStringLiteral(APP_NAME));
     app->setApplicationDisplayName(QStringLiteral("Gibrievida"));
     app->setApplicationVersion(QStringLiteral(VERSION_STRING));
+
+    Gibrievida::DBManager *dbm = new Gibrievida::DBManager();
+    QObject::connect(dbm, &QThread::finished, dbm, &QObject::deleteLater);
+    dbm->start(QThread::LowPriority);
 
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();
