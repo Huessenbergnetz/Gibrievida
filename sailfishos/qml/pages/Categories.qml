@@ -23,8 +23,32 @@ import harbour.gibrievida 1.0
 Page {
     id: categoryManager
 
+    Column {
+        id: headerContainer
+        width: categoryManager.width
+
+        PageHeader {
+            title: qsTr("Categories")
+            page: categoryManager
+        }
+
+        SearchField {
+            id: searchField
+            width: parent.width
+            EnterKey.iconSource: "image://theme/icon-m-enter-close"
+            EnterKey.onClicked: searchField.focus = false
+
+            Binding {
+                target: categoryModel
+                property: "search"
+                value: searchField.text.trim()
+            }
+        }
+    }
+
     SilicaListView {
         anchors.fill: parent
+        currentIndex: -1
 
         PullDownMenu {
             MenuItem {
@@ -48,9 +72,11 @@ Page {
             controller: categories
         }
 
-        header: PageHeader {
-            title: qsTr("Categories")
-            page: categoryManager
+        header: Item {
+            id: header
+            width: headerContainer.width
+            height: headerContainer.height
+            Component.onCompleted: headerContainer.parent = header
         }
 
         delegate: ListItem {
