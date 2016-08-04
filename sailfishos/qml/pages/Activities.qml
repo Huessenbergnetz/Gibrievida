@@ -101,29 +101,37 @@ Page {
                     color: actsManagerItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
-                Row {
+                Item {
                     width: parent.width
-                    spacing: Theme.paddingMedium
+                    height: cName.height
 
                     Rectangle {
                         id: cColor
-                        anchors { verticalCenter: cName.verticalCenter }
+                        anchors { left: parent.left; verticalCenter: cName.verticalCenter; top: parent.top }
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                         color: categoryColor
                     }
 
                     Text {
                         id: cName
-                        width: parent.width - cColor.width - cRepeats.width - cDistance.width - ((parent.visibleChildren  - 1) * parent.spacing)
+                        anchors { left: cColor.right; leftMargin: Theme.paddingMedium; top: parent.top }
                         text: categoryName
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        color: actsManagerItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
+                    }
+
+                    Text {
+                        id: recordsCount
+                        anchors { right: parent.right; top: parent.top }
+                        text: qsTr("%n record(s)", "", records)
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: actsManagerItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
                     }
 
                     ImageHighlight {
                         id: cRepeats
-                        anchors { verticalCenter: cName.verticalCenter }
-                        source: "image://theme/icon-s-sync"
+                        anchors { verticalCenter: cName.verticalCenter; right: recordsCount.left; rightMargin: Theme.paddingMedium; top: parent.top }
+                        source: "image://theme/icon-cover-sync"
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                         highlighted: actsManagerItem.highlighted
                         visible: (minRepeats > 0 && maxRepeats > 0)
@@ -131,7 +139,7 @@ Page {
 
                     ImageHighlight {
                         id: cDistance
-                        anchors { verticalCenter: cName.verticalCenter }
+                        anchors { verticalCenter: cName.verticalCenter; right: cRepeats.visible ? cRepeats.left : recordsCount.left; rightMargin: Theme.paddingMedium; top: parent.top }
                         source: "image://theme/icon-cover-transfers"
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                         highlighted: actsManagerItem.highlighted

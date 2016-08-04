@@ -98,6 +98,19 @@ bool DBManager::createDatabase()
         return false;
     }
 
+    if (!q.exec(QStringLiteral("CREATE TABLE IF NOT EXISTS records "
+                               "(id INTEGER PRIMARY KEY NOT NULL, "
+                               "activity INTEGER NOT NULL, "
+                               "start INTEGER NOT NULL, "
+                               "end INTEGER NOT NULL, "
+                               "duration INTEGER NOT NULL, "
+                               "repetitions INTEGER, "
+                               "distance REAL, "
+                               "note TEXT)"
+                               ))) {
+        return false;
+    }
+
     if (!db.commit()) {
         return false;
     }

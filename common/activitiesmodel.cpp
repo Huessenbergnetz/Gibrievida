@@ -45,6 +45,7 @@ QHash<int, QByteArray> ActivitiesModel::roleNames() const
     roles.insert(CategoryId, QByteArrayLiteral("categoryId"));
     roles.insert(CategoryName, QByteArrayLiteral("categoryName"));
     roles.insert(CategoryColor, QByteArrayLiteral("categoryColor"));
+    roles.insert(Records, QByteArrayLiteral("records"));
     return roles;
 }
 
@@ -106,6 +107,8 @@ QVariant ActivitiesModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(a->categoryName);
     case CategoryColor:
         return QVariant::fromValue(a->categoryColor);
+    case Records:
+        return QVariant::fromValue(a->records);
     default:
         return QVariant();
     }
@@ -129,7 +132,7 @@ void ActivitiesModel::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT a.id, a.name, a.minrepeats, a.maxrepeats, a.distance, a.category, c.name as categoryname, c.color FROM activities a JOIN categories c ON c.id = a.category"))) {
+    if (!q.exec(QStringLiteral("SELECT a.id, a.name, a.minrepeats, a.maxrepeats, a.distance, a.category, c.name as categoryname, c.color, (SELECT COUNT(id) FROM records WHERE activity = a.id) AS records FROM activities a JOIN categories c ON c.id = a.category"))) {
         setInOperation(false);
         return;
     }
@@ -146,6 +149,7 @@ void ActivitiesModel::init()
         a->categoryId = q.value(5).toInt();
         a->categoryName = q.value(6).toString();
         a->categoryColor = q.value(7).toString();
+        a->records = q.value(8).toInt();
         t_activities.append(a);
     }
 

@@ -32,7 +32,7 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Track activity")
+                text: qsTr("Record activity")
             }
         }
 
@@ -52,6 +52,7 @@ Page {
                 model: ListModel {
                     ListElement { name: QT_TR_NOOP("Categories"); icon: "image://theme/icon-m-levels"; target: "Categories.qml" }
                     ListElement { name: QT_TR_NOOP("Activities"); icon: "image://theme/icon-m-watch"; target: "Activities.qml" }
+                    ListElement { name: QT_TR_NOOP("Records"); icon: "image://theme/icon-m-gps"; target: "Records.qml" }
                 }
                 delegate: BackgroundItem {
                     id: catsItem

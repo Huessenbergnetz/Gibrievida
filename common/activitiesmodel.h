@@ -18,6 +18,7 @@ struct Activity {
     int categoryId;
     QString categoryName;
     QString categoryColor;
+    int records;
 };
 
 class ActivitiesModel : public DBModel
@@ -35,7 +36,8 @@ public:
         Distance,
         CategoryId,
         CategoryName,
-        CategoryColor
+        CategoryColor,
+        Records
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE Q_DECL_FINAL;
@@ -73,5 +75,6 @@ private:
 };
 
 }
+Q_DECLARE_TYPEINFO(Gibrievida::Activity, Q_PRIMITIVE_TYPE);
 
 #endif // ACTIVITIESMODEL_H

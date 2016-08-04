@@ -37,5 +37,6 @@ DISTFILES += \
     qml/dialogs/CategoryDialog.qml \
     qml/pages/Categories.qml \
     qml/pages/Activities.qml \
-    qml/dialogs/ActivityDialog.qml
+    qml/dialogs/ActivityDialog.qml \
+    qml/pages/Records.qml
 

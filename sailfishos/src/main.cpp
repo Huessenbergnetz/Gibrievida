@@ -34,6 +34,7 @@
 #include "../common/categoriesfiltermodel.h"
 #include "../common/activitiescontroller.h"
 #include "../common/activitiesfiltermodel.h"
+#include "../common/recordsmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -56,6 +57,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableType<Gibrievida::ActivitiesController>("harbour.gibrievida", 1, 0, "ActivitiesController", QStringLiteral("ActivitiesController can not be created."));
     qmlRegisterType<Gibrievida::ActivitiesFilterModel>("harbour.gibrievida", 1, 0, "ActivitiesModel");
+
+    qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();
