@@ -18,6 +18,7 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import "../common"
 
 Page {
     id: mainPage
@@ -29,13 +30,14 @@ Page {
             MenuItem {
                 text: qsTr("About")
             }
+
+            MenuItem {
+                text: qsTr("Track activity")
+            }
         }
 
-        // Tell SilicaFlickable the height of its content.
         contentHeight: column.height
 
-        // Place our content in a Column.  The PageHeader is always placed at the top
-        // of the page, followed by our content.
         Column {
             id: column
 
@@ -43,6 +45,27 @@ Page {
             spacing: Theme.paddingLarge
             PageHeader {
                 title: "Gibrievida"
+            }
+
+            BackgroundItem {
+                id: catsItem
+                width: column.width
+                contentHeight: Theme.itemSizeSmall
+
+                onClicked: pageStack.push(Qt.resolvedUrl("Categories.qml"))
+
+                ImageHighlight {
+                    id: catsIcon
+                    source: "image://theme/icon-m-levels"
+                    highlighted: catsItem.highlighted
+                    anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                }
+
+                Label {
+                    text: qsTr("Categories")
+                    color: catsItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    anchors { left: catsIcon.right; leftMargin: Theme.paddingLarge; right: parent.right; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                }
             }
         }
     }

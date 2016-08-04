@@ -22,6 +22,8 @@ protected:
 private:
     bool createDatabase();
     QString m_dbpath;
+
+    Q_DISABLE_COPY(DBManager)
 };
 
 }

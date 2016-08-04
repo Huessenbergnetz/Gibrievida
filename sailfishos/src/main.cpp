@@ -30,14 +30,16 @@
 
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
+#include "../common/categoriesfiltermodel.h"
+#include "../common/categoriescontroller.h"
 
 int main(int argc, char *argv[])
 {
-    #ifndef CLAZY
-        QGuiApplication* app = SailfishApp::application(argc, argv);
-    #else
-        QGuiApplication* app = new QGuiApplication(argc, argv);
-    #endif
+#ifndef CLAZY
+    QGuiApplication* app = SailfishApp::application(argc, argv);
+#else
+    QGuiApplication* app = new QGuiApplication(argc, argv);
+#endif
 
     app->setApplicationName(QStringLiteral(APP_NAME));
     app->setApplicationDisplayName(QStringLiteral("Gibrievida"));
@@ -47,13 +49,24 @@ int main(int argc, char *argv[])
     QObject::connect(dbm, &QThread::finished, dbm, &QObject::deleteLater);
     dbm->start(QThread::LowPriority);
 
+    qmlRegisterUncreatableType<Gibrievida::CategoriesController>("harbour.gibrievida", 1, 0, "CategoriesController", QStringLiteral("CategoriesController can not be created."));
+    qmlRegisterType<Gibrievida::CategoriesFilterModel>("harbour.gibrievida", 1, 0, "CategoriesModel");
+
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();
+#else
+    QQuickView *view = new QQuickView();
+#endif
 
+    Gibrievida::CategoriesController catsController;
+
+    view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
+
+#ifndef CLAZY
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));
+#endif
 
     view->show();
-#endif
 
     return app->exec();
 }

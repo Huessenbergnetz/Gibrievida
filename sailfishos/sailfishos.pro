@@ -33,5 +33,8 @@ DISTFILES += \
     rpm/harbour-gibrievida.changes.in \
     rpm/harbour-gibrievida.yaml \
     qml/pages/MainPage.qml \
-    qml/common/ImageHighlight.qml
+    qml/common/ImageHighlight.qml \
+    qml/dialogs/CategoryDialog.qml \
+    qml/pages/Categories.qml \
+    qml/pages/Activities.qml
 
