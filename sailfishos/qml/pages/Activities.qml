@@ -18,16 +18,32 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import harbour.gibrievida 1.0
+import "../common"
 
 Page {
     id: activityManager
 
-    property bool categoryManagerAttached: false
+    Column {
+        id: headerContainer
+        width: activityManager.width
 
-    onStatusChanged: {
-        if (status === PageStatus.Active && !categoryManagerAttached) {
-            pageStack.pushAttached(Qt.resolvedUrl("Categories.qml"));
-            categoryManagerAttached = true;
+        PageHeader {
+            title: qsTr("Activities")
+            page: activityManager
+        }
+
+        SearchField {
+            id: searchField
+            width: parent.width
+            EnterKey.iconSource: "image://theme/icon-m-enter-close"
+            EnterKey.onClicked: searchField.focus = false
+
+            Binding {
+                target: activitiesModel
+                property: "search"
+                value: searchField.text.trim()
+            }
         }
     }
 
@@ -36,21 +52,111 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Remove all")
+                onClicked: remorse.execute(qsTr("Removing all"), function() {activities.removeAll()})
+            }
+
+            MenuItem {
                 text: qsTr("Add activity")
+                onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/ActivityDialog.qml"))
             }
         }
 
-        header: PageHeader { title: qsTr("Activities") }
+        VerticalScrollDecorator {
+            flickable: parent
+            page: activityManager
+        }
+
+        model: ActivitiesModel {
+            id: activitiesModel
+            activitiesController: activities
+            categoriesController: categories
+        }
+
+        header: Item {
+            id: header
+            width: headerContainer.width
+            height: headerContainer.height
+            Component.onCompleted: headerContainer.parent = header
+        }
 
         delegate: ListItem {
+            id: actsManagerItem
             width: ListView.view.width
-            height: Theme.itemSizeSmall
             contentHeight: Theme.itemSizeSmall
+            menu: contextMenu
 
-            Label {
-                anchors { left: icon.right; right: parent.right; leftMargin: Theme.paddingLarge; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
-                text: name
+            ListView.onRemove: animateRemoval(catManagerListItem)
+
+            function remove() {
+                remorseAction(qsTr("Removing"), function() {activites.remove(model.databaseId)})
             }
+
+            Column {
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+
+                Label {
+                    text: name
+                    width: parent.width
+                    color: actsManagerItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+
+                Row {
+                    width: parent.width
+                    spacing: Theme.paddingMedium
+
+                    Rectangle {
+                        id: cColor
+                        anchors { verticalCenter: cName.verticalCenter }
+                        width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
+                        color: categoryColor
+                    }
+
+                    Text {
+                        id: cName
+                        width: parent.width - cColor.width - cRepeats.width - cDistance.width - ((parent.visibleChildren  - 1) * parent.spacing)
+                        text: categoryName
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        color: actsManagerItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
+                    }
+
+                    ImageHighlight {
+                        id: cRepeats
+                        anchors { verticalCenter: cName.verticalCenter }
+                        source: "image://theme/icon-s-sync"
+                        width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
+                        highlighted: actsManagerItem.highlighted
+                        visible: (minRepeats > 0 && maxRepeats > 0)
+                    }
+
+                    ImageHighlight {
+                        id: cDistance
+                        anchors { verticalCenter: cName.verticalCenter }
+                        source: "image://theme/icon-cover-transfers"
+                        width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
+                        highlighted: actsManagerItem.highlighted
+                        visible: distance
+                    }
+                }
+            }
+
+            Component {
+                id: contextMenu
+                ContextMenu {
+                    MenuItem {
+                        text: qsTr("Edit")
+                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/ActivityDialog.qml"), {databaseId: model.databaseId, name: model.name, categoryId: model.categoryId, categoryName: model.categoryName, minRepeats: model.minRepeats, maxRepeats: model.maxRepeats, distance: model.distance})
+                    }
+                    MenuItem {
+                        text: qsTr("Remove")
+                        onClicked: remove()
+                    }
+                }
+            }
+        }
+
+        RemorsePopup {
+            id: remorse
         }
     }
 }

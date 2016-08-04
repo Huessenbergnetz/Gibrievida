@@ -35,8 +35,14 @@ Dialog {
     canAccept: nameField.text.length > 0
 
     SilicaFlickable {
+        id: catDialogFlick
         anchors.fill: parent
         contentHeight: catDialogCol.height
+
+        VerticalScrollDecorator {
+            flickable: catDialogFlick
+            page: catDialog
+        }
 
         Column {
             id: catDialogCol
@@ -45,6 +51,8 @@ Dialog {
 
             DialogHeader {
                 acceptText: (databaseId < 0) ? qsTr("Add") : qsTr("Edit")
+                flickable: catDialogFlick
+                dialog: catDialog
             }
 
             Row {

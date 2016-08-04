@@ -8,7 +8,10 @@ HEADERS += \
     $$PWD/filtermodel.h \
     $$PWD/categoriesfiltermodel.h \
     $$PWD/categoriescontroller.h \
-    $$PWD/basecontroller.h
+    $$PWD/basecontroller.h \
+    $$PWD/activitiescontroller.h \
+    $$PWD/activitiesmodel.h \
+    $$PWD/activitiesfiltermodel.h
 
 SOURCES += \
     $$PWD/dbmanager.cpp \
@@ -17,4 +20,7 @@ SOURCES += \
     $$PWD/filtermodel.cpp \
     $$PWD/categoriesfiltermodel.cpp \
     $$PWD/categoriescontroller.cpp \
-    $$PWD/basecontroller.cpp
+    $$PWD/basecontroller.cpp \
+    $$PWD/activitiescontroller.cpp \
+    $$PWD/activitiesmodel.cpp \
+    $$PWD/activitiesfiltermodel.cpp

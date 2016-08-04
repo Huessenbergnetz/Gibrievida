@@ -70,6 +70,7 @@ Page {
         model: CategoriesModel {
             id: categoryModel
             controller: categories
+            activitiesController: activities
         }
 
         header: Item {
@@ -99,10 +100,19 @@ Page {
                 height: width
             }
 
-            Label {
+            Column {
                 anchors { left: catColor.right; right: parent.right; leftMargin: Theme.paddingLarge; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
-                text: name
-                color: catManagerListItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+
+                Label {
+                    text: name
+                    color: catManagerListItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+
+                Text {
+                    text: qsTr("%n activitie(s)", "", activities)
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: catManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                }
             }
 
             Component {

@@ -1,33 +1,41 @@
-#ifndef CATEGORIESMODEL_H
-#define CATEGORIESMODEL_H
+#ifndef ACTIVITIESMODEL_H
+#define ACTIVITIESMODEL_H
 
 #include <QObject>
 #include "dbmodel.h"
 
 namespace Gibrievida {
 
-class CategoriesController;
 class ActivitiesController;
+class CategoriesController;
 
-struct Category {
+struct Activity {
     int databaseId;
     QString name;
-    QString color;
-    int activities;
+    int minRepeats;
+    int maxRepeats;
+    bool distance;
+    int categoryId;
+    QString categoryName;
+    QString categoryColor;
 };
 
-class CategoriesModel : public DBModel
+class ActivitiesModel : public DBModel
 {
     Q_OBJECT
 public:
-    explicit CategoriesModel(QObject *parent = nullptr);
-    ~CategoriesModel();
+    explicit ActivitiesModel(QObject *parent = nullptr);
+    ~ActivitiesModel();
 
     enum Roles {
         DatabaseId = Qt::UserRole + 1,
         Name,
-        Color,
-        Activities
+        MinRepeats,
+        MaxRepeats,
+        Distance,
+        CategoryId,
+        CategoryName,
+        CategoryColor
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE Q_DECL_FINAL;
@@ -42,28 +50,28 @@ public:
     ActivitiesController *getActivitiesController() const;
 
 public slots:
-    void add(int databaseId, const QString &name, const QString &color);
-    void edit(int databaseId, const QString &name, const QString &color);
-    void remove(int databaseId);
+    void add(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance);
+    void edit(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance);
+    void remove(int databaseId, int category);
     void removeAll();
 
-    void addActivity(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance);
-    void editActivity(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance);
-    void removeActivity(int databaseId, int category);
-    void removeAllActivities();
+    void editCategory(int category, const QString &name, const QString &color);
+    void removeCategory(int category);
 
 private:
-    QList<Category*> m_categories;
+    QList<Activity*> m_activities;
+
     void init();
     void clear();
-    int find(int databaseId);
-    CategoriesController *m_controller;
-    ActivitiesController *m_actsController;
 
-    Q_DISABLE_COPY(CategoriesModel)
+    int find(int databaseId);
+
+    ActivitiesController *m_actsController;
+    CategoriesController *m_catsController;
+
+    Q_DISABLE_COPY(ActivitiesModel)
 };
 
 }
-Q_DECLARE_TYPEINFO(Gibrievida::Category, Q_PRIMITIVE_TYPE);
 
-#endif // CATEGORIESMODEL_H
+#endif // ACTIVITIESMODEL_H

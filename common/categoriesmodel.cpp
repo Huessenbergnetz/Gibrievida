@@ -1,6 +1,7 @@
 #include "categoriesmodel.h"
 #include <QSqlQuery>
 #include "categoriescontroller.h"
+#include "activitiescontroller.h"
 
 using namespace Gibrievida;
 
@@ -9,8 +10,9 @@ using namespace Gibrievida;
  */
 CategoriesModel::CategoriesModel(QObject *parent) : DBModel(parent)
 {
-    init();
     m_controller = nullptr;
+    m_actsController = nullptr;
+    init();
 }
 
 
@@ -33,6 +35,7 @@ QHash<int, QByteArray> CategoriesModel::roleNames() const
     roles.insert(DatabaseId, QByteArrayLiteral("databaseId"));
     roles.insert(Name, QByteArrayLiteral("name"));
     roles.insert(Color, QByteArrayLiteral("color"));
+    roles.insert(Activities, QByteArrayLiteral("activities"));
     return roles;
 }
 
@@ -85,6 +88,8 @@ QVariant CategoriesModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(c->name);
     case Color:
         return QVariant::fromValue(c->color);
+    case Activities:
+        return QVariant::fromValue(c->activities);
     default:
         return QVariant();
     }
@@ -108,7 +113,7 @@ void CategoriesModel::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("SELECT id, name, color FROM categories ORDER BY name ASC"))) {
+    if (!q.prepare(QStringLiteral("SELECT c.id, c.name, c.color, (SELECT COUNT(id) FROM activities WHERE category = c.id) AS activities FROM categories c ORDER BY name ASC"))) {
         setInOperation(false);
         return;
     }
@@ -125,6 +130,7 @@ void CategoriesModel::init()
         c->databaseId = q.value(0).toInt();
         c->name = q.value(1).toString();
         c->color = q.value(2).toString();
+        c->activities = q.value(3).toInt();
         t_categories.append(c);
     }
 
@@ -255,6 +261,104 @@ int CategoriesModel::find(int databaseId)
 
 
 
+/*!
+ * \brief This slot updates the model after a new activitiy has been added.
+ */
+void CategoriesModel::addActivity(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance)
+{
+    Q_UNUSED(databaseId)
+    Q_UNUSED(name)
+    Q_UNUSED(minRepeats)
+    Q_UNUSED(maxRepeats)
+    Q_UNUSED(distance)
+
+    int idx = find(category);
+
+    if (idx < 0) {
+        return;
+    }
+
+    m_categories.at(idx)->activities++;
+
+    emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+}
+
+
+
+
+/*!
+ * \brief This slot updates the model after an activitiy has been changed.
+ */
+void CategoriesModel::editActivity(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance)
+{
+    Q_UNUSED(databaseId)
+    Q_UNUSED(name)
+    Q_UNUSED(minRepeats)
+    Q_UNUSED(maxRepeats)
+    Q_UNUSED(distance)
+
+    if (oldCategory != newCategory) {
+        int idx = find(oldCategory);
+
+        if (idx > -1) {
+            m_categories.at(idx)->activities--;
+            emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+        }
+
+        idx = find(newCategory);
+
+        if (idx > -1) {
+            m_categories.at(idx)->activities++;
+            emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+        }
+    }
+}
+
+
+/*!
+ * \brief This slot updates the model after an activity has been removed.
+ */
+void CategoriesModel::removeActivity(int databaseId, int category)
+{
+    Q_UNUSED(databaseId);
+
+    int idx = find(category);
+
+    if (idx < 0) {
+        return;
+    }
+
+    m_categories.at(idx)->activities--;
+
+    emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+}
+
+
+
+
+
+/*!
+ * \brief This slot updates the model after all activities have been removed.
+ */
+void CategoriesModel::removeAllActivities()
+{
+    if (m_categories.isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < m_categories.size(); ++i) {
+        m_categories.at(i)->activities = 0;
+    }
+
+    emit dataChanged(index(0), index(rowCount()-1), QVector<int>(Activities));
+}
+
+
+
+
+/*!
+ * \brief Sets the categories controller and connnects signals and slots.
+ */
 void CategoriesModel::setCategoriesController(CategoriesController *controller)
 {
     if (controller != m_controller) {
@@ -275,7 +379,42 @@ void CategoriesModel::setCategoriesController(CategoriesController *controller)
 }
 
 
+/*!
+ * \brief Returns the currently set categories controller.
+ */
 CategoriesController *CategoriesModel::getCategoriesController() const
 {
     return m_controller;
+}
+
+
+/*!
+ * \brief Sets the activities controller.
+ */
+void CategoriesModel::setActivitiesController(ActivitiesController *controller)
+{
+    if (controller != m_actsController) {
+        if (m_actsController) {
+            disconnect(m_actsController, &ActivitiesController::added, this, &CategoriesModel::addActivity);
+            disconnect(m_actsController, &ActivitiesController::edited, this, &CategoriesModel::editActivity);
+            disconnect(m_actsController, &ActivitiesController::removed, this, &CategoriesModel::removeActivity);
+            disconnect(m_actsController, &ActivitiesController::removedAll, this, &CategoriesModel::removeAllActivities);
+        }
+        m_actsController = controller;
+        if (m_actsController) {
+            connect(m_actsController, &ActivitiesController::added, this, &CategoriesModel::addActivity);
+            connect(m_actsController, &ActivitiesController::edited, this, &CategoriesModel::editActivity);
+            connect(m_actsController, &ActivitiesController::removed, this, &CategoriesModel::removeActivity);
+            connect(m_actsController, &ActivitiesController::removedAll, this, &CategoriesModel::removeAllActivities);
+        }
+    }
+}
+
+
+/*!
+ * \brief Returns the currently set activities controller.
+ */
+ActivitiesController *CategoriesModel::getActivitiesController() const
+{
+    return m_actsController;
 }

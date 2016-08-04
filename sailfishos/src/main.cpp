@@ -30,8 +30,10 @@
 
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
-#include "../common/categoriesfiltermodel.h"
 #include "../common/categoriescontroller.h"
+#include "../common/categoriesfiltermodel.h"
+#include "../common/activitiescontroller.h"
+#include "../common/activitiesfiltermodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -52,6 +54,9 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Gibrievida::CategoriesController>("harbour.gibrievida", 1, 0, "CategoriesController", QStringLiteral("CategoriesController can not be created."));
     qmlRegisterType<Gibrievida::CategoriesFilterModel>("harbour.gibrievida", 1, 0, "CategoriesModel");
 
+    qmlRegisterUncreatableType<Gibrievida::ActivitiesController>("harbour.gibrievida", 1, 0, "ActivitiesController", QStringLiteral("ActivitiesController can not be created."));
+    qmlRegisterType<Gibrievida::ActivitiesFilterModel>("harbour.gibrievida", 1, 0, "ActivitiesModel");
+
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();
 #else
@@ -59,8 +64,10 @@ int main(int argc, char *argv[])
 #endif
 
     Gibrievida::CategoriesController catsController;
+    Gibrievida::ActivitiesController actsController;
 
     view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
+    view->rootContext()->setContextProperty(QStringLiteral("activities"), &actsController);
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));

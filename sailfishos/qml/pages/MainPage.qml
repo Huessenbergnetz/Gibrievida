@@ -47,24 +47,31 @@ Page {
                 title: "Gibrievida"
             }
 
-            BackgroundItem {
-                id: catsItem
-                width: column.width
-                contentHeight: Theme.itemSizeSmall
-
-                onClicked: pageStack.push(Qt.resolvedUrl("Categories.qml"))
-
-                ImageHighlight {
-                    id: catsIcon
-                    source: "image://theme/icon-m-levels"
-                    highlighted: catsItem.highlighted
-                    anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+            Repeater {
+                width: parent.width
+                model: ListModel {
+                    ListElement { name: QT_TR_NOOP("Categories"); icon: "image://theme/icon-m-levels"; target: "Categories.qml" }
+                    ListElement { name: QT_TR_NOOP("Activities"); icon: "image://theme/icon-m-watch"; target: "Activities.qml" }
                 }
+                delegate: BackgroundItem {
+                    id: catsItem
+                    width: column.width
+                    contentHeight: Theme.itemSizeSmall
 
-                Label {
-                    text: qsTr("Categories")
-                    color: catsItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    anchors { left: catsIcon.right; leftMargin: Theme.paddingLarge; right: parent.right; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                    onClicked: pageStack.push(Qt.resolvedUrl(target))
+
+                    ImageHighlight {
+                        id: catsIcon
+                        source: icon
+                        highlighted: catsItem.highlighted
+                        anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                    }
+
+                    Label {
+                        text: qsTranslate("mainPage",name)
+                        color: catsItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        anchors { left: catsIcon.right; leftMargin: Theme.paddingLarge; right: parent.right; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                    }
                 }
             }
         }

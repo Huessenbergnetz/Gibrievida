@@ -53,3 +53,26 @@ void CategoriesFilterModel::setController(CategoriesController *controller)
 {
     m_catsModel->setCategoriesController(controller);
 }
+
+
+
+/*!
+ * \property CategoriesFilterModel::activitiesController
+ * \brief Sets the activities contoller to update the model on activity cahnges.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>ActivitiesController*</TD><TD>getActivitiesController() const</TD></TR><TR><TD>void</TD><TD>setActivitiesController(ActivitiesController *activitiesController)</TD></TR></TABLE>
+ */
+
+/*!
+ * \brief Part of the \link CategoriesFilterModel::activitiesController activitiesController \endlink property.
+ */
+ActivitiesController *CategoriesFilterModel::getActivitiesController() const { return m_catsModel->getActivitiesController(); }
+
+/*!
+ * \brief Part of the \link CategoriesFilterModel::activitiesController activitiesController \endlink property.
+ */
+void CategoriesFilterModel::setActivitiesController(ActivitiesController *activitiesController)
+{
+   m_catsModel->setActivitiesController(activitiesController);
+}

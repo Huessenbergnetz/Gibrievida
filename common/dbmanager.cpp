@@ -87,6 +87,17 @@ bool DBManager::createDatabase()
         return false;
     }
 
+    if (!q.exec(QStringLiteral("CREATE TABLE IF NOT EXISTS activities "
+                               "(id INTEGER PRIMARY KEY NOT NULL, "
+                               "category INTEGER NOT NULL, "
+                               "name TEXT NOT NULL, "
+                               "minrepeats INTEGER NOT NULL, "
+                               "maxrepeats INTEGER NOT NULL, "
+                               "distance INTEGER NOT NULL)"
+                               ))) {
+        return false;
+    }
+
     if (!db.commit()) {
         return false;
     }
