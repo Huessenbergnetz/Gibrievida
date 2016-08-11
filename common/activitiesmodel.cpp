@@ -216,6 +216,7 @@ void ActivitiesModel::add(int databaseId, const QString &name, int category, int
         a->categoryId = category;
         a->categoryName = q.value(0).toString();
         a->categoryColor = q.value(1).toString();
+        a->records = 0;
     } else {
         delete a;
         return;
