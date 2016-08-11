@@ -169,7 +169,7 @@ Dialog {
                     label: qsTr("Minimum"); placeholderText: label
                     text: "0"
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: nameField.focus = false
+                    EnterKey.onClicked: minRepeatsField.focus = false
                     inputMethodHints: Qt.ImhDigitsOnly
                 }
 
@@ -179,7 +179,7 @@ Dialog {
                     label: qsTr("Maximum"); placeholderText: label
                     text: "0"
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: nameField.focus = false
+                    EnterKey.onClicked: maxRepeatsField.focus = false
                     inputMethodHints: Qt.ImhDigitsOnly
                 }
             }
