@@ -12,7 +12,9 @@ HEADERS += \
     $$PWD/activitiescontroller.h \
     $$PWD/activitiesmodel.h \
     $$PWD/activitiesfiltermodel.h \
-    $$PWD/recordsmodel.h
+    $$PWD/recordsmodel.h \
+    $$PWD/recordscontroller.h \
+    $$PWD/configuration.h
 
 SOURCES += \
     $$PWD/dbmanager.cpp \
@@ -25,4 +27,6 @@ SOURCES += \
     $$PWD/activitiescontroller.cpp \
     $$PWD/activitiesmodel.cpp \
     $$PWD/activitiesfiltermodel.cpp \
-    $$PWD/recordsmodel.cpp
+    $$PWD/recordsmodel.cpp \
+    $$PWD/recordscontroller.cpp \
+    $$PWD/configuration.cpp
