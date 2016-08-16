@@ -29,6 +29,7 @@ Page {
     }
 
     SilicaListView {
+        id: recordsListView
         anchors.fill: parent
         spacing: Theme.paddingSmall
 
@@ -199,6 +200,12 @@ Page {
                     }
                 }
             }
+        }
+
+        ViewPlaceholder {
+            enabled: recordsListView.count === 0
+            text: qsTr("No records")
+            hintText: qsTr("Use the pull down menu to add new records")
         }
 
         RemorsePopup {

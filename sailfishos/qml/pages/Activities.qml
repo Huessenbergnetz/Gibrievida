@@ -48,7 +48,10 @@ Page {
     }
 
     SilicaListView {
+        id: activitiesListView
         anchors.fill: parent
+        currentIndex: -1
+
 
         PullDownMenu {
             MenuItem {
@@ -161,6 +164,12 @@ Page {
                     }
                 }
             }
+        }
+
+        ViewPlaceholder {
+            enabled: activitiesListView.count === 0
+            text: qsTr("No activities")
+            hintText: qsTr("Use the pull down menu to add new activities")
         }
 
         RemorsePopup {

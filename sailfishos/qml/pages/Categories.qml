@@ -47,6 +47,7 @@ Page {
     }
 
     SilicaListView {
+        id: categoriesListView
         anchors.fill: parent
         currentIndex: -1
 
@@ -128,6 +129,12 @@ Page {
                     }
                 }
             }
+        }
+
+        ViewPlaceholder {
+            enabled: categoriesListView.count === 0
+            text: qsTr("No categories")
+            hintText: qsTr("Use the pull down menu to add new categories")
         }
 
         RemorsePopup {
