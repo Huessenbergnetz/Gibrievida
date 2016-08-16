@@ -207,6 +207,7 @@ void CategoriesModel::add(int databaseId, const QString &name, const QString &co
     c->databaseId = databaseId;
     c->name = name;
     c->color = color;
+    c->activities = 0;
     m_categories.append(c);
 
     endInsertRows();
