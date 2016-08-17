@@ -37,6 +37,21 @@ Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxR
 }
 
 
+Activity::Activity(Activity *other, QObject *parent) :
+    QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records())
+{
+    m_useRepeats = (other->minRepeats() > 0 && other->maxRepeats() > 0);
+
+#ifdef QT_DEBUG
+    qDebug() << "Constructed a new" << this << "from" << other;
+#endif
+
+    Category *c = new Category(other->category(), this);
+    setCategory(c);
+}
+
+
+
 /*!
  * \brief Deconstructs the Activity object.
  */

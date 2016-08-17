@@ -24,6 +24,7 @@ class Activity : public QObject
 public:
     explicit Activity(QObject *parent = nullptr);
     explicit Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, QObject *parent = nullptr);
+    explicit Activity(Activity *other, QObject *parent = nullptr);
     ~Activity();
 
     int databaseId() const;
