@@ -34,8 +34,8 @@ Page {
             }
 
             MenuItem {
-                text: records.currentId < 0 ? qsTr("Record activity") : qsTr("Finish recording")
-                onClicked: records.currentId < 0 ? pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml")) : records.finish()
+                text: records.current ? qsTr("Finish recording") : qsTr("Record activity")
+                onClicked: records.current ? records.finish() : pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"))
             }
         }
 
@@ -57,7 +57,7 @@ Page {
             Item {
                 width: parent.width
                 height: Theme.itemSizeMedium
-                visible: records.currentId < 0
+                visible: !records.current
 
                 Label {
                     anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
@@ -71,14 +71,14 @@ Page {
                 id: curRec
                 width: parent.width
                 contentHeight: Theme.itemSizeSmall
-                visible: records.currentId > 0
+                visible: records.current
 
                 Rectangle {
                     id: cColor
                     anchors { left: parent.left; leftMargin: Theme.paddingSmall; top: parent.top; verticalCenter: parent.verticalCenter }
                     width: Theme.itemSizeExtraSmall / 5
                     height: Theme.itemSizeSmall * 0.9
-                    color: records.currentCategoryColor
+                    color: records.current ? records.current.activity.category.color : ""
                 }
 
                 Column {
@@ -90,7 +90,7 @@ Page {
                         Label {
                             id: aName
                             width: parent.width * 0.6
-                            text: records.currentActivityName
+                            text: records.current ? records.current.activity.name : ""
                             color: curRec.highlighted ? Theme.highlightColor : Theme.primaryColor
                             truncationMode: TruncationMode.Fade
                         }
@@ -99,8 +99,7 @@ Page {
                             id: timeText
                             width: parent.width * 0.4
                             anchors { verticalCenter: aName.verticalCenter }
-                            //: date and time foramt, see http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method
-                            text: Qt.formatDateTime(records.currentStartTime, qsTr("dd.MM.yyyy hh:mmap"))
+                            text: records.current ? helpers.relativeTimeString(records.current.start) : ""
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             verticalAlignment: Text.AlignRight
@@ -113,7 +112,7 @@ Page {
                         Text {
                             id: cName
                             width: parent.width * 0.33
-                            text: records.currentCategoryName
+                            text: records.current ? records.current.activity.category.name : ""
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             elide: Text.ElideRight
@@ -123,7 +122,7 @@ Page {
                             id: repetitionItem
                             width: distanceItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
                             height: repText.height
-                            visible: records.currentRepetitions > 0
+                            visible: records.current && records.current.repetitions > 0
 
                             ImageHighlight {
                                 id: repIcon
@@ -136,7 +135,7 @@ Page {
                             Text {
                                 id: repText
                                 anchors { left: repIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                                text: records.currentRepetitions
+                                text: records.current ? records.current.repetitions : ""
                                 font.pixelSize: Theme.fontSizeExtraSmall
                                 color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             }
@@ -146,7 +145,7 @@ Page {
                             id: distanceItem
                             width: repetitionItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
                             height: distText.height
-                            visible: records.currentDistance > 0.0
+                            visible: records.current && records.current.distance > 0.0
 
                             ImageHighlight {
                                 id: distIcon
@@ -159,7 +158,7 @@ Page {
                             Text {
                                 id: distText
                                 anchors { left: distIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                                text: records.currentDistance
+                                text: records.current ? records.current.distance : ""
                                 font.pixelSize: Theme.fontSizeExtraSmall
                                 color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             }
@@ -168,7 +167,7 @@ Page {
                         Item {
                             width: parent.width * 0.33
                             height: durText.height
-                            visible: records.currentDuration > 0
+                            visible: records.current && records.current.duration > 0
 
                             ImageHighlight {
                                 id: durIcon
@@ -181,7 +180,7 @@ Page {
                             Text {
                                 id: durText
                                 anchors { left: durIcon.right; leftMargin: Theme.paddingSmall }
-                                text: records.currentDurationString
+                                text: records.current ? helpers.createDurationString(records.current.duration) : ""
                                 font.pixelSize: Theme.fontSizeExtraSmall
                                 color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             }

@@ -3,6 +3,9 @@
 #include <QSqlError>
 #include <QtCore/qmath.h>
 #include "recordscontroller.h"
+#include "category.h"
+#include "activity.h"
+#include "record.h"
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -39,18 +42,7 @@ RecordsModel::~RecordsModel()
 QHash<int, QByteArray> RecordsModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-    roles.insert(DatabaseId, QByteArrayLiteral("databaseId"));
-    roles.insert(ActivityId, QByteArrayLiteral("activityId"));
-    roles.insert(ActivityName, QByteArrayLiteral("activityName"));
-    roles.insert(CategoryId, QByteArrayLiteral("categoryId"));
-    roles.insert(CategoryName, QByteArrayLiteral("categoryName"));
-    roles.insert(CategoryColor, QByteArrayLiteral("categoryColor"));
-    roles.insert(Start, QByteArrayLiteral("start"));
-    roles.insert(End, QByteArrayLiteral("end"));
-    roles.insert(Duration, QByteArrayLiteral("duration"));
-    roles.insert(DurationString, QByteArrayLiteral("durationString"));
-    roles.insert(Repetitions, QByteArrayLiteral("repetitions"));
-    roles.insert(Distance, QByteArrayLiteral("distance"));
+    roles.insert(Item, QByteArrayLiteral("item"));
     return roles;
 }
 
@@ -93,34 +85,9 @@ QVariant RecordsModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    Record *r = m_records.at(index.row());
-
-    switch(role) {
-    case DatabaseId:
-        return QVariant::fromValue(r->databaseId);
-    case ActivityId:
-        return QVariant::fromValue(r->activityId);
-    case ActivityName:
-        return QVariant::fromValue(r->activityName);
-    case CategoryId:
-        return QVariant::fromValue(r->categoryId);
-    case CategoryName:
-        return QVariant::fromValue(r->categoryName);
-    case CategoryColor:
-        return QVariant::fromValue(r->categoryColor);
-    case Start:
-        return QVariant::fromValue(r->start);
-    case End:
-        return QVariant::fromValue(r->end);
-    case Duration:
-        return QVariant::fromValue(r->duration);
-    case DurationString:
-        return QVariant::fromValue(r->durationString);
-    case Repetitions:
-        return QVariant::fromValue(r->repetitions);
-    case Distance:
-        return QVariant::fromValue(r->distance);
-    default:
+    if (role == Item) {
+        return QVariant::fromValue<Record*>(m_records.at(index.row()));
+    } else {
         return QVariant();
     }
 }
@@ -142,7 +109,7 @@ void RecordsModel::update()
         return;
     }
 
-    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
+    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
     if (m_activityId > 0) {
         queryString.append(QLatin1String(" AND r.activity = ?"));
@@ -171,20 +138,29 @@ void RecordsModel::update()
     QList<Record*> t_records;
 
     while (q.next()) {
-        Record *r = new Record;
-        r->databaseId = q.value(0).toInt();
-        r->activityId = q.value(1).toInt();
-        r->activityName = q.value(2).toString();
-        r->categoryId = q.value(3).toInt();
-        r->categoryName = q.value(4).toString();
-        r->categoryColor = q.value(5).toString();
-        r->start = QDateTime::fromTime_t(q.value(6).toUInt());
-        r->end = QDateTime::fromTime_t(q.value(7).toUInt());
-        r->duration = q.value(8).toUInt();
-        r->durationString = createDurationString(r->duration);
-        r->repetitions = q.value(9).toUInt();
-        r->distance = q.value(10).toDouble();
-        t_records.append(r);
+        Record *r = new Record(q.value(0).toInt(),
+                               QDateTime::fromTime_t(q.value(6).toUInt()),
+                               QDateTime::fromTime_t(q.value(7).toUInt()),
+                               q.value(8).toUInt(),
+                               q.value(9).toUInt(),
+                               q.value(10).toDouble(),
+                               q.value(14).toString(),
+                               this
+                               );
+
+        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(11).toInt(), q.value(12).toInt(), q.value(13).toBool(), 0, r);
+
+        Category *c = new Category(q.value(3).toInt(), q.value(4).toString(), q.value(5).toString(), 0, a);
+
+        a->setCategory(c);
+        r->setActivity(a);
+
+        if (r->isValid()) {
+            t_records.append(r);
+        } else {
+            delete r;
+        }
+
     }
 
     if (!t_records.isEmpty()) {
@@ -469,7 +445,7 @@ int RecordsModel::find(int databaseId) const
     int idx = -1;
 
     for (int i = 0; i < m_records.size(); ++i) {
-        if (m_records.at(i)->databaseId == databaseId) {
+        if (m_records.at(i)->databaseId() == databaseId) {
             idx = i;
             break;
         }
@@ -489,7 +465,7 @@ QList<int> RecordsModel::findByActivity(int activity) const
     QList<int> idxs;
 
     for (int i = 0; i < m_records.size(); ++i) {
-        if (m_records.at(i)->activityId == activity) {
+        if (m_records.at(i)->activity()->databaseId() == activity) {
             idxs.append(i);
         }
     }
@@ -499,53 +475,27 @@ QList<int> RecordsModel::findByActivity(int activity) const
 
 
 
-void RecordsModel::finished(int databaseId, int activity, int category)
+/*!
+ * \brief Adds a finished Record to the model.
+ */
+void RecordsModel::finished(Record *record)
 {
 
-    if (!connectDb()) {
+    if (record->isValid()) {
+        record->setParent(this);
+    } else {
         return;
     }
-
-    QSqlQuery q(m_db);
-
-    if (!q.prepare(QStringLiteral("SELECT a.name, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.id = ?"))) {
-        return;
-    }
-
-    q.addBindValue(databaseId);
-
-    if (!q.exec()) {
-        return;
-    }
-
-    if (!q.next()) {
-        return;
-    }
-
-    Record *r = new Record;
-
-    r->databaseId = databaseId;
-    r->activityId = activity;
-    r->activityName = q.value(0).toString();
-    r->categoryId = category;
-    r->categoryName = q.value(1).toString();
-    r->categoryColor = q.value(2).toString();
-    r->start = QDateTime::fromTime_t(q.value(3).toUInt());
-    r->end = QDateTime::fromTime_t(q.value(4).toUInt());
-    r->duration = q.value(5).toUInt();
-    r->durationString = createDurationString(r->duration);
-    r->repetitions = q.value(6).toUInt();
-    r->distance = q.value(7).toDouble();
 
     if (m_orderBy == QLatin1String("start")) {
 
         if (m_order == QLatin1String("DESC")) {
             beginInsertRows(QModelIndex(), 0, 0);
-            m_records.prepend(r);
+            m_records.prepend(record);
             endInsertRows();
         } else if (m_order == QLatin1String("ASC")) {
             beginInsertRows(QModelIndex(), rowCount(), rowCount());
-            m_records.append(r);
+            m_records.append(record);
             endInsertRows();
         } else {
             update();

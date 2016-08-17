@@ -79,10 +79,10 @@ Page {
             ListView.onAdd: AddAnimation { target: recManagerListItem }
             ListView.onRemove: animateRemoval(recManagerListItem)
 
-            onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {activityName: model.activityName, categoryName: model.categoryName, startTime: timeText.text, duration: model.duration, durationString: model.durationString, repetitions: model.repetitions})
+            onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {record: model.item})
 
             function remove() {
-                remorseAction(qsTr("Removing"), function() {records.remove(model.databaseId, model.activityId, model.categoryId)})
+                remorseAction(qsTr("Removing"), function() {records.remove(model.item)})
             }
 
             Rectangle {
@@ -90,7 +90,7 @@ Page {
                 anchors { left: parent.left; leftMargin: Theme.paddingSmall; top: parent.top; verticalCenter: parent.verticalCenter }
                 width: Theme.itemSizeExtraSmall/5
                 height: Theme.itemSizeSmall * 0.9
-                color: categoryColor
+                color: item.activity.category.color
             }
 
             Column {
@@ -102,7 +102,7 @@ Page {
                     Label {
                         id: aName
                         width: parent.width*0.6
-                        text: activityName
+                        text: item.activity.name
                         color: recManagerListItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         truncationMode: TruncationMode.Fade
                     }
@@ -111,7 +111,7 @@ Page {
                         id: timeText
                         width: parent.width*0.4
                         anchors { verticalCenter: aName.verticalCenter }
-                        text: helpers.relativeTimeString(start)
+                        text: helpers.relativeTimeString(item.start)
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         verticalAlignment: Text.AlignRight
@@ -124,7 +124,7 @@ Page {
                     Text {
                         id: cName
                         width: parent.width * 0.33
-                        text: categoryName
+                        text: item.activity.category.name
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         elide: Text.ElideRight
@@ -145,7 +145,7 @@ Page {
                         Text {
                             id: durText
                             anchors { left: durIcon.right; leftMargin: Theme.paddingSmall }
-                            text: durationString
+                            text: helpers.createDurationString(item.duration)
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         }
@@ -155,7 +155,7 @@ Page {
                         id: repetitionItem
                         width: distanceItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
                         height: repText.height
-                        visible: repetitions > 0
+                        visible: item.repetitions > 0
 
                         ImageHighlight {
                             id: repIcon
@@ -168,7 +168,7 @@ Page {
                         Text {
                             id: repText
                             anchors { left: repIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                            text: repetitions
+                            text: item.repetitions
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         }
@@ -178,7 +178,7 @@ Page {
                         id: distanceItem
                         width: repetitionItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
                         height: distText.height
-                        visible: distance > 0
+                        visible: item.distance > 0.0
 
                         ImageHighlight {
                             id: distIcon
@@ -191,7 +191,7 @@ Page {
                         Text {
                             id: distText
                             anchors { left: distIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                            text: distance
+                            text: item.distance
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         }
@@ -204,7 +204,7 @@ Page {
                 ContextMenu {
                     MenuItem {
                         text: qsTr("Edit")
-                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"), {databaseId: model.databaseId, activityId: model.activityId, activityName: model.activityName, start: model.start, duration: model.duration, durationString: model.durationString, repetitions: model.repetitions})
+                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"), {record: model.item})
                     }
                     MenuItem {
                         text: qsTr("Remove")

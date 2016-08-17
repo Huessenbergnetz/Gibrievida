@@ -24,16 +24,28 @@ import "../common"
 Dialog {
     id: recDialog
 
-    property int databaseId: -1
-    property alias activityId: activity.chosenValue
-    property alias activityName: activity.value
-    property alias note: noteText.text
-    property alias start: startTime.dateTime
-    property alias duration: durationButton.duration
-    property alias durationString: durationButton.value
-    property alias repetitions: repetitionsField.text
+//    property int databaseId: -1
+//    property alias activityId: activity.chosenValue
+//    property alias activityName: activity.value
+//    property alias note: noteText.text
+//    property alias start: startTime.dateTime
+//    property alias duration: durationButton.duration
+//    property alias durationString: durationButton.value
+//    property alias repetitions: repetitionsField.text
 
-    canAccept: databaseId < 0 ? (activity.chosenValue > 0) : repetitionsField.acceptableInput
+    property Record record: null
+
+    ActivitiesModel { id: activitiesModel }
+
+//    canAccept: databaseId < 0 ? (activity.chosenValue > 0) : repetitionsField.acceptableInput
+    canAccept: activityButton.chosenActivity && repetitionsField.acceptableInput
+
+    Component.onCompleted: {
+        if (record) {
+            activityButton.chosenActivity = record.activity
+            activityButton.value = record.activity.name
+        }
+    }
 
     SilicaFlickable {
         id: recDialogFlick
@@ -53,19 +65,31 @@ Dialog {
             DialogHeader {
                 dialog: recDialog
                 flickable: recDialogFlick
-                acceptText: (databaseId < 0) ? qsTr("Add") : qsTr("Edit")
+//                acceptText: (databaseId < 0) ? qsTr("Add") : qsTr("Edit")
+                acceptText: record ? qsTr("Edit") : qsTr("Add")
             }
 
             ValueButton {
-                id: activity
+                id: activityButton
                 label: qsTr("Activity")
                 value: qsTr("Please select")
 
-                property int chosenValue
+//                property int chosenValue
+                property Activity chosenActivity: null
+
+                onChosenActivityChanged: {
+                    if (chosenActivity) {
+                        activityButton.value = chosenActivity.name
+                    } else {
+                        activityButton.value = qsTr("Please select")
+                    }
+                }
 
                 onClicked: {
-                    var dialog = pageStack.push(actChoserComp, {chosenValue: activity.chosenValue, chosenText: activity.value, label: activity.label})
-                    dialog.accepted.connect(function() {activity.chosenValue = dialog.chosenValue; activity.value = dialog.chosenText})
+//                    var dialog = pageStack.push(actChoserComp, {chosenValue: activityButton.chosenValue, chosenText: activityButton.value, label: activityButton.label})
+//                    dialog.accepted.connect(function() {activityButton.chosenValue = dialog.chosenValue; activityButton.value = dialog.chosenText})
+                    var dialog = pageStack.push(actChoserComp, {chosenActivity: activityButton.chosenActivity, label: activityButton.label, model: activitiesModel})
+                    dialog.accepted.connect(function() {activityButton.chosenActivity = dialog.chosenActivity})
                 }
 
                 Component {
@@ -76,9 +100,11 @@ Dialog {
 
                         signal accepted()
 
-                        property int chosenValue
-                        property string chosenText
+//                        property int chosenValue
+//                        property string chosenText
+                        property Activity chosenActivity: null
                         property alias label: pHeader.title
+                        property alias model: list.model
 
                         PageHeader {
                             id: pHeader
@@ -100,7 +126,6 @@ Dialog {
                             anchors { top: search.bottom; bottom: parent.bottom; left: parent.left; right: parent.right }
                             contentWidth: parent.width
                             clip: true
-                            model: ActivitiesModel { id: activitiesModel }
 
                             delegate: ListItem {
                                 id: listItem
@@ -110,11 +135,13 @@ Dialog {
                                 ListView.onAdd: AddAnimation { target: listItem }
                                 ListView.onRemove: animateRemoval(listItem)
 
-                                highlighted: model.databaseId === actChoser.chosenValue
+//                                highlighted: model.databaseId === actChoser.chosenValue
+                                highlighted: actChoser.chosenActivity ? model.item.databaseId === actChoser.chosenActivity.databaseId : false
 
                                 onClicked: {
-                                    actChoser.chosenValue = model.databaseId
-                                    actChoser.chosenText = model.name
+//                                    actChoser.chosenValue = model.databaseId
+//                                    actChoser.chosenText = model.name
+                                    actChoser.chosenActivity = model.item
                                     actChoser.accepted()
                                     search.text = ""
                                     search.focus = false
@@ -125,7 +152,7 @@ Dialog {
                                     anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
 
                                     Label {
-                                        text: model.name
+                                        text: model.item.name
                                         width: parent.width
                                         color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                                     }
@@ -138,13 +165,13 @@ Dialog {
                                             id: cColor
                                             anchors { left: parent.left; verticalCenter: cName.verticalCenter; top: parent.top }
                                             width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
-                                            color: model.categoryColor
+                                            color: model.item.category.color
                                         }
 
                                         Text {
                                             id: cName
                                             anchors { left: cColor.right; leftMargin: Theme.paddingMedium; top: parent.top }
-                                            text: model.categoryName
+                                            text: model.item.category.name
                                             font.pixelSize: Theme.fontSizeExtraSmall
                                             color: listItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
                                         }
@@ -152,7 +179,7 @@ Dialog {
                                         Text {
                                             id: recordsCount
                                             anchors { right: parent.right; top: parent.top }
-                                            text: qsTr("%n record(s)", "", model.records)
+                                            text: qsTr("%n record(s)", "", model.item.records)
                                             font.pixelSize: Theme.fontSizeExtraSmall
                                             color: listItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
                                         }
@@ -163,7 +190,7 @@ Dialog {
                                             source: "image://theme/icon-cover-sync"
                                             width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                                             highlighted: listItem.highlighted
-                                            visible: (model.minRepeats > 0 && model.maxRepeats > 0)
+                                            visible: model.item.useRepeats
                                         }
 
                                         ImageHighlight {
@@ -172,7 +199,7 @@ Dialog {
                                             source: "image://theme/icon-cover-transfers"
                                             width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                                             highlighted: listItem.highlighted
-                                            visible: model.distance
+                                            visible: model.item.useDistance
                                         }
                                     }
                                 }
@@ -185,22 +212,25 @@ Dialog {
             DateTimeButton {
                 id: startTime
                 label: qsTr("Start time")
-                visible: databaseId > 0
+                visible: record
+                dateTime: record ? record.start : new Date()
             }
 
             DurationButton{
                 id: durationButton
-                visible: databaseId > 0
+                visible: record
                 label: qsTr("Duration")
+                duration: record ? record.duration : 0
             }
 
             TextField {
                 id: repetitionsField
                 width: parent.width
-                visible: databaseId > 0
+                visible: record
                 label: qsTr("Repetitions"); placeholderText: label
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: IntValidator { bottom: 1 }
+                text: record ? record.repetitions : "1"
             }
 
             TextArea {
@@ -209,15 +239,17 @@ Dialog {
                 height: 2 * Theme.itemSizeExtraLarge
                 placeholderText: qsTr("Note")
                 label: qsTr("Note")
+                text: record ? record.note : ""
             }
         }
     }
 
     onAccepted: {
-        if (databaseId > -1) {
+        if (record) {
 
         } else {
-            records.add(activityId, note)
+//            records.add(activityId, note)
+            records.add(activityButton.chosenActivity, noteText.text)
         }
     }
 }

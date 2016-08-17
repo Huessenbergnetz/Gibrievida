@@ -24,14 +24,16 @@ import "../common"
 Page {
     id: singleRecordPage
 
-    property alias activityName: pHeader.title
-    property alias categoryName: pHeader.description
-    property alias startTime: startTimeText.text
-    property int duration: 0
-    property alias durationString: durationText.text
-    property int repetitions
+    property Record record: null
 
     SilicaFlickable {
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Edit")
+                onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"), {record: record})
+            }
+        }
+
         id: singleRecordFlick
         anchors.fill: parent
         contentHeight: singleRecordCol.height
@@ -50,6 +52,7 @@ Page {
                 id: pHeader
                 page: singleRecordPage
                 rightMargin: 0
+                title: record ? record.activity.name : ""
             }
 
             IconSectionHeader {
@@ -62,6 +65,7 @@ Page {
                 width: parent.width
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
+                text: record ? helpers.relativeTimeString(record.start) : ""
             }
 
             IconSectionHeader {
@@ -74,20 +78,35 @@ Page {
                 width: parent.width
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
+                text: record ? helpers.createDurationString(record.duration) : ""
             }
 
             IconSectionHeader {
                 icon: "image://theme/icon-s-retweet"
                 text: qsTr("Repetitions")
-                visible: repetitions > 0
+                visible: record ? record.repetitions > 0 : false
             }
 
             Text {
-                visible: repetitions > 0
                 width: parent.width
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: repetitions
+                text: record ? record.repetitions : ""
+                visible: record ? record.repetitions > 0 : false
+            }
+
+            IconSectionHeader {
+                icon: "image://theme/icon-s-edit"
+                text: qsTr("Note")
+                visible: record ? record.note : false
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: record ? record.note : ""
+                visible: record ? record.note : false
             }
         }
     }

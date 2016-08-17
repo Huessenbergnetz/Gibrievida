@@ -4,27 +4,14 @@
 #include <QObject>
 #include <QDateTime>
 #include "dbmodel.h"
+#include "helpers.h"
 
 namespace Gibrievida {
 
 class RecordsController;
 class ActivitiesController;
 class CategoriesController;
-
-struct Record {
-    int databaseId;
-    int activityId;
-    QString activityName;
-    int categoryId;
-    QString categoryName;
-    QString categoryColor;
-    QDateTime start;
-    QDateTime end;
-    uint duration;
-    QString durationString;
-    uint repetitions;
-    double distance;
-};
+class Record;
 
 class RecordsModel : public DBModel
 {
@@ -40,18 +27,7 @@ public:
     ~RecordsModel();
 
     enum Roles {
-        DatabaseId = Qt::UserRole + 1,
-        ActivityId,
-        ActivityName,
-        CategoryId,
-        CategoryName,
-        CategoryColor,
-        Start,
-        End,
-        Duration,
-        DurationString,
-        Repetitions,
-        Distance
+        Item = Qt::UserRole + 1
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE Q_DECL_FINAL;
@@ -79,7 +55,7 @@ public:
 
 public slots:
     void update();
-    void finished(int databaseId, int activity, int category);
+    void finished(Record *record);
     void removed(int databaseId, int activity, int category);
     void removedByActivity(int activity, int category);
     void removedAll();
@@ -96,6 +72,8 @@ private:
 
     void clear();
 
+    Helpers helpers;
+
     int find(int databaseId) const;
     QList<int> findByActivity(int activity) const;
 
@@ -105,6 +83,5 @@ private:
 };
 
 }
-Q_DECLARE_TYPEINFO(Gibrievida::Record, Q_PRIMITIVE_TYPE);
 
 #endif // RECORDSMODEL_H

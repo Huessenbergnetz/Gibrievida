@@ -36,6 +36,7 @@
 #include "../common/activity.h"
 #include "../common/activitiescontroller.h"
 #include "../common/activitiesfiltermodel.h"
+#include "../common/record.h"
 #include "../common/recordscontroller.h"
 #include "../common/recordsmodel.h"
 #include "../common/helpers.h"
@@ -64,6 +65,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Gibrievida::ActivitiesController>("harbour.gibrievida", 1, 0, "ActivitiesController", QStringLiteral("ActivitiesController can not be created."));
     qmlRegisterType<Gibrievida::ActivitiesFilterModel>("harbour.gibrievida", 1, 0, "ActivitiesModel");
 
+    qmlRegisterType<Gibrievida::Record>("harbour.gibrievida", 1, 0, "Record");
     qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created"));
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 

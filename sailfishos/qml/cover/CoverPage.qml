@@ -25,17 +25,17 @@ CoverBackground {
     onStatusChanged: gibrievida.updateVisibility()
 
     CoverPlaceholder {
-        visible: records.currentId < 0
+        visible: !records.current
         text: qsTr("Gibrievida")
     }
 
     Column {
-        visible: records.currentId > 0
+        visible: records.current
         anchors { left: parent.left; right: parent.right; top: parent.top; leftMargin: Theme.paddingMedium; topMargin: Theme.paddingMedium; rightMargin: Theme.paddingMedium }
         spacing: Theme.paddingSmall
 
         Label {
-            text: records.currentActivityName
+            text: records.current ? records.current.activity.name : ""
             width: parent.width
             truncationMode: TruncationMode.Fade
         }
@@ -48,13 +48,13 @@ CoverBackground {
                 id: cColor
                 anchors { left: parent.left; verticalCenter: cName.verticalCenter }
                 width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
-                color: records.currentCategoryColor
+                color: records.current ? records.current.activity.category.color : "white"
             }
 
             Text {
                 id: cName
                 anchors { left: cColor.right; leftMargin: Theme.paddingMedium; top: parent.top; right: parent.right }
-                text: records.currentCategoryName
+                text: records.current ? records.current.activity.category.name : ""
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
                 elide: Text.ElideRight
@@ -80,8 +80,7 @@ CoverBackground {
             Text {
                 id: startTime
                 anchors { left: startTimeIcon.right; leftMargin: Theme.paddingMedium; top: parent.top; right: parent.right }
-                //: date and time foramt, see http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method
-                text: Qt.formatDateTime(records.currentStartTime, qsTr("hh:mmap"))
+                text: records.current ? helpers.relativeTimeString(records.current.start) : ""
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.primaryColor
             }
@@ -90,7 +89,7 @@ CoverBackground {
         Item {
             width: parent.width
             height: duration.height
-            visible: records.currentDuration > 0
+            visible: records.current && records.current.duration > 0
 
             Image {
                 id: durationIcon
@@ -101,7 +100,7 @@ CoverBackground {
             Text {
                 id: duration
                 anchors { left: durationIcon.right; leftMargin: Theme.paddingMedium; top: parent.top; right: parent.right }
-                text: records.currentDurationString
+                text: records.current ? helpers.createDurationString(records.current.duration) : ""
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.primaryColor
             }
@@ -111,7 +110,7 @@ CoverBackground {
         Item {
             width: parent.width
             height: repetitions.height
-            visible: records.currentRepetitions > 0
+            visible: records.current && records.current.repetitions > 0
 
             Image {
                 id: repetitionsIcon
@@ -122,7 +121,7 @@ CoverBackground {
             Text {
                 id: repetitions
                 anchors { left: repetitionsIcon.right; leftMargin: Theme.paddingMedium; top: parent.top; right: parent.right }
-                text: records.currentRepetitions
+                text: records.current ? records.current.repetitions : ""
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.primaryColor
             }
@@ -131,7 +130,7 @@ CoverBackground {
 
     CoverActionList {
         id: defaultActionList
-        enabled: records.currentId < 0
+        enabled: !records.current
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
@@ -140,7 +139,7 @@ CoverBackground {
 
     CoverActionList {
         id: recordActionlist
-        enabled: records.currentId > 0 && records.currentMinRepetitions > 0
+        enabled: records.current && records.current.activity.minRepeats > 0
 
         CoverAction {
             iconSource: "image://theme/icon-cover-sync"

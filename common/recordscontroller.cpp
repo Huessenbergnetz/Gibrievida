@@ -3,6 +3,9 @@
 #include <QSqlError>
 #include <QVariant>
 #include <QTimer>
+#include "record.h"
+#include "activity.h"
+#include "category.h"
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -14,16 +17,8 @@ using namespace Gibrievida;
  */
 RecordsController::RecordsController(QObject *parent) : BaseController(parent)
 {
-    m_currentId = -1;
-    m_currentActivityId = -1;
-    m_currentCategoryId = -1;
-    m_currentRepetitions = 0;
-    m_currentDistance = 0.0;
-    m_currentMinRepetitions = 0;
-    m_currentMaxRepetitions = 0;
-    m_currentDistanceActive = false;
+    m_current = nullptr;
     m_visible = false;
-    m_currentDuration = 0;
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
@@ -41,7 +36,7 @@ RecordsController::RecordsController(QObject *parent) : BaseController(parent)
  */
 RecordsController::~RecordsController()
 {
-    if (m_currentId > 0) {
+    if (m_current) {
 
         if (connectDb()) {
 
@@ -49,13 +44,15 @@ RecordsController::~RecordsController()
 
             if (q.prepare(QStringLiteral("UPDATE records SET repetitions = ?, distance = ? WHERE id = ?"))) {
 
-                q.addBindValue(getCurrentRepetitions());
-                q.addBindValue(getCurrentDistance());
-                q.addBindValue(getCurrentId());
+                q.addBindValue(m_current->repetitions());
+                q.addBindValue(m_current->distance());
+                q.addBindValue(m_current->databaseId());
 
                 q.exec();
             }
         }
+
+        delete m_current;
     }
 }
 
@@ -66,9 +63,13 @@ RecordsController::~RecordsController()
  *
  * Setting a not is optional.
  */
-int RecordsController::add(int activity, const QString &note)
+int RecordsController::add(Activity *activity, const QString &note)
 {
-    if (m_currentId > -1) {
+    if (!activity) {
+        return -1;
+    }
+
+    if (m_current) {
         return -1;
     }
 
@@ -78,50 +79,38 @@ int RecordsController::add(int activity, const QString &note)
 
     QDateTime startTime = QDateTime::currentDateTimeUtc();
 
+    Record *r = new Record(-1, startTime, QDateTime::fromTime_t(0), 0, 0, 0.0, note);
+
+    Activity *a = new Activity(activity, r);
+
+    r->setActivity(a);
+
     QSqlQuery q(m_db);
 
     if (!q.prepare(QStringLiteral("INSERT INTO records (activity, start, note) VALUES (?, ?, ?)"))) {
+        delete r;
         return -1;
     }
 
-    q.addBindValue(activity);
+    q.addBindValue(a->databaseId());
     q.addBindValue(startTime.toTime_t());
     q.addBindValue(note);
 
     if (!q.exec()) {
+        delete r;
         return -1;
     }
 
-    int id = q.lastInsertId().toInt();
+    r->setDatabaseId(q.lastInsertId().toInt());
 
-    if (!q.prepare(QStringLiteral("SELECT a.name, a.minrepeats, a.maxrepeats, a.distance, a.category, c.name as categoryname, c.color FROM activities a JOIN categories c ON c.id = a.category WHERE a.id = ?"))) {
-        return -1;
-    }
-
-    q.addBindValue(activity);
-
-    if (!q.exec()) {
-        return -1;
-    }
-
-    if (q.next()) {
-        setCurrentId(id);
-        setCurrentActivityId(activity);
-        setCurrentActivityName(q.value(0).toString());
-        setCurrentMinRepetitions(q.value(1).toInt());
-        setCurrentMaxRepetitions(q.value(2).toInt());
-        setCurrentDistanceActive(q.value(3).toBool());
-        setCurrentCategoryId(q.value(4).toInt());
-        setCurrentCategoryName(q.value(5).toString());
-        setCurrentCategoryColor(q.value(6).toString());
-        setCurrentStartTime(startTime);
-        setCurrentRepetitions(0);
-        setCurrentDistance(0.0);
+    if (r->isValid()) {
+        setCurrent(r);
+        return r->databaseId();
     } else {
+        setCurrent(nullptr);
+        delete r;
         return -1;
     }
-
-    return id;
 }
 
 
@@ -132,7 +121,7 @@ int RecordsController::add(int activity, const QString &note)
  */
 void RecordsController::finish()
 {
-    if (m_currentId < 0) {
+    if (!m_current) {
         return;
     }
 
@@ -141,29 +130,33 @@ void RecordsController::finish()
     }
 
     QDateTime endTime = QDateTime::currentDateTimeUtc();
-    qint64 duration = m_currentStartTime.secsTo(endTime);
+    qint64 duration = m_current->start().secsTo(endTime);
 
     QSqlQuery q(m_db);
 
     if (!q.prepare(QStringLiteral("UPDATE records SET end = ?, duration = ?, repetitions = ?, distance = ? WHERE id = ?"))) {
-        qDebug() << q.lastError().text();
+        Record *current = m_current;
+        setCurrent(nullptr);
+        delete current;
         return;
     }
 
     q.addBindValue(endTime.toTime_t());
     q.addBindValue(duration);
-    q.addBindValue(getCurrentRepetitions());
-    q.addBindValue(getCurrentDistance());
-    q.addBindValue(getCurrentId());
+    q.addBindValue(m_current->repetitions());
+    q.addBindValue(m_current->distance());
+    q.addBindValue(m_current->databaseId());
 
     if (!q.exec()) {
-        qDebug() << q.lastError().text();
+        Record *current = m_current;
+        setCurrent(nullptr);
+        delete current;
         return;
     }
 
-    emit finished(getCurrentId(), getCurrentActivityId(), getCurrentCategoryId());
+    emit finished(current());
 
-    setCurrentId(-1);
+    setCurrent(nullptr);
 }
 
 
@@ -174,7 +167,7 @@ void RecordsController::finish()
  *
  * \c activity and \c category are given to the removed() signal that is emitted on success.
  */
-void RecordsController::remove(int databaseId, int activity, int category)
+void RecordsController::remove(Record *r)
 {
     if (!connectDb()) {
         return;
@@ -186,15 +179,14 @@ void RecordsController::remove(int databaseId, int activity, int category)
         return;
     }
 
-    q.addBindValue(databaseId);
+    q.addBindValue(r->databaseId());
 
     if (!q.exec()) {
         return;
     }
 
-    emit removed(databaseId, activity, category);
+    emit removed(r->databaseId(), r->activity()->databaseId(), r->activity()->category()->databaseId());
 }
-
 
 
 
@@ -249,445 +241,36 @@ void RecordsController::removeAll()
 
 
 /*!
- * \property RecordsController::currentId
- * \brief The database id of the current recording.
+ * \property RecordsController::current
+ * \brief The currently active record.
  *
  * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentId() const</TD></TR><TR><TD>void</TD><TD>setCurrentId(int currentId)</TD></TR></TABLE>
+ * <TABLE><TR><TD>Record*</TD><TD>current() const</TD></TR><TR><TD>void</TD><TD>setCurrent(Record *nCurrent)</TD></TR></TABLE>
  * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentIdChanged(int currentId)</TD></TR></TABLE>
+ * <TABLE><TR><TD>void</TD><TD>currentChanged(Record *current)</TD></TR></TABLE>
  */
 
 /*!
- * \fn void RecordsController::currentIdChanged(int currentId)
- * \brief Part of the \link RecordsController::currentId currentId \endlink property.
+ * \fn void RecordsController::currentChanged(Record *current)
+ * \brief Part of the \link RecordsController::current current \endlink property.
  */
 
 /*!
- * \brief Part of the \link RecordsController::currentId currentId \endlink property.
+ * \brief Part of the \link RecordsController::current current \endlink property.
  */
-int RecordsController::getCurrentId() const { return m_currentId; }
+Record *RecordsController::current() const { return m_current; }
 
 /*!
- * \brief Part of the \link RecordsController::currentId currentId \endlink property.
+ * \brief Part of the \link RecordsController::current current \endlink property.
  */
-void RecordsController::setCurrentId(int currentId)
+void RecordsController::setCurrent(Record *nCurrent)
 {
-    if (currentId != m_currentId) {
-        m_currentId = currentId;
+    if (nCurrent != m_current) {
+        m_current = nCurrent;
 #ifdef QT_DEBUG
-        qDebug() << "Changed currentId to" << m_currentId;
+        qDebug() << "Changed currentRecord to" << m_current;
 #endif
-
-        startStopTimer();
-
-        emit currentIdChanged(getCurrentId());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentActivityId
- * \brief Database ID of the currently recorded activity.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentActivityId() const</TD></TR><TR><TD>void</TD><TD>setCurrentActivityId(int currentActivityId)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentActivityIdChanged(int currentActivityId)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentActivityIdChanged(int currentActivityId)
- * \brief Part of the \link RecordsController::currentActivityId currentActivityId \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentActivityId currentActivityId \endlink property.
- */
-int RecordsController::getCurrentActivityId() const { return m_currentActivityId; }
-
-/*!
- * \brief Part of the \link RecordsController::currentActivityId currentActivityId \endlink property.
- */
-void RecordsController::setCurrentActivityId(int currentActivityId)
-{
-    if (currentActivityId != m_currentActivityId) {
-        m_currentActivityId = currentActivityId;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentActivityId to" << m_currentActivityId;
-#endif
-        emit currentActivityIdChanged(getCurrentActivityId());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentActivityName
- * \brief Name of the currently recorded activity.
- *
- * \par Access functions:
- * <TABLE><TR><TD>QString</TD><TD>getCurrentActivityName() const</TD></TR><TR><TD>void</TD><TD>setCurrentActivityName(const QString &currentActivityName)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentActivityNameChanged(const QString &currentActivityName)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentActivityNameChanged(const QString &currentActivityName)
- * \brief Part of the \link RecordsController::currentActivityName currentActivityName \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentActivityName currentActivityName \endlink property.
- */
-QString RecordsController::getCurrentActivityName() const { return m_currentActivityName; }
-
-/*!
- * \brief Part of the \link RecordsController::currentActivityName currentActivityName \endlink property.
- */
-void RecordsController::setCurrentActivityName(const QString &currentActivityName)
-{
-    if (currentActivityName != m_currentActivityName) {
-        m_currentActivityName = currentActivityName;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentActivityName to" << m_currentActivityName;
-#endif
-        emit currentActivityNameChanged(getCurrentActivityName());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentCategoryId
- * \brief Database ID of the currents activity category.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentCategoryId() const</TD></TR><TR><TD>void</TD><TD>setCurrentCategoryId(int currentCategoryId)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentCategoryIdChanged(int currentCategoryId)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentCategoryIdChanged(int currentCategoryId)
- * \brief Part of the \link RecordsController::currentCategoryId currentCategoryId \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryId currentCategoryId \endlink property.
- */
-int RecordsController::getCurrentCategoryId() const { return m_currentCategoryId; }
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryId currentCategoryId \endlink property.
- */
-void RecordsController::setCurrentCategoryId(int currentCategoryId)
-{
-    if (currentCategoryId != m_currentCategoryId) {
-        m_currentCategoryId = currentCategoryId;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentCategoryId to" << m_currentCategoryId;
-#endif
-        emit currentCategoryIdChanged(getCurrentCategoryId());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentCategoryName
- * \brief Name of the current activities category.
- *
- * \par Access functions:
- * <TABLE><TR><TD>QString</TD><TD>getCurrentCategoryName() const</TD></TR><TR><TD>void</TD><TD>setCurrentCategoryName(const QString &currentCategoryName)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentCategoryNameChanged(const QString &currentCategoryName)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentCategoryNameChanged(const QString &currentCategoryName)
- * \brief Part of the \link RecordsController::currentCategoryName currentCategoryName \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryName currentCategoryName \endlink property.
- */
-QString RecordsController::getCurrentCategoryName() const { return m_currentCategoryName; }
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryName currentCategoryName \endlink property.
- */
-void RecordsController::setCurrentCategoryName(const QString &currentCategoryName)
-{
-    if (currentCategoryName != m_currentCategoryName) {
-        m_currentCategoryName = currentCategoryName;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentCategoryName to" << m_currentCategoryName;
-#endif
-        emit currentCategoryNameChanged(getCurrentCategoryName());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentCategoryColor
- * \brief Color value of the current activities category.
- *
- * \par Access functions:
- * <TABLE><TR><TD>QString</TD><TD>getCurrentCategoryColor() const</TD></TR><TR><TD>void</TD><TD>setCurrentCategoryColor(const QString &currentCategoryColor)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentCategoryColorChanged(const QString &currentCategoryColor)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentCategoryColorChanged(const QString &currentCategoryColor)
- * \brief Part of the \link RecordsController::currentCategoryColor currentCategoryColor \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryColor currentCategoryColor \endlink property.
- */
-QString RecordsController::getCurrentCategoryColor() const { return m_currentCategoryColor; }
-
-/*!
- * \brief Part of the \link RecordsController::currentCategoryColor currentCategoryColor \endlink property.
- */
-void RecordsController::setCurrentCategoryColor(const QString &currentCategoryColor)
-{
-    if (currentCategoryColor != m_currentCategoryColor) {
-        m_currentCategoryColor = currentCategoryColor;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentCategoryColor to" << m_currentCategoryColor;
-#endif
-        emit currentCategoryColorChanged(getCurrentCategoryColor());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentStartTime
- * \brief Start time of the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>QDateTime</TD><TD>getCurrentStartTime() const</TD></TR><TR><TD>void</TD><TD>setCurrentStartTime(const QDateTime &currentStartTime)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentStartTimeChanged(const QDateTime &currentStartTime)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentStartTimeChanged(const QDateTime &currentStartTime)
- * \brief Part of the \link RecordsController::currentStartTime currentStartTime \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentStartTime currentStartTime \endlink property.
- */
-QDateTime RecordsController::getCurrentStartTime() const { return m_currentStartTime; }
-
-/*!
- * \brief Part of the \link RecordsController::currentStartTime currentStartTime \endlink property.
- */
-void RecordsController::setCurrentStartTime(const QDateTime &currentStartTime)
-{
-    if (currentStartTime != m_currentStartTime) {
-        m_currentStartTime = currentStartTime;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentStartTime to" << m_currentStartTime;
-#endif
-        emit currentStartTimeChanged(getCurrentStartTime());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentRepetitions
- * \brief Actual repetition value of the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentRepetitions() const</TD></TR><TR><TD>void</TD><TD>setCurrentRepetitions(int currentRepetitions)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentRepetitionsChanged(int currentRepetitions)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentRepetitionsChanged(int currentRepetitions)
- * \brief Part of the \link RecordsController::currentRepetitions currentRepetitions \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentRepetitions currentRepetitions \endlink property.
- */
-int RecordsController::getCurrentRepetitions() const { return m_currentRepetitions; }
-
-/*!
- * \brief Part of the \link RecordsController::currentRepetitions currentRepetitions \endlink property.
- */
-void RecordsController::setCurrentRepetitions(int currentRepetitions)
-{
-    if (currentRepetitions != m_currentRepetitions) {
-        m_currentRepetitions = currentRepetitions;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentRepetitions to" << m_currentRepetitions;
-#endif
-        emit currentRepetitionsChanged(getCurrentRepetitions());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentDistance
- * \brief Actual distance of the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>float</TD><TD>getCurrentDistance() const</TD></TR><TR><TD>void</TD><TD>setCurrentDistance(float currentDistance)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentDistanceChanged(float currentDistance)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentDistanceChanged(float currentDistance)
- * \brief Part of the \link RecordsController::currentDistance currentDistance \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentDistance currentDistance \endlink property.
- */
-float RecordsController::getCurrentDistance() const { return m_currentDistance; }
-
-/*!
- * \brief Part of the \link RecordsController::currentDistance currentDistance \endlink property.
- */
-void RecordsController::setCurrentDistance(float currentDistance)
-{
-    if (currentDistance != m_currentDistance) {
-        m_currentDistance = currentDistance;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentDistance to" << m_currentDistance;
-#endif
-        emit currentDistanceChanged(getCurrentDistance());
-    }
-}
-
-
-
-/*!
- * \property RecordsController::currentMinRepetitions
- * \brief The minimum repetitions for the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentMinRepetitions() const</TD></TR><TR><TD>void</TD><TD>setCurrentMinRepetitions(int currentMinRepetitions)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentMinRepetitionsChanged(int currentMinRepetitions)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentMinRepetitionsChanged(int currentMinRepetitions)
- * \brief Part of the \link RecordsController::currentMinRepetitions currentMinRepetitions \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentMinRepetitions currentMinRepetitions \endlink property.
- */
-int RecordsController::getCurrentMinRepetitions() const { return m_currentMinRepetitions; }
-
-/*!
- * \brief Part of the \link RecordsController::currentMinRepetitions currentMinRepetitions \endlink property.
- */
-void RecordsController::setCurrentMinRepetitions(int currentMinRepetitions)
-{
-    if (currentMinRepetitions != m_currentMinRepetitions) {
-        m_currentMinRepetitions = currentMinRepetitions;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentMinRepetitions to" << m_currentMinRepetitions;
-#endif
-        emit currentMinRepetitionsChanged(getCurrentMinRepetitions());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentMaxRepetitions
- * \brief The maximum repetitions for the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentMaxRepetitions() const</TD></TR><TR><TD>void</TD><TD>setCurrentMaxRepetitions(int currentMaxRepetitions)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentMaxRepetitionsChanged(int currentMaxRepetitions)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentMaxRepetitionsChanged(int currentMaxRepetitions)
- * \brief Part of the \link RecordsController::currentMaxRepetitions currentMaxRepetitions \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentMaxRepetitions currentMaxRepetitions \endlink property.
- */
-int RecordsController::getCurrentMaxRepetitions() const { return m_currentMaxRepetitions; }
-
-/*!
- * \brief Part of the \link RecordsController::currentMaxRepetitions currentMaxRepetitions \endlink property.
- */
-void RecordsController::setCurrentMaxRepetitions(int currentMaxRepetitions)
-{
-    if (currentMaxRepetitions != m_currentMaxRepetitions) {
-        m_currentMaxRepetitions = currentMaxRepetitions;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentMaxRepetitions to" << m_currentMaxRepetitions;
-#endif
-        emit currentMaxRepetitionsChanged(getCurrentMaxRepetitions());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentDistanceActive
- * \brief True if the current recording should record the distance.
- *
- * \par Access functions:
- * <TABLE><TR><TD>bool</TD><TD>hasCurrentDistanceActive() const</TD></TR><TR><TD>void</TD><TD>setCurrentDistanceActive(bool currentDistanceActive)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentDistanceActiveChanged(bool currentDistanceActive)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentDistanceActiveChanged(bool currentDistanceActive)
- * \brief Part of the \link RecordsController::currentDistanceActive currentDistanceActive \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentDistanceActive currentDistanceActive \endlink property.
- */
-bool RecordsController::hasCurrentDistanceActive() const { return m_currentDistanceActive; }
-
-/*!
- * \brief Part of the \link RecordsController::currentDistanceActive currentDistanceActive \endlink property.
- */
-void RecordsController::setCurrentDistanceActive(bool currentDistanceActive)
-{
-    if (currentDistanceActive != m_currentDistanceActive) {
-        m_currentDistanceActive = currentDistanceActive;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentDistanceActive to" << m_currentDistanceActive;
-#endif
-        emit currentDistanceActiveChanged(hasCurrentDistanceActive());
+        emit currentChanged(current());
     }
 }
 
@@ -729,81 +312,6 @@ void RecordsController::setVisible(bool visible)
 
 
 
-
-/*!
- * \property RecordsController::currentDuration
- * \brief The duration of the current recording.
- *
- * \par Access functions:
- * <TABLE><TR><TD>int</TD><TD>getCurrentDuration() const</TD></TR><TR><TD>void</TD><TD>setCurrentDuration(int currentDuration)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentDurationChanged(int currentDuration)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentDurationChanged(int currentDuration)
- * \brief Part of the \link RecordsController::currentDuration currentDuration \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentDuration currentDuration \endlink property.
- */
-int RecordsController::getCurrentDuration() const { return m_currentDuration; }
-
-/*!
- * \brief Part of the \link RecordsController::currentDuration currentDuration \endlink property.
- */
-void RecordsController::setCurrentDuration(int currentDuration)
-{
-    if (currentDuration != m_currentDuration) {
-        m_currentDuration = currentDuration;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentDuration to" << m_currentDuration;
-#endif
-        setCurrentDurationString(helpers.createDurationString(m_currentDuration));
-        emit currentDurationChanged(getCurrentDuration());
-    }
-}
-
-
-
-
-/*!
- * \property RecordsController::currentDurationString
- * \brief Human readable version of the current duration.
- *
- * \par Access functions:
- * <TABLE><TR><TD>QString</TD><TD>getCurrentDurationString() const</TD></TR><TR><TD>void</TD><TD>setCurrentDurationString(const QString &currentDurationString)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>currentDurationStringChanged(const QString &currentDurationString)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void RecordsController::currentDurationStringChanged(const QString &currentDurationString)
- * \brief Part of the \link RecordsController::currentDurationString currentDurationString \endlink property.
- */
-
-/*!
- * \brief Part of the \link RecordsController::currentDurationString currentDurationString \endlink property.
- */
-QString RecordsController::getCurrentDurationString() const { return m_currentDurationString; }
-
-/*!
- * \brief Part of the \link RecordsController::currentDurationString currentDurationString \endlink property.
- */
-void RecordsController::setCurrentDurationString(const QString &currentDurationString)
-{
-    if (currentDurationString != m_currentDurationString) {
-        m_currentDurationString = currentDurationString;
-#ifdef QT_DEBUG
-        qDebug() << "Changed currentDurationString to" << m_currentDurationString;
-#endif
-        emit currentDurationStringChanged(getCurrentDurationString());
-    }
-}
-
-
-
 /*!
  * \brief Initializes the records controller.
  *
@@ -812,33 +320,37 @@ void RecordsController::setCurrentDurationString(const QString &currentDurationS
 void RecordsController::init()
 {
     if (!connectDb()) {
-        setCurrentId(-1);
+        setCurrent(nullptr);
         return;
     }
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
-        setCurrentId(-1);
+    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
+        setCurrent(nullptr);
         return;
     }
 
     if (q.next()) {
-        setCurrentId(q.value(0).toInt());
-        setCurrentActivityId(q.value(1).toInt());
-        setCurrentActivityName(q.value(2).toString());
-        setCurrentCategoryId(q.value(3).toInt());
-        setCurrentCategoryName(q.value(4).toString());
-        setCurrentCategoryColor(q.value(5).toString());
-        setCurrentStartTime(QDateTime::fromTime_t(q.value(6).toUInt()));
-        setCurrentRepetitions(q.value(7).toInt());
-        setCurrentDistance(q.value(8).toFloat());
-        setCurrentMinRepetitions(q.value(9).toInt());
-        setCurrentMaxRepetitions(q.value(10).toInt());
-        setCurrentDistanceActive(q.value(11).toBool());
-        setCurrentDuration(m_currentStartTime.secsTo(QDateTime::currentDateTimeUtc()));
+        QDateTime startTime = QDateTime::fromTime_t(q.value(6).toUInt());
+        Record *r = new Record(q.value(0).toInt(), startTime, QDateTime::fromTime_t(0), startTime.secsTo(QDateTime::currentDateTimeUtc()), q.value(7).toInt(), q.value(8).toDouble(), q.value(12).toString());
+
+        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, r);
+
+        Category *c = new Category(q.value(3).toInt(), q.value(4).toString(), q.value(5).toString(), 0, a);
+
+        a->setCategory(c);
+        r->setActivity(a);
+
+        if (r->isValid()) {
+            setCurrent(r);
+        } else {
+            setCurrent(nullptr);
+            delete r;
+        }
+
     } else {
-        setCurrentId(-1);
+        setCurrent(nullptr);
     }
 }
 
@@ -853,16 +365,16 @@ void RecordsController::init()
  */
 void RecordsController::increaseRepetitions()
 {
-    if (m_currentId < 0) {
+    if (!m_current) {
         return;
     }
 
-    int reps = m_currentRepetitions + 1;
+    int reps = m_current->repetitions() + 1;
 
-    if (reps <= m_currentMaxRepetitions) {
-        setCurrentRepetitions(reps);
+    if (reps <= m_current->activity()->maxRepeats()) {
+        m_current->setRepetitions(reps);
     } else {
-        setCurrentRepetitions(m_currentMaxRepetitions);
+        m_current->setRepetitions(m_current->activity()->maxRepeats());
     }
 }
 
@@ -875,16 +387,16 @@ void RecordsController::increaseRepetitions()
  */
 void RecordsController::decreaseRepetitions()
 {
-    if (m_currentId < 0) {
+    if (!m_current) {
         return;
     }
 
-    int reps = m_currentRepetitions - 1;
+    int reps = m_current->repetitions() - 1;
 
-    if (reps >= m_currentMinRepetitions) {
-        setCurrentRepetitions(reps);
+    if (reps >= m_current->activity()->minRepeats()) {
+        m_current->setRepetitions(reps);
     } else {
-        setCurrentRepetitions(m_currentMinRepetitions);
+        m_current->setRepetitions(m_current->activity()->minRepeats());
     }
 }
 
@@ -896,11 +408,12 @@ void RecordsController::decreaseRepetitions()
  */
 void RecordsController::updateDuration()
 {
-    if (m_currentId < 0) {
+    if (!m_current) {
         return;
     }
 
-    setCurrentDuration(m_currentStartTime.secsTo(QDateTime::currentDateTimeUtc()));
+    m_current->setDuration(m_current->start().secsTo(QDateTime::currentDateTimeUtc()));
+
 }
 
 
@@ -914,7 +427,7 @@ void RecordsController::updateDuration()
  */
 void RecordsController::startStopTimer()
 {
-    if (m_visible && (m_currentId > 0)) {
+    if (m_visible && m_current) {
 #ifdef QT_DEBUG
         qDebug() << "Starting timer for duration updates.";
 #endif
