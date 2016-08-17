@@ -14,7 +14,10 @@ HEADERS += \
     $$PWD/activitiesfiltermodel.h \
     $$PWD/recordsmodel.h \
     $$PWD/recordscontroller.h \
-    $$PWD/configuration.h
+    $$PWD/configuration.h \
+    $$PWD/helpers.h \
+    $$PWD/category.h \
+    $$PWD/activity.h
 
 SOURCES += \
     $$PWD/dbmanager.cpp \
@@ -29,4 +32,7 @@ SOURCES += \
     $$PWD/activitiesfiltermodel.cpp \
     $$PWD/recordsmodel.cpp \
     $$PWD/recordscontroller.cpp \
-    $$PWD/configuration.cpp
+    $$PWD/configuration.cpp \
+    $$PWD/helpers.cpp \
+    $$PWD/category.cpp \
+    $$PWD/activity.cpp

@@ -2,6 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QVariant>
+#include "category.h"
 
 using namespace Gibrievida;
 
@@ -56,11 +57,11 @@ int CategoriesController::add(const QString &name, const QString &color)
 
 
 /*!
- * \brief Edits the category at \a databaseId.
+ * \brief Updates the category \c in the database.
  *
- * Returns true and emits the edited() signal if the operation was successful.
+ * Returns true and emits the updated() signal if the operation was successful.
  */
-bool CategoriesController::edit(int databaseId, const QString &name, const QString &color)
+bool CategoriesController::update(Category *c)
 {
     if (!connectDb()) {
         return false;
@@ -72,15 +73,15 @@ bool CategoriesController::edit(int databaseId, const QString &name, const QStri
         return false;
     }
 
-    q.addBindValue(name);
-    q.addBindValue(color);
-    q.addBindValue(databaseId);
+    q.addBindValue(c->name());
+    q.addBindValue(c->color());
+    q.addBindValue(c->databaseId());
 
     if (!q.exec()) {
         return false;
     }
 
-    emit edited(databaseId, name, color);
+    emit updated(c);
 
     return true;
 }
@@ -88,11 +89,11 @@ bool CategoriesController::edit(int databaseId, const QString &name, const QStri
 
 
 /*!
- * \brief Removes the category at \a databaseId.
+ * \brief Removes the category at \a c from the database.
  *
  * Returns true and emits the removed() signal if the operation was successful.
  */
-bool CategoriesController::remove(int databaseId)
+bool CategoriesController::remove(Category *c)
 {
     if (!connectDb()) {
         return false;
@@ -104,13 +105,13 @@ bool CategoriesController::remove(int databaseId)
         return false;
     }
 
-    q.addBindValue(databaseId);
+    q.addBindValue(c->databaseId());
 
     if (!q.exec()) {
         return false;
     }
 
-    emit removed(databaseId);
+    emit removed(c->databaseId());
 
     return true;
 }

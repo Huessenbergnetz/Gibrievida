@@ -104,8 +104,8 @@ bool DBManager::createDatabase()
                                "start INTEGER NOT NULL, "
                                "end INTEGER NOT NULL DEFAULT 0, "
                                "duration INTEGER NOT NULL DEFAULT 0, "
-                               "repetitions INTEGER, "
-                               "distance REAL, "
+                               "repetitions INTEGER DEFAULT 0, "
+                               "distance REAL DEFAULT 0.0, "
                                "note TEXT)"
                                ))) {
         return false;

@@ -1,6 +1,8 @@
 #include "activitiesmodel.h"
 #include "activitiescontroller.h"
 #include "categoriescontroller.h"
+#include "category.h"
+#include "activity.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #ifdef QT_DEBUG
@@ -26,8 +28,7 @@ ActivitiesModel::ActivitiesModel(QObject *parent) : DBModel(parent)
  */
 ActivitiesModel::~ActivitiesModel()
 {
-    qDeleteAll(m_activities);
-    m_activities.clear();
+
 }
 
 
@@ -37,15 +38,7 @@ ActivitiesModel::~ActivitiesModel()
 QHash<int, QByteArray> ActivitiesModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-    roles.insert(DatabaseId, QByteArrayLiteral("databaseId"));
-    roles.insert(Name, QByteArrayLiteral("name"));
-    roles.insert(MinRepeats, QByteArrayLiteral("minRepeats"));
-    roles.insert(MaxRepeats, QByteArrayLiteral("maxRepeats"));
-    roles.insert(Distance, QByteArrayLiteral("distance"));
-    roles.insert(CategoryId, QByteArrayLiteral("categoryId"));
-    roles.insert(CategoryName, QByteArrayLiteral("categoryName"));
-    roles.insert(CategoryColor, QByteArrayLiteral("categoryColor"));
-    roles.insert(Records, QByteArrayLiteral("records"));
+    roles.insert(Item, QByteArrayLiteral("item"));
     return roles;
 }
 
@@ -88,28 +81,9 @@ QVariant ActivitiesModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    Activity *a = m_activities.at(index.row());
-
-    switch(role) {
-    case DatabaseId:
-        return QVariant::fromValue(a->databaseId);
-    case Name:
-        return QVariant::fromValue(a->name);
-    case MinRepeats:
-        return QVariant::fromValue(a->minRepeats);
-    case MaxRepeats:
-        return QVariant::fromValue(a->maxRepeats);
-    case Distance:
-        return QVariant::fromValue(a->distance);
-    case CategoryId:
-        return QVariant::fromValue(a->categoryId);
-    case CategoryName:
-        return QVariant::fromValue(a->categoryName);
-    case CategoryColor:
-        return QVariant::fromValue(a->categoryColor);
-    case Records:
-        return QVariant::fromValue(a->records);
-    default:
+    if (role == Item) {
+        return QVariant::fromValue<Activity*>(m_activities.at(index.row()));
+    } else {
         return QVariant();
     }
 }
@@ -132,7 +106,7 @@ void ActivitiesModel::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT a.id, a.name, a.minrepeats, a.maxrepeats, a.distance, a.category, c.name as categoryname, c.color, (SELECT COUNT(id) FROM records WHERE activity = a.id) AS records FROM activities a JOIN categories c ON c.id = a.category"))) {
+    if (!q.exec(QStringLiteral("SELECT a.id, a.name, a.minrepeats, a.maxrepeats, a.distance, a.category, c.name as categoryname, c.color, (SELECT COUNT(id) FROM records WHERE activity = a.id) AS records, (SELECT COUNT(id) FROM activities WHERE category = a.category) AS catActs FROM activities a JOIN categories c ON c.id = a.category"))) {
         setInOperation(false);
         return;
     }
@@ -140,16 +114,9 @@ void ActivitiesModel::init()
     QList<Activity*> t_activities;
 
     while (q.next()) {
-        Activity *a = new Activity;
-        a->databaseId = q.value(0).toInt();
-        a->name = q.value(1).toString();
-        a->minRepeats = q.value(2).toInt();
-        a->maxRepeats = q.value(3).toInt();
-        a->distance = q.value(4).toBool();
-        a->categoryId = q.value(5).toInt();
-        a->categoryName = q.value(6).toString();
-        a->categoryColor = q.value(7).toString();
-        a->records = q.value(8).toInt();
+        Activity *a = new Activity(q.value(0).toInt(), q.value(1).toString(), q.value(2).toInt(), q.value(3).toInt(), q.value(4).toBool(), q.value(8).toInt(), this);
+        Category *c = new Category(q.value(5).toInt(), q.value(6).toString(), q.value(7).toString(), q.value(9).toInt(), a);
+        a->setCategory(c);
         t_activities.append(a);
     }
 
@@ -185,42 +152,13 @@ void ActivitiesModel::clear()
 
 
 /*!
- * \brief Adds a new activity to the model.
+ * \brief Adds a new Activity to the model.
  */
-void ActivitiesModel::add(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance)
+void ActivitiesModel::add(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool distance)
 {
-    if (!connectDb()) {
-        return;
-    }
-
-    QSqlQuery q(m_db);
-
-    if (!q.prepare(QStringLiteral("SELECT name, color FROM categories WHERE id = ?"))) {
-        return;
-    }
-
-    q.addBindValue(category);
-
-    if (!q.exec()) {
-        return;
-    }
-
-    Activity *a = new Activity;
-
-    if (q.next()) {
-        a->databaseId = databaseId;
-        a->name = name;
-        a->minRepeats = minRepeats;
-        a->maxRepeats = maxRepeats;
-        a->distance = distance;
-        a->categoryId = category;
-        a->categoryName = q.value(0).toString();
-        a->categoryColor = q.value(1).toString();
-        a->records = 0;
-    } else {
-        delete a;
-        return;
-    }
+    Activity *a = new Activity(databaseId, name, minRepeats, maxRepeats, distance, 0, this);
+    c->setParent(a);
+    a->setCategory(c);
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
@@ -229,61 +167,6 @@ void ActivitiesModel::add(int databaseId, const QString &name, int category, int
     endInsertRows();
 }
 
-
-/*!
- * \brief Updates the model after an activity has been changed.
- */
-void ActivitiesModel::edit(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance)
-{
-    int idx = find(databaseId);
-
-    if (idx < 0) {
-        return;
-    }
-
-    QString categoryName;
-    QString categoryColor;
-
-    if (oldCategory != newCategory) {
-
-        if (!connectDb()) {
-            return;
-        }
-
-        QSqlQuery q(m_db);
-
-        if (!q.prepare(QStringLiteral("SELECT name, color FROM categories WHERE id = ?"))) {
-            return;
-        }
-
-        q.addBindValue(newCategory);
-
-        if (!q.exec()) {
-            return;
-        }
-
-        if (q.next()) {
-            categoryName = q.value(0).toString();
-            categoryColor = q.value(1).toString();
-        }
-    }
-
-    Activity *a = m_activities.at(idx);
-    a->name = name;
-    a->minRepeats = minRepeats;
-    a->maxRepeats = maxRepeats;
-    a->distance = distance;
-
-    if (oldCategory != newCategory) {
-        a->categoryId = newCategory;
-        a->categoryName = categoryName;
-        a->categoryColor = categoryColor;
-        emit dataChanged(index(idx), index(idx));
-    } else {
-        emit dataChanged(index(idx), index(idx), QVector<int>({Name, MinRepeats, MaxRepeats, Distance}));
-    }
-
-}
 
 
 
@@ -333,25 +216,28 @@ void ActivitiesModel::removeCategory(int category)
 /*!
  * \brief Updates the model items after a category has been updated.
  */
-void ActivitiesModel::editCategory(int category, const QString &name, const QString &color)
+void ActivitiesModel::updateCategory(Category *c)
 {
     if (m_activities.isEmpty()) {
         return;
     }
 
-    if (category < 0) {
+    if (!c) {
+        return;
+    }
+
+    if (!c->isValid()) {
         return;
     }
 
     for (int i = 0; i < m_activities.size(); ++i) {
-        if (m_activities.at(i)->categoryId == category) {
-            m_activities.at(i)->categoryName = name;
-            m_activities.at(i)->categoryColor = color;
-            emit dataChanged(index(i), index(i), QVector<int>({CategoryName, CategoryColor}));
+        Category *cat = m_activities.at(i)->category();
+        if (cat->databaseId() == c->databaseId()) {
+            cat->setName(c->name());
+            cat->setColor(c->color());
         }
     }
 }
-
 
 
 
@@ -369,7 +255,7 @@ int ActivitiesModel::find(int databaseId)
     }
 
     for (int i = 0; i < m_activities.size(); ++i) {
-        if (m_activities.at(i)->databaseId == databaseId) {
+        if (m_activities.at(i)->databaseId() == databaseId) {
             idx = i;
             break;
         }
@@ -388,14 +274,12 @@ void ActivitiesModel::setActivitiesController(ActivitiesController *controller)
     if (controller != m_actsController) {
         if (m_actsController) {
             disconnect(m_actsController, &ActivitiesController::added, this, &ActivitiesModel::add);
-            disconnect(m_actsController, &ActivitiesController::edited, this, &ActivitiesModel::edit);
             disconnect(m_actsController, &ActivitiesController::removed, this, &ActivitiesModel::remove);
             disconnect(m_actsController, &ActivitiesController::removedAll, this, &ActivitiesModel::removeAll);
         }
         m_actsController = controller;
         if (m_actsController) {
             connect(m_actsController, &ActivitiesController::added, this, &ActivitiesModel::add);
-            connect(m_actsController, &ActivitiesController::edited, this, &ActivitiesModel::edit);
             connect(m_actsController, &ActivitiesController::removed, this, &ActivitiesModel::remove);
             connect(m_actsController, &ActivitiesController::removedAll, this, &ActivitiesModel::removeAll);
         }
@@ -422,13 +306,13 @@ void ActivitiesModel::setCategoriesController(CategoriesController *controller)
         if (m_catsController) {
             disconnect(m_catsController, &CategoriesController::removed, this, &ActivitiesModel::removeCategory);
             disconnect(m_catsController, &CategoriesController::removedAll, this, &ActivitiesModel::removeAll);
-            disconnect(m_catsController, &CategoriesController::edited, this, &ActivitiesModel::editCategory);
+            disconnect(m_catsController, &CategoriesController::updated, this, &ActivitiesModel::updateCategory);
         }
         m_catsController = controller;
         if (m_catsController) {
             connect(m_catsController, &CategoriesController::removed, this, &ActivitiesModel::removeCategory);
             connect(m_catsController, &CategoriesController::removedAll, this, &ActivitiesModel::removeAll);
-            connect(m_catsController, &CategoriesController::edited, this, &ActivitiesModel::editCategory);
+            connect(m_catsController, &CategoriesController::updated, this, &ActivitiesModel::updateCategory);
         }
     }
 }

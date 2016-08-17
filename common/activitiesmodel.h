@@ -8,18 +8,8 @@ namespace Gibrievida {
 
 class ActivitiesController;
 class CategoriesController;
-
-struct Activity {
-    int databaseId;
-    QString name;
-    int minRepeats;
-    int maxRepeats;
-    bool distance;
-    int categoryId;
-    QString categoryName;
-    QString categoryColor;
-    int records;
-};
+class Category;
+class Activity;
 
 class ActivitiesModel : public DBModel
 {
@@ -29,15 +19,7 @@ public:
     ~ActivitiesModel();
 
     enum Roles {
-        DatabaseId = Qt::UserRole + 1,
-        Name,
-        MinRepeats,
-        MaxRepeats,
-        Distance,
-        CategoryId,
-        CategoryName,
-        CategoryColor,
-        Records
+        Item = Qt::UserRole + 1
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE Q_DECL_FINAL;
@@ -52,12 +34,11 @@ public:
     ActivitiesController *getActivitiesController() const;
 
 public slots:
-    void add(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance);
-    void edit(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance);
+    void add(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool distance);
     void remove(int databaseId, int category);
     void removeAll();
 
-    void editCategory(int category, const QString &name, const QString &color);
+    void updateCategory(Category *c);
     void removeCategory(int category);
 
 private:
@@ -75,6 +56,5 @@ private:
 };
 
 }
-Q_DECLARE_TYPEINFO(Gibrievida::Activity, Q_PRIMITIVE_TYPE);
 
 #endif // ACTIVITIESMODEL_H

@@ -2,6 +2,8 @@
 #include <QSqlQuery>
 #include "categoriescontroller.h"
 #include "activitiescontroller.h"
+#include "category.h"
+#include "activity.h"
 
 using namespace Gibrievida;
 
@@ -21,8 +23,7 @@ CategoriesModel::CategoriesModel(QObject *parent) : DBModel(parent)
  */
 CategoriesModel::~CategoriesModel()
 {
-    qDeleteAll(m_categories);
-    m_categories.clear();
+
 }
 
 
@@ -32,10 +33,7 @@ CategoriesModel::~CategoriesModel()
 QHash<int, QByteArray> CategoriesModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-    roles.insert(DatabaseId, QByteArrayLiteral("databaseId"));
-    roles.insert(Name, QByteArrayLiteral("name"));
-    roles.insert(Color, QByteArrayLiteral("color"));
-    roles.insert(Activities, QByteArrayLiteral("activities"));
+    roles.insert(Item, QByteArrayLiteral("item"));
     return roles;
 }
 
@@ -79,18 +77,9 @@ QVariant CategoriesModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    Category *c = m_categories.at(index.row());
-
-    switch(role) {
-    case DatabaseId:
-        return QVariant::fromValue(c->databaseId);
-    case Name:
-        return QVariant::fromValue(c->name);
-    case Color:
-        return QVariant::fromValue(c->color);
-    case Activities:
-        return QVariant::fromValue(c->activities);
-    default:
+    if (role = Item) {
+        return QVariant::fromValue<Category*>(m_categories.at(index.row()));
+    } else {
         return QVariant();
     }
 }
@@ -126,11 +115,7 @@ void CategoriesModel::init()
     QList<Category*> t_categories;
 
     while (q.next()) {
-        Category *c = new Category;
-        c->databaseId = q.value(0).toInt();
-        c->name = q.value(1).toString();
-        c->color = q.value(2).toString();
-        c->activities = q.value(3).toInt();
+        Category *c = new Category(q.value(0).toInt(), q.value(1).toString(), q.value(2).toString(), q.value(3).toInt(), this);
         t_categories.append(c);
     }
 
@@ -203,35 +188,12 @@ void CategoriesModel::add(int databaseId, const QString &name, const QString &co
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-    Category *c = new Category;
-    c->databaseId = databaseId;
-    c->name = name;
-    c->color = color;
-    c->activities = 0;
+    Category *c = new Category(databaseId, name, color, 0, this);
     m_categories.append(c);
 
     endInsertRows();
 }
 
-
-
-/*!
- * \brief Edits the category with \a databaseId.
- */
-void CategoriesModel::edit(int databaseId, const QString &name, const QString &color)
-{
-    int idx = find(databaseId);
-
-    if (idx < 0) {
-        return;
-    }
-
-    Category *c = m_categories.at(idx);
-    c->name = name;
-    c->color = color;
-
-    emit dataChanged(index(idx), index(idx), QVector<int>({Name, Color}));
-}
 
 
 
@@ -250,7 +212,7 @@ int CategoriesModel::find(int databaseId)
     }
 
     for (int i = 0; i < m_categories.size(); ++i) {
-        if (m_categories.at(i)->databaseId == databaseId) {
+        if (m_categories.at(i)->databaseId() == databaseId) {
             idx = i;
             break;
         }
@@ -263,61 +225,51 @@ int CategoriesModel::find(int databaseId)
 
 
 /*!
- * \brief This slot updates the model after a new activitiy has been added.
+ * \brief This slot updates the model after a new Activity has been added.
  */
-void CategoriesModel::addActivity(int databaseId, const QString &name, int category, int minRepeats, int maxRepeats, bool distance)
+void CategoriesModel::addActivity(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance)
 {
     Q_UNUSED(databaseId)
     Q_UNUSED(name)
     Q_UNUSED(minRepeats)
     Q_UNUSED(maxRepeats)
-    Q_UNUSED(distance)
+    Q_UNUSED(useDistance)
 
-    int idx = find(category);
+    int idx = find(c->databaseId());
 
     if (idx < 0) {
         return;
     }
 
-    m_categories.at(idx)->activities++;
-
-    emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+    m_categories.at(idx)->increaseActivities();
 }
 
 
 
-
 /*!
- * \brief This slot updates the model after an activitiy has been changed.
+ * \brief This slot updates the model after an Activity has been changed.
  */
-void CategoriesModel::editActivity(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance)
+void CategoriesModel::updateActivity(Activity *a, int oldCategoryId)
 {
-    Q_UNUSED(databaseId)
-    Q_UNUSED(name)
-    Q_UNUSED(minRepeats)
-    Q_UNUSED(maxRepeats)
-    Q_UNUSED(distance)
-
-    if (oldCategory != newCategory) {
-        int idx = find(oldCategory);
+    if (a->category()->databaseId() != oldCategoryId) {
+        int idx = find(oldCategoryId);
 
         if (idx > -1) {
-            m_categories.at(idx)->activities--;
-            emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+            m_categories.at(idx)->decreaseActivities();
         }
 
-        idx = find(newCategory);
+        idx = find(a->category()->databaseId());
 
         if (idx > -1) {
-            m_categories.at(idx)->activities++;
-            emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+            m_categories.at(idx)->increaseActivities();
         }
     }
 }
 
 
+
 /*!
- * \brief This slot updates the model after an activity has been removed.
+ * \brief This slot updates the model after an Activity has been removed.
  */
 void CategoriesModel::removeActivity(int databaseId, int category)
 {
@@ -329,9 +281,7 @@ void CategoriesModel::removeActivity(int databaseId, int category)
         return;
     }
 
-    m_categories.at(idx)->activities--;
-
-    emit dataChanged(index(idx), index(idx), QVector<int>(Activities));
+    m_categories.at(idx)->decreaseActivities();
 }
 
 
@@ -348,10 +298,9 @@ void CategoriesModel::removeAllActivities()
     }
 
     for (int i = 0; i < m_categories.size(); ++i) {
-        m_categories.at(i)->activities = 0;
+        m_categories.at(i)->setActivities(0);
     }
 
-    emit dataChanged(index(0), index(rowCount()-1), QVector<int>(Activities));
 }
 
 
@@ -365,14 +314,12 @@ void CategoriesModel::setCategoriesController(CategoriesController *controller)
     if (controller != m_controller) {
         if (m_controller) {
             disconnect(m_controller, &CategoriesController::added, this, &CategoriesModel::add);
-            disconnect(m_controller, &CategoriesController::edited, this, &CategoriesModel::edit);
             disconnect(m_controller, &CategoriesController::removed, this, &CategoriesModel::remove);
             disconnect(m_controller, &CategoriesController::removedAll, this, &CategoriesModel::removeAll);
         }
         m_controller = controller;
         if (m_controller) {
             connect(m_controller, &CategoriesController::added, this, &CategoriesModel::add);
-            connect(m_controller, &CategoriesController::edited, this, &CategoriesModel::edit);
             connect(m_controller, &CategoriesController::removed, this, &CategoriesModel::remove);
             connect(m_controller, &CategoriesController::removedAll, this, &CategoriesModel::removeAll);
         }
@@ -397,14 +344,14 @@ void CategoriesModel::setActivitiesController(ActivitiesController *controller)
     if (controller != m_actsController) {
         if (m_actsController) {
             disconnect(m_actsController, &ActivitiesController::added, this, &CategoriesModel::addActivity);
-            disconnect(m_actsController, &ActivitiesController::edited, this, &CategoriesModel::editActivity);
+            disconnect(m_actsController, &ActivitiesController::updated, this, &CategoriesModel::updateActivity);
             disconnect(m_actsController, &ActivitiesController::removed, this, &CategoriesModel::removeActivity);
             disconnect(m_actsController, &ActivitiesController::removedAll, this, &CategoriesModel::removeAllActivities);
         }
         m_actsController = controller;
         if (m_actsController) {
             connect(m_actsController, &ActivitiesController::added, this, &CategoriesModel::addActivity);
-            connect(m_actsController, &ActivitiesController::edited, this, &CategoriesModel::editActivity);
+            connect(m_actsController, &ActivitiesController::updated, this, &CategoriesModel::updateActivity);
             connect(m_actsController, &ActivitiesController::removed, this, &CategoriesModel::removeActivity);
             connect(m_actsController, &ActivitiesController::removedAll, this, &CategoriesModel::removeAllActivities);
         }

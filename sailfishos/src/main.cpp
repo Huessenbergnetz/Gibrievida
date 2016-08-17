@@ -30,11 +30,15 @@
 
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
+#include "../common/category.h"
 #include "../common/categoriescontroller.h"
 #include "../common/categoriesfiltermodel.h"
+#include "../common/activity.h"
 #include "../common/activitiescontroller.h"
 #include "../common/activitiesfiltermodel.h"
+#include "../common/recordscontroller.h"
 #include "../common/recordsmodel.h"
+#include "../common/helpers.h"
 
 int main(int argc, char *argv[])
 {
@@ -52,12 +56,15 @@ int main(int argc, char *argv[])
     QObject::connect(dbm, &QThread::finished, dbm, &QObject::deleteLater);
     dbm->start(QThread::LowPriority);
 
+    qmlRegisterType<Gibrievida::Category>("harbour.gibrievida", 1, 0, "Category");
     qmlRegisterUncreatableType<Gibrievida::CategoriesController>("harbour.gibrievida", 1, 0, "CategoriesController", QStringLiteral("CategoriesController can not be created."));
     qmlRegisterType<Gibrievida::CategoriesFilterModel>("harbour.gibrievida", 1, 0, "CategoriesModel");
 
+    qmlRegisterType<Gibrievida::Activity>("harbour.gibrievida", 1, 0, "Activity");
     qmlRegisterUncreatableType<Gibrievida::ActivitiesController>("harbour.gibrievida", 1, 0, "ActivitiesController", QStringLiteral("ActivitiesController can not be created."));
     qmlRegisterType<Gibrievida::ActivitiesFilterModel>("harbour.gibrievida", 1, 0, "ActivitiesModel");
 
+    qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created"));
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
 #ifndef CLAZY
@@ -68,9 +75,13 @@ int main(int argc, char *argv[])
 
     Gibrievida::CategoriesController catsController;
     Gibrievida::ActivitiesController actsController;
+    Gibrievida::RecordsController recsController;
+    Gibrievida::Helpers helpers;
 
     view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
     view->rootContext()->setContextProperty(QStringLiteral("activities"), &actsController);
+    view->rootContext()->setContextProperty(QStringLiteral("records"), &recsController);
+    view->rootContext()->setContextProperty(QStringLiteral("helpers"), &helpers);
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));

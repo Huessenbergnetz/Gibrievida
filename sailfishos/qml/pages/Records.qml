@@ -37,10 +37,12 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Remove all")
+                onClicked: remorse.execute(qsTr("Removing all"), function() {records.removeAll()})
             }
 
             MenuItem {
-                text: qsTr("Record activity")
+                text: records.currentId < 0 ? qsTr("Record activity") : qsTr("Finish recording")
+                onClicked: records.currentId < 0 ? pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml")) : records.finish()
             }
         }
 
@@ -51,13 +53,21 @@ Page {
 
         model: RecordsModel {
             id: recordsModel
-//            controller: categories
-//            activitiesController: activities
+            recordsController: records
+            activitiesController: activities
+            categoriesController: categories
         }
 
         header: PageHeader {
             title: qsTr("Records")
             page: recordsManager
+        }
+
+        BusyIndicator {
+            size: BusyIndicatorSize.Large
+            anchors.centerIn: parent
+            running: visible
+            visible: recordsModel.inOperation
         }
 
         delegate: ListItem {
@@ -66,10 +76,13 @@ Page {
             contentHeight: Theme.itemSizeSmall
             menu: contextMenu
 
+            ListView.onAdd: AddAnimation { target: recManagerListItem }
             ListView.onRemove: animateRemoval(recManagerListItem)
 
+            onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {activityName: model.activityName, categoryName: model.categoryName, startTime: timeText.text, duration: model.duration, durationString: model.durationString, repetitions: model.repetitions})
+
             function remove() {
-//                remorseAction(qsTr("Removing"), function() {categories.remove(model.databaseId)})
+                remorseAction(qsTr("Removing"), function() {records.remove(model.databaseId, model.activityId, model.categoryId)})
             }
 
             Rectangle {
@@ -98,8 +111,7 @@ Page {
                         id: timeText
                         width: parent.width*0.4
                         anchors { verticalCenter: aName.verticalCenter }
-                        //: date and time foramt, see http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method
-                        text: Qt.formatDateTime(start, qsTr("dd.MM.yyyy hh:mmap"))
+                        text: helpers.relativeTimeString(start)
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         verticalAlignment: Text.AlignRight
@@ -192,18 +204,18 @@ Page {
                 ContextMenu {
                     MenuItem {
                         text: qsTr("Edit")
-//                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/CategoryDialog.qml"), {databaseId: databaseId, name: model.name, color: model.color})
+                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"), {databaseId: model.databaseId, activityId: model.activityId, activityName: model.activityName, start: model.start, duration: model.duration, durationString: model.durationString, repetitions: model.repetitions})
                     }
                     MenuItem {
                         text: qsTr("Remove")
-//                        onClicked: remove()
+                        onClicked: remove()
                     }
                 }
             }
         }
 
         ViewPlaceholder {
-            enabled: recordsListView.count === 0
+            enabled: recordsListView.count === 0 && !recordsModel.inOperation
             text: qsTr("No records")
             hintText: qsTr("Use the pull down menu to add new records")
         }

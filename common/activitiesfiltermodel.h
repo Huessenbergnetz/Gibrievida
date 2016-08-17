@@ -25,6 +25,10 @@ public:
     void setActivitiesController(ActivitiesController *activitiesController);
     void setCategoriesController(CategoriesController *categoriesController);
 
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const Q_DECL_OVERRIDE;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
+
 private:
     ActivitiesModel *m_actsModel;
     Q_DISABLE_COPY(ActivitiesFilterModel)

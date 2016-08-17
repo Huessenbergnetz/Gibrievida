@@ -1,5 +1,9 @@
 #include "categoriesfiltermodel.h"
 #include "categoriesmodel.h"
+#include "category.h"
+#ifdef QT_DEBUG
+#include <QtDebug>
+#endif
 
 using namespace Gibrievida;
 
@@ -13,10 +17,8 @@ CategoriesFilterModel::CategoriesFilterModel(QObject *parent) : FilterModel(pare
     m_catsModel = new CategoriesModel(this);
     connect(m_catsModel, &DBModel::inOperationChanged, this, &FilterModel::setInOperation);
     setSourceModel(m_catsModel);
-    setFilterRole(CategoriesModel::Name);
-    setFilterCaseSensitivity(Qt::CaseInsensitive);
     setSortLocaleAware(true);
-    setSortRole(CategoriesModel::Name);
+    setSortRole(CategoriesModel::Item);
     sort(0);
 }
 
@@ -29,6 +31,30 @@ CategoriesFilterModel::CategoriesFilterModel(QObject *parent) : FilterModel(pare
 CategoriesFilterModel::~CategoriesFilterModel()
 {
 
+}
+
+
+/*!
+ * \brief Reimplemented from QSortFilterProxyModel.
+ */
+bool CategoriesFilterModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    Category *l = sourceModel()->data(left, CategoriesModel::Item).value<Category*>();
+    Category *r = sourceModel()->data(right, CategoriesModel::Item).value<Category*>();
+
+    return QString::localeAwareCompare(l->name(), r->name()) < 0;
+}
+
+
+
+/*!
+ * \brief Reimplemented from QSortFilterProxyModel.
+ */
+bool CategoriesFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+
+    return sourceModel()->data(idx, CategoriesModel::Item).value<Category*>()->name().contains(filterRegExp());
 }
 
 

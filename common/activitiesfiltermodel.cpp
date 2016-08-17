@@ -1,5 +1,6 @@
 #include "activitiesfiltermodel.h"
 #include "activitiesmodel.h"
+#include "activity.h"
 
 using namespace Gibrievida;
 
@@ -13,10 +14,8 @@ ActivitiesFilterModel::ActivitiesFilterModel(QObject *parent) : FilterModel(pare
     m_actsModel = new ActivitiesModel(this);
     connect(m_actsModel, &DBModel::inOperationChanged, this, &FilterModel::setInOperation);
     setSourceModel(m_actsModel);
-    setFilterRole(ActivitiesModel::Name);
-    setFilterCaseSensitivity(Qt::CaseInsensitive);
     setSortLocaleAware(true);
-    setSortRole(ActivitiesModel::Name);
+    setSortRole(ActivitiesModel::Item);
     sort(0);
 }
 
@@ -29,6 +28,29 @@ ActivitiesFilterModel::ActivitiesFilterModel(QObject *parent) : FilterModel(pare
 ActivitiesFilterModel::~ActivitiesFilterModel()
 {
 
+}
+
+
+/*!
+ * \brief Reimplemented from QSortFilterProxyModel.
+ */
+bool ActivitiesFilterModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    Activity *l = sourceModel()->data(left, ActivitiesModel::Item).value<Activity*>();
+    Activity *r = sourceModel()->data(right, ActivitiesModel::Item).value<Activity*>();
+
+    return QString::localeAwareCompare(l->name(), r->name()) < 0;
+}
+
+
+/*!
+ * \brief Reimplemented from QSortFilterProxyModel.
+ */
+bool ActivitiesFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+
+    return sourceModel()->data(idx, ActivitiesModel::Item).value<Activity*>()->name().contains(filterRegExp());
 }
 
 

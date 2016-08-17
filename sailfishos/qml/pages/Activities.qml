@@ -89,17 +89,17 @@ Page {
             contentHeight: Theme.itemSizeSmall
             menu: contextMenu
 
-            ListView.onRemove: animateRemoval(catManagerListItem)
+            ListView.onRemove: animateRemoval(actsManagerItem)
 
             function remove() {
-                remorseAction(qsTr("Removing"), function() {activites.remove(model.databaseId)})
+                remorseAction(qsTr("Removing"), function() {activities.remove(item)})
             }
 
             Column {
                 anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
 
                 Label {
-                    text: name
+                    text: item.name
                     width: parent.width
                     color: actsManagerItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
@@ -112,13 +112,13 @@ Page {
                         id: cColor
                         anchors { left: parent.left; verticalCenter: cName.verticalCenter; top: parent.top }
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
-                        color: categoryColor
+                        color: item.category.color
                     }
 
                     Text {
                         id: cName
                         anchors { left: cColor.right; leftMargin: Theme.paddingMedium; top: parent.top }
-                        text: categoryName
+                        text: item.category.name
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: actsManagerItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
                     }
@@ -126,7 +126,7 @@ Page {
                     Text {
                         id: recordsCount
                         anchors { right: parent.right; top: parent.top }
-                        text: qsTr("%n record(s)", "", records)
+                        text: qsTr("%n record(s)", "", item.records)
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: actsManagerItem.highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
                     }
@@ -137,7 +137,7 @@ Page {
                         source: "image://theme/icon-cover-sync"
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                         highlighted: actsManagerItem.highlighted
-                        visible: (minRepeats > 0 && maxRepeats > 0)
+                        visible: item.useRepeats
                     }
 
                     ImageHighlight {
@@ -146,7 +146,7 @@ Page {
                         source: "image://theme/icon-cover-transfers"
                         width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                         highlighted: actsManagerItem.highlighted
-                        visible: distance
+                        visible: item.useDistance
                     }
                 }
             }
@@ -156,7 +156,7 @@ Page {
                 ContextMenu {
                     MenuItem {
                         text: qsTr("Edit")
-                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/ActivityDialog.qml"), {databaseId: model.databaseId, name: model.name, categoryId: model.categoryId, categoryName: model.categoryName, minRepeats: model.minRepeats, maxRepeats: model.maxRepeats, distance: model.distance})
+                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/ActivityDialog.qml"), {activity: model.item})
                     }
                     MenuItem {
                         text: qsTr("Remove")

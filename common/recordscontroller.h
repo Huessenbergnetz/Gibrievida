@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QDateTime>
 #include "basecontroller.h"
+#include "helpers.h"
+
+class QTimer;
 
 namespace Gibrievida {
 
@@ -19,12 +22,21 @@ class RecordsController : public BaseController
     Q_PROPERTY(QDateTime currentStartTime READ getCurrentStartTime NOTIFY currentStartTimeChanged)
     Q_PROPERTY(int currentRepetitions READ getCurrentRepetitions NOTIFY currentRepetitionsChanged)
     Q_PROPERTY(float currentDistance READ getCurrentDistance NOTIFY currentDistanceChanged)
+    Q_PROPERTY(int currentMinRepetitions READ getCurrentMinRepetitions NOTIFY currentMinRepetitionsChanged)
+    Q_PROPERTY(int currentMaxRepetitions READ getCurrentMaxRepetitions NOTIFY currentMaxRepetitionsChanged)
+    Q_PROPERTY(bool currentDistanceActive READ hasCurrentDistanceActive NOTIFY currentDistanceActiveChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
+    Q_PROPERTY(int currentDuration READ getCurrentDuration NOTIFY currentDurationChanged)
+    Q_PROPERTY(QString currentDurationString READ getCurrentDurationString NOTIFY currentDurationStringChanged)
 public:
     explicit RecordsController(QObject *parent = nullptr);
     ~RecordsController();
 
-    int add(int activity);
-    void finish(int databaseId, int repetitions = 0, float distance = 0.0, QString note = QString());
+    Q_INVOKABLE int add(int activity, const QString &note = QString());
+    Q_INVOKABLE void finish();
+    Q_INVOKABLE void remove(int databaseId, int activity, int category);
+    Q_INVOKABLE void removeByActivity(int activity, int category);
+    Q_INVOKABLE void removeAll();
 
     int getCurrentId() const;
     int getCurrentActivityId() const;
@@ -35,9 +47,23 @@ public:
     QDateTime getCurrentStartTime() const;
     int getCurrentRepetitions() const;
     float getCurrentDistance() const;
+    int getCurrentMinRepetitions() const;
+    int getCurrentMaxRepetitions() const;
+    bool hasCurrentDistanceActive() const;
+    bool isVisible() const;
+    int getCurrentDuration() const;
+    QString getCurrentDurationString() const;
+
+    void setVisible(bool visible);
+
+    Q_INVOKABLE void increaseRepetitions();
+    Q_INVOKABLE void decreaseRepetitions();
 
 signals:
-    void added(int databaseId, int activity, const QDateTime &start);
+    void finished(int databaseId, int activity, int category);
+    void removed(int databaseId, int activity, int category);
+    void removedByActivity(int activity, int category);
+    void removedAll();
 
     void currentIdChanged(int currentId);
     void currentActivityIdChanged(int currentActivityId);
@@ -48,6 +74,14 @@ signals:
     void currentStartTimeChanged(const QDateTime &currentStartTime);
     void currentRepetitionsChanged(int currentRepetitions);
     void currentDistanceChanged(float currentDistance);
+    void currentMinRepetitionsChanged(int currentMinRepetitions);
+    void currentMaxRepetitionsChanged(int currentMaxRepetitions);
+    void currentDistanceActiveChanged(bool currentDistanceActive);
+    void currentDurationChanged(int currentDuration);
+    void currentDurationStringChanged(const QString &currentDurationString);
+
+private slots:
+    void updateDuration();
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -61,6 +95,14 @@ private:
     void setCurrentStartTime(const QDateTime &currentStartTime);
     void setCurrentRepetitions(int currentRepetitions);
     void setCurrentDistance(float currentDistance);
+    void setCurrentMinRepetitions(int currentMinRepetitions);
+    void setCurrentMaxRepetitions(int currentMaxRepetitions);
+    void setCurrentDistanceActive(bool currentDistanceActive);
+    void setCurrentDuration(int currentDuration);
+    void setCurrentDurationString(const QString &currentDurationString);
+
+    void init();
+    void startStopTimer();
 
 
     int m_currentId;
@@ -72,6 +114,16 @@ private:
     QDateTime m_currentStartTime;
     int m_currentRepetitions;
     float m_currentDistance;
+    int m_currentMinRepetitions;
+    int m_currentMaxRepetitions;
+    bool m_currentDistanceActive;
+    bool m_visible;
+    int m_currentDuration;
+    QString m_currentDurationString;
+
+    QTimer *m_timer;
+
+    Helpers helpers;
 };
 
 }

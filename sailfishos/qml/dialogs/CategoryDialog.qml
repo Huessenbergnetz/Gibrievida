@@ -18,17 +18,19 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import harbour.gibrievida 1.0
 
 Dialog {
     id: catDialog
 
-    property int databaseId: -1
-    property alias name: nameField.text
-    property alias color: colorChoosed.color
+    property Category category: null
 
     Component.onCompleted: {
-        if (databaseId < 0) {
-            color = categories.createRandomColor()
+        if (category) {
+            nameField.text = category.name
+            chosedColor.color = category.color
+        } else {
+            chosedColor.color = categories.createRandomColor()
         }
     }
 
@@ -50,7 +52,7 @@ Dialog {
             spacing: Theme.paddingLarge
 
             DialogHeader {
-                acceptText: (databaseId < 0) ? qsTr("Add") : qsTr("Edit")
+                acceptText: category ? qsTr("Edit") : qsTr("Add")
                 flickable: catDialogFlick
                 dialog: catDialog
             }
@@ -59,14 +61,14 @@ Dialog {
                 width: parent.width
 
                 Rectangle {
-                    id: colorChoosed
+                    id: chosedColor
                     height: nameField.height
                     width: height
                 }
 
                 TextField {
                     id: nameField
-                    width: parent.width - colorChoosed.width - Theme.horizontalPageMargin
+                    width: parent.width - chosedColor.width - Theme.horizontalPageMargin
                     label: qsTr("Name"); placeholderText: label
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     EnterKey.onClicked: nameField.focus = false
@@ -76,17 +78,21 @@ Dialog {
 
             ColorPicker {
                 id: colorChooser
-                onColorChanged: catDialog.color = color
+                onColorChanged: {
+                    chosedColor.color = color
+                }
             }
         }
 
     }
 
     onAccepted: {
-        if (databaseId > -1) {
-            categories.edit(databaseId, nameField.text, colorChooser.color)
+        if (category) {
+            category.name = nameField.text
+            category.color = chosedColor.color
+            categories.update(category)
         } else {
-            categories.add(nameField.text, colorChoosed.color)
+            categories.add(nameField.text, chosedColor.color)
         }
     }
 }

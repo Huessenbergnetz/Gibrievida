@@ -6,6 +6,8 @@
 
 namespace Gibrievida {
 
+class Category;
+
 class CategoriesController : public BaseController
 {
     Q_OBJECT
@@ -14,14 +16,14 @@ public:
     ~CategoriesController();
 
     Q_INVOKABLE int add(const QString &name, const QString &color);
-    Q_INVOKABLE bool edit(int databaseId, const QString &name, const QString &color);
-    Q_INVOKABLE bool remove(int databaseId);
+    Q_INVOKABLE bool update(Gibrievida::Category *c);
+    Q_INVOKABLE bool remove(Gibrievida::Category *c);
     Q_INVOKABLE bool removeAll();
     Q_INVOKABLE QString createRandomColor();
 
 signals:
     void added(int databaseId, const QString &name, const QString &color);
-    void edited(int databaseId, const QString &name, const QString &color);
+    void updated(Category *c);
     void removed(int databaseId);
     void removedAll();
 

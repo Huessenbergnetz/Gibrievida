@@ -23,6 +23,8 @@ import "../common"
 Page {
     id: mainPage
 
+    objectName: "MainPage"
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -32,7 +34,8 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Record activity")
+                text: records.currentId < 0 ? qsTr("Record activity") : qsTr("Finish recording")
+                onClicked: records.currentId < 0 ? pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml")) : records.finish()
             }
         }
 
@@ -42,15 +45,159 @@ Page {
             id: column
 
             width: mainPage.width
-            spacing: Theme.paddingLarge
+
             PageHeader {
                 title: "Gibrievida"
+            }
+
+            SectionHeader {
+                text: qsTr("Current record")
+            }
+
+            Item {
+                width: parent.width
+                height: Theme.itemSizeMedium
+                visible: records.currentId < 0
+
+                Label {
+                    anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
+                    text: qsTr("There is currently no active recording. Pull down to start a new recording.")
+                    color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+            }
+
+            BackgroundItem {
+                id: curRec
+                width: parent.width
+                contentHeight: Theme.itemSizeSmall
+                visible: records.currentId > 0
+
+                Rectangle {
+                    id: cColor
+                    anchors { left: parent.left; leftMargin: Theme.paddingSmall; top: parent.top; verticalCenter: parent.verticalCenter }
+                    width: Theme.itemSizeExtraSmall / 5
+                    height: Theme.itemSizeSmall * 0.9
+                    color: records.currentCategoryColor
+                }
+
+                Column {
+                    anchors { left: cColor.right; leftMargin: Theme.paddingMedium; right: parent.right; rightMargin: Theme.horizontalPageMargin; top: parent.top }
+
+                    Row {
+                        width: parent.width
+
+                        Label {
+                            id: aName
+                            width: parent.width * 0.6
+                            text: records.currentActivityName
+                            color: curRec.highlighted ? Theme.highlightColor : Theme.primaryColor
+                            truncationMode: TruncationMode.Fade
+                        }
+
+                        Text {
+                            id: timeText
+                            width: parent.width * 0.4
+                            anchors { verticalCenter: aName.verticalCenter }
+                            //: date and time foramt, see http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method
+                            text: Qt.formatDateTime(records.currentStartTime, qsTr("dd.MM.yyyy hh:mmap"))
+                            font.pixelSize: Theme.fontSizeExtraSmall
+                            color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                            verticalAlignment: Text.AlignRight
+                        }
+                    }
+
+                    Row {
+                        width: parent.width
+
+                        Text {
+                            id: cName
+                            width: parent.width * 0.33
+                            text: records.currentCategoryName
+                            font.pixelSize: Theme.fontSizeExtraSmall
+                            color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                            elide: Text.ElideRight
+                        }
+
+                        Item {
+                            id: repetitionItem
+                            width: distanceItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
+                            height: repText.height
+                            visible: records.currentRepetitions > 0
+
+                            ImageHighlight {
+                                id: repIcon
+                                anchors { left: parent.left; top: parent.top; verticalCenter: repText.verticalCenter }
+                                height: Theme.fontSizeExtraSmall
+                                source: "image://theme/icon-s-retweet"
+                                highlighted: curRec.highlighted
+                            }
+
+                            Text {
+                                id: repText
+                                anchors { left: repIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
+                                text: records.currentRepetitions
+                                font.pixelSize: Theme.fontSizeExtraSmall
+                                color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                            }
+                        }
+
+                        Item {
+                            id: distanceItem
+                            width: repetitionItem.visible ? (parent.width * 0.17) : (parent.width * 0.34)
+                            height: distText.height
+                            visible: records.currentDistance > 0.0
+
+                            ImageHighlight {
+                                id: distIcon
+                                anchors { left: parent.left; top: parent.top; verticalCenter: distText.verticalCenter }
+                                height: Theme.fontSizeExtraSmall
+                                source: "image://theme/icon-cover-transfers"
+                                highlighted: curRec.highlighted
+                            }
+
+                            Text {
+                                id: distText
+                                anchors { left: distIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
+                                text: records.currentDistance
+                                font.pixelSize: Theme.fontSizeExtraSmall
+                                color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                            }
+                        }
+
+                        Item {
+                            width: parent.width * 0.33
+                            height: durText.height
+                            visible: records.currentDuration > 0
+
+                            ImageHighlight {
+                                id: durIcon
+                                anchors { left: parent.left; top: parent.top; verticalCenter: durText.verticalCenter }
+                                height: Theme.fontSizeExtraSmall
+                                source: "image://theme/icon-s-duration"
+                                highlighted: curRec.highlighted
+                            }
+
+                            Text {
+                                id: durText
+                                anchors { left: durIcon.right; leftMargin: Theme.paddingSmall }
+                                text: records.currentDurationString
+                                font.pixelSize: Theme.fontSizeExtraSmall
+                                color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                            }
+                        }
+                    }
+                }
+            }
+
+            SectionHeader {
+                text: qsTr("Management")
             }
 
             Repeater {
                 width: parent.width
                 model: ListModel {
-                    ListElement { name: QT_TR_NOOP("Categories"); icon: "image://theme/icon-m-levels"; target: "Categories.qml" }
+                    ListElement { name: QT_TR_NOOP("Categories"); icon: "image://theme/icon-m-tabs"; target: "Categories.qml" }
                     ListElement { name: QT_TR_NOOP("Activities"); icon: "image://theme/icon-m-watch"; target: "Activities.qml" }
                     ListElement { name: QT_TR_NOOP("Records"); icon: "image://theme/icon-m-gps"; target: "Records.qml" }
                 }

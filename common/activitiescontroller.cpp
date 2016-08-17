@@ -1,7 +1,12 @@
 #include "activitiescontroller.h"
+#include "category.h"
+#include "activity.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QVariant>
+#ifdef QT_DEBUG
+#include <QtDebug>
+#endif
 
 using namespace Gibrievida;
 
@@ -25,35 +30,40 @@ ActivitiesController::~ActivitiesController()
 /*!
  * \brief Adds a new activity to the database.
  *
- * Emits the added() signal and return the database id > -1 if successful.
+ * Emits the added() signal and returns the database id > -1 if successful.
  */
-int ActivitiesController::add(const QString &name, int category, int minRepeats, int maxRepeats, bool distance)
+int ActivitiesController::add(const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance)
 {
     if (!connectDb()) {
         return -1;
     }
 
+    Category *cat = new Category(c);
+
     QSqlQuery q(m_db);
 
     if (!q.prepare(QStringLiteral("INSERT INTO activities (name, category, minrepeats, maxrepeats, distance) VALUES (?, ?, ?, ?, ?)"))) {
+        delete cat;
         return -1;
     }
 
     q.addBindValue(name);
-    q.addBindValue(category);
+    q.addBindValue(cat->databaseId());
     q.addBindValue(minRepeats);
     q.addBindValue(maxRepeats);
-    q.addBindValue(distance);
+    q.addBindValue(useDistance);
 
     if (!q.exec()) {
+        delete cat;
         return -1;
     }
 
     int id = q.lastInsertId().toInt();
 
-    emit added(id, name, category, minRepeats, maxRepeats, distance);
+    emit added(id, name, cat, minRepeats, maxRepeats, useDistance);
 
     return id;
+
 }
 
 
@@ -63,8 +73,12 @@ int ActivitiesController::add(const QString &name, int category, int minRepeats,
  *
  * Emits the edited() signal and returns true on success.
  */
-bool ActivitiesController::edit(int databaseId, const QString &name, int oldCategory, int newCategory, int minRepeats, int maxRepeats, bool distance)
+bool ActivitiesController::update(Activity *a, int oldCategoryId)
 {
+    if (!a->isValid()) {
+        return false;
+    }
+
     if (!connectDb()) {
         return false;
     }
@@ -75,29 +89,29 @@ bool ActivitiesController::edit(int databaseId, const QString &name, int oldCate
         return false;
     }
 
-    q.addBindValue(name);
-    q.addBindValue(newCategory);
-    q.addBindValue(minRepeats);
-    q.addBindValue(maxRepeats);
-    q.addBindValue(distance);
-    q.addBindValue(databaseId);
+    q.addBindValue(a->name());
+    q.addBindValue(a->category()->databaseId());
+    q.addBindValue(a->minRepeats());
+    q.addBindValue(a->maxRepeats());
+    q.addBindValue(a->useDistance());
+    q.addBindValue(a->databaseId());
 
     if (!q.exec()) {
         return false;
     }
 
-    emit edited(databaseId, name, oldCategory, newCategory, minRepeats, maxRepeats, distance);
+    emit updated(a, oldCategoryId);
 
     return true;
 }
 
 
 /*!
- * \brief Removes the activity with \q databaseId.
+ * \brief Removes the Activity \c a.
  *
  * Emits the removed() signal and return true on success.
  */
-bool ActivitiesController::remove(int databaseId, int category)
+bool ActivitiesController::remove(Activity *a)
 {
     if (!connectDb()) {
         return false;
@@ -105,17 +119,17 @@ bool ActivitiesController::remove(int databaseId, int category)
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("REMOVE FROM activities WHERE id = ?"))) {
+    if (!q.prepare(QStringLiteral("DELETE FROM activities WHERE id = ?"))) {
         return false;
     }
 
-    q.addBindValue(databaseId);
+    q.addBindValue(a->databaseId());
 
     if (!q.exec()) {
         return false;
     }
 
-    emit removed(databaseId, category);
+    emit removed(a->databaseId(), a->category()->databaseId());
 
     return true;
 }

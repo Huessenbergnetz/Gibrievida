@@ -2,6 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QtCore/qmath.h>
+#include "recordscontroller.h"
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -18,7 +19,7 @@ RecordsModel::RecordsModel(QObject *parent) : DBModel(parent)
     m_catsController = nullptr;
     m_activityId = 0;
     m_order = QStringLiteral("DESC");
-    m_orderBy = QStringLiteral("end");
+    m_orderBy = QStringLiteral("start");
 }
 
 
@@ -141,10 +142,10 @@ void RecordsModel::update()
         return;
     }
 
-    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category");
+    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
     if (m_activityId > 0) {
-        queryString.append(QLatin1String(" WHERE r.activity = ?"));
+        queryString.append(QLatin1String(" AND r.activity = ?"));
     }
 
     queryString.append(QLatin1String(" ORDER BY ")).append(m_orderBy).append(QLatin1String(" ")).append(m_order);
@@ -160,9 +161,6 @@ void RecordsModel::update()
     if (m_activityId > 0) {
         q.addBindValue(m_activityId);
     }
-
-//    q.addBindValue(m_orderBy);
-//    q.addBindValue(m_order);
 
     if (!q.exec()) {
         setInOperation(false);
@@ -298,10 +296,22 @@ RecordsController *RecordsModel::getRecordsController() const { return m_recsCon
  */
 void RecordsModel::setRecordsController(RecordsController *recordsController)
 {
+    if (m_recsController) {
+        disconnect(m_recsController, &RecordsController::finished, this, &RecordsModel::finished);
+        disconnect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
+        disconnect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
+    }
+
     m_recsController = recordsController;
 #ifdef QT_DEBUG
     qDebug() << " Set recordsController to" << m_recsController;
 #endif
+
+    if (m_recsController) {
+        connect(m_recsController, &RecordsController::finished, this, &RecordsModel::finished);
+        connect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
+        connect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
+    }
 }
 
 
@@ -443,4 +453,162 @@ void RecordsModel::setOrderBy(const QString &orderBy)
 #ifdef QT_DEBUG
     qDebug() << " Set orderBy to" << m_orderBy;
 #endif
+}
+
+
+
+/*!
+ * \brief Returns the model index of the record identified by \c databaseId.
+ */
+int RecordsModel::find(int databaseId) const
+{
+    if (m_records.isEmpty()) {
+        return -1;
+    }
+
+    int idx = -1;
+
+    for (int i = 0; i < m_records.size(); ++i) {
+        if (m_records.at(i)->databaseId == databaseId) {
+            idx = i;
+            break;
+        }
+    }
+
+    return idx;
+}
+
+
+
+QList<int> RecordsModel::findByActivity(int activity) const
+{
+    if (m_records.isEmpty()) {
+        return QList<int>();
+    }
+
+    QList<int> idxs;
+
+    for (int i = 0; i < m_records.size(); ++i) {
+        if (m_records.at(i)->activityId == activity) {
+            idxs.append(i);
+        }
+    }
+
+    return idxs;
+}
+
+
+
+void RecordsModel::finished(int databaseId, int activity, int category)
+{
+
+    if (!connectDb()) {
+        return;
+    }
+
+    QSqlQuery q(m_db);
+
+    if (!q.prepare(QStringLiteral("SELECT a.name, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.id = ?"))) {
+        return;
+    }
+
+    q.addBindValue(databaseId);
+
+    if (!q.exec()) {
+        return;
+    }
+
+    if (!q.next()) {
+        return;
+    }
+
+    Record *r = new Record;
+
+    r->databaseId = databaseId;
+    r->activityId = activity;
+    r->activityName = q.value(0).toString();
+    r->categoryId = category;
+    r->categoryName = q.value(1).toString();
+    r->categoryColor = q.value(2).toString();
+    r->start = QDateTime::fromTime_t(q.value(3).toUInt());
+    r->end = QDateTime::fromTime_t(q.value(4).toUInt());
+    r->duration = q.value(5).toUInt();
+    r->durationString = createDurationString(r->duration);
+    r->repetitions = q.value(6).toUInt();
+    r->distance = q.value(7).toDouble();
+
+    if (m_orderBy == QLatin1String("start")) {
+
+        if (m_order == QLatin1String("DESC")) {
+            beginInsertRows(QModelIndex(), 0, 0);
+            m_records.prepend(r);
+            endInsertRows();
+        } else if (m_order == QLatin1String("ASC")) {
+            beginInsertRows(QModelIndex(), rowCount(), rowCount());
+            m_records.append(r);
+            endInsertRows();
+        } else {
+            update();
+        }
+
+    } else {
+        update();
+    }
+}
+
+
+/*!
+ * \brief Removes the record identified by \c databaseId from the model.
+ */
+void RecordsModel::removed(int databaseId, int activity, int category)
+{
+    Q_UNUSED(activity)
+    Q_UNUSED(category)
+
+    int idx = find(databaseId);
+
+    if (idx < 0) {
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), idx, idx);
+
+    delete m_records.takeAt(idx);
+
+    endRemoveRows();
+}
+
+
+void RecordsModel::removedByActivity(int activity, int category)
+{
+    Q_UNUSED(category)
+
+    if (!connectDb()) {
+        return;
+    }
+
+    QList<int> idxs = findByActivity(activity);
+
+    if (idxs.isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < idxs.size(); ++i) {
+        int idx = idxs.at(i) - i;
+        beginRemoveRows(QModelIndex(), idx, idx);
+
+        delete m_records.takeAt(idx);
+
+        endRemoveRows();
+    }
+}
+
+
+
+/*!
+ * \brief Removes all entries from the model.
+ */
+void RecordsModel::removedAll()
+{
+    clear();
 }

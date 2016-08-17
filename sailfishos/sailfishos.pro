@@ -38,5 +38,10 @@ DISTFILES += \
     qml/pages/Categories.qml \
     qml/pages/Activities.qml \
     qml/dialogs/ActivityDialog.qml \
-    qml/pages/Records.qml
+    qml/pages/Records.qml \
+    qml/dialogs/RecordDialog.qml \
+    qml/pages/Record.qml \
+    qml/common/IconSectionHeader.qml \
+    qml/common/DateTimeButton.qml \
+    qml/common/DurationButton.qml
 

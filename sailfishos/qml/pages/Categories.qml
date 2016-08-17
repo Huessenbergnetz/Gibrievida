@@ -90,13 +90,13 @@ Page {
             ListView.onRemove: animateRemoval(catManagerListItem)
 
             function remove() {
-                remorseAction(qsTr("Removing"), function() {categories.remove(model.databaseId)})
+                remorseAction(qsTr("Removing"), function() {categories.remove(item)})
             }
 
             Rectangle {
                 id: catColor
                 anchors { left: parent.left; verticalCenter: parent.verticalCenter }
-                color: model.color
+                color: item.color
                 width: Theme.itemSizeExtraSmall
                 height: width
             }
@@ -105,12 +105,12 @@ Page {
                 anchors { left: catColor.right; right: parent.right; leftMargin: Theme.paddingLarge; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
 
                 Label {
-                    text: name
+                    text: item.name
                     color: catManagerListItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
                 Text {
-                    text: qsTr("%n activitie(s)", "", activities)
+                    text: qsTr("%n activitie(s)", "", item.activities)
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: catManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 }
@@ -121,7 +121,7 @@ Page {
                 ContextMenu {
                     MenuItem {
                         text: qsTr("Edit")
-                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/CategoryDialog.qml"), {databaseId: databaseId, name: model.name, color: model.color})
+                        onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/CategoryDialog.qml"), {category: item})
                     }
                     MenuItem {
                         text: qsTr("Remove")

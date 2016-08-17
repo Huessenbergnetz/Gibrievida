@@ -18,29 +18,26 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
-import "pages"
 
-ApplicationWindow
-{
-    id: gibrievida
-    initialPage: Component { MainPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
-    allowedOrientations: Orientation.Portrait
-    _defaultPageOrientations: Orientation.Portrait
+Item {
+    width: parent.width
+    height: header.height
 
-    function updateVisibility()
-    {
-        if (pageStack.currentPage.objectName === "MainPage" || cover.status === Cover.Active) {
-            records.visible = true
-        } else {
-            records.visible = false
-        }
+    property alias text: header.text
+    property alias icon: icon.source
+
+    Image {
+        id: icon
+        anchors { left: parent.left }
     }
 
-    Connections {
-        target: pageStack
-        onCurrentPageChanged: updateVisibility()
+    Label {
+        id: header
+        anchors { right: parent.right }
+        width: parent.width - icon.width - Theme.paddingMedium
+        horizontalAlignment: Text.AlignRight
+        font.pixelSize: Theme.fontSizeSmall
+        color: Theme.highlightColor
     }
 }
-
 

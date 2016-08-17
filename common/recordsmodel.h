@@ -29,9 +29,9 @@ struct Record {
 class RecordsModel : public DBModel
 {
     Q_OBJECT
-    Q_PROPERTY(RecordsController *recordsController READ getRecordsController WRITE setRecordsController)
-    Q_PROPERTY(CategoriesController *categoriesController READ getCategoriesController WRITE setCategoriesController)
-    Q_PROPERTY(ActivitiesController *activitiesController READ getActivitiesController WRITE setActivitiesController)
+    Q_PROPERTY(Gibrievida::RecordsController *recordsController READ getRecordsController WRITE setRecordsController)
+    Q_PROPERTY(Gibrievida::CategoriesController *categoriesController READ getCategoriesController WRITE setCategoriesController)
+    Q_PROPERTY(Gibrievida::ActivitiesController *activitiesController READ getActivitiesController WRITE setActivitiesController)
     Q_PROPERTY(int activityId READ getActivityId WRITE setActivityId)
     Q_PROPERTY(QString order READ getOrder WRITE setOrder)
     Q_PROPERTY(QString orderBy READ getOrderBy WRITE setOrderBy)
@@ -79,6 +79,10 @@ public:
 
 public slots:
     void update();
+    void finished(int databaseId, int activity, int category);
+    void removed(int databaseId, int activity, int category);
+    void removedByActivity(int activity, int category);
+    void removedAll();
 
 private:
     QList<Record*> m_records;
@@ -92,11 +96,15 @@ private:
 
     void clear();
 
+    int find(int databaseId) const;
+    QList<int> findByActivity(int activity) const;
+
     QString createDurationString(uint duration);
 
     Q_DISABLE_COPY(RecordsModel)
 };
 
 }
+Q_DECLARE_TYPEINFO(Gibrievida::Record, Q_PRIMITIVE_TYPE);
 
 #endif // RECORDSMODEL_H
