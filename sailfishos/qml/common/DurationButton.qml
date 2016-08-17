@@ -29,8 +29,7 @@ ValueButton {
     property int minutes: 0
     property int seconds: 0
 
-    Component.onCompleted: {
-
+    function setDurationParts() {
         if (duration > 0) {
             var secs = duration
 
@@ -48,8 +47,12 @@ ValueButton {
             minutes = Math.floor(fMins)
 
             seconds = secs - (60*minutes)
+
+            value = helpers.createDurationString(duration)
         }
     }
+
+    Component.onCompleted: setDurationParts()
 
     onClicked: {
         var dialog = pageStack.push(durationDialogComp, {days: days, hours: hours, minutes: minutes, seconds: seconds})
