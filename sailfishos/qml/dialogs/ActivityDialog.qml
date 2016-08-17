@@ -23,25 +23,14 @@ import harbour.gibrievida 1.0
 Dialog {
     id: catDialog
 
-//    property int databaseId: -1
-//    property alias name: nameField.text
-//    property int oldCategoryId
-//    property alias categoryId: category.chosenValue
-//    property alias categoryName: category.value
-//    property alias minRepeats: minRepeatsField.text
-//    property alias maxRepeats: maxRepeatsField.text
-//    property alias distance: distanceSwitch.checked
-
     property Activity activity: null
     property int oldCategoryId
 
-//    canAccept: (nameField.text.length > 0 && category.chosenValue > 0)
     canAccept: (nameField.text.length > 0 && categoryButton.chosenCategory && minRepeatsField.acceptableInput && maxRepeatsField.acceptableInput)
 
     CategoriesModel { id: categoriesModel }
 
     Component.onCompleted: {
-//        oldCategoryId = categoryId
         if (activity) {
             oldCategoryId = activity.category.databaseId
             categoryButton.chosenCategory = activity.category
@@ -76,7 +65,6 @@ Dialog {
                 label: qsTr("Category")
                 value: qsTr("Please select")
 
-//                property int chosenValue
                 property Category chosenCategory: null
 
                 onChosenCategoryChanged: {
@@ -88,8 +76,6 @@ Dialog {
                 }
 
                 onClicked: {
-//                    var dialog = pageStack.push(catChoserComp, {chosenValue: categoryButton.chosenValue, chosenText: categoryButton.value, label: categoryButton.label})
-//                    dialog.accepted.connect(function()  {categoryButton.chosenValue = dialog.chosenValue; categoryButton.value = dialog.chosenText})
                     var dialog = pageStack.push(catChoserComp, {chosenCategory: categoryButton.chosenCategory, label: categoryButton.label, model: categoriesModel})
                     dialog.accepted.connect(function() {categoryButton.chosenCategory = dialog.chosenCategory})
                 }
@@ -101,14 +87,13 @@ Dialog {
 
                         signal accepted()
 
-//                        property int chosenValue
-//                        property string chosenText
                         property Category chosenCategory: null
                         property alias label: pHeader.title
                         property alias model: list.model
 
                         PageHeader {
                             id: pHeader
+                            page: catChoser
                         }
 
                         SearchField {
@@ -135,7 +120,6 @@ Dialog {
                                 ListView.onAdd: AddAnimation { target: listItem }
                                 ListView.onRemove: animateRemoval(listItem)
 
-//                                highlighted: model.databaseId === catChoser.chosenValue
                                 highlighted: catChoser.chosenCategory ? model.item.databaseId === catChoser.chosenCategory.databaseId : false
 
                                 Rectangle {
@@ -162,8 +146,6 @@ Dialog {
                                 }
 
                                 onClicked: {
-//                                    catChoser.chosenValue = model.databaseId
-//                                    catChoser.chosenText = model.name
                                     catChoser.chosenCategory = model.item
                                     catChoser.accepted()
                                     search.text = ""
@@ -230,12 +212,6 @@ Dialog {
         } else {
             activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked)
         }
-
-//        if (databaseId > -1) {
-//            activities.edit(databaseId, name, oldCategoryId, categoryId, parseInt(minRepeats), parseInt(maxRepeats), distance)
-//        } else {
-//            activities.add(name, categoryId, parseInt(minRepeats), parseInt(maxRepeats), distance)
-//        }
     }
 }
 
