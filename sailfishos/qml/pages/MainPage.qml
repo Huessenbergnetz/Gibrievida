@@ -62,7 +62,7 @@ Page {
                 Label {
                     anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
                     text: qsTr("There is currently no active recording. Pull down to start a new recording.")
-                    color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    color: Theme.secondaryHighlightColor
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
             }
