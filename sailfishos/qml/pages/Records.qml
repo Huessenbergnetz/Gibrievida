@@ -41,8 +41,8 @@ Page {
             }
 
             MenuItem {
-                text: records.currentId < 0 ? qsTr("Record activity") : qsTr("Finish recording")
-                onClicked: records.currentId < 0 ? pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml")) : records.finish()
+                text: records.current ? qsTr("Finish recording") : qsTr("Record activity")
+                onClicked: records.current ? records.finish() : pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"))
             }
         }
 
