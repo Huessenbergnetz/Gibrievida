@@ -139,7 +139,7 @@ CoverBackground {
 
     CoverActionList {
         id: recordActionlist
-        enabled: records.current && records.current.activity.minRepeats > 0
+        enabled: records.current && records.current.activity.useRepeats
 
         CoverAction {
             iconSource: "image://theme/icon-cover-sync"
@@ -149,6 +149,16 @@ CoverBackground {
         CoverAction {
             iconSource: "image://theme/icon-cover-next"
             onTriggered: records.increaseRepetitions()
+        }
+    }
+
+    CoverActionList {
+        id: recordWithoutRepeatActionlist
+        enabled: records.current && !records.current.activity.useRepeats
+
+        CoverAction {
+            iconSource: "image://theme/icon-cover-sync"
+            onTriggered: records.finish()
         }
     }
 }
