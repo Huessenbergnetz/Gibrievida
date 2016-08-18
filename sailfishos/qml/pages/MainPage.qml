@@ -73,6 +73,8 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 visible: records.current
 
+                onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {record: records.current})
+
                 Rectangle {
                     id: cColor
                     anchors { left: parent.left; leftMargin: Theme.paddingSmall; top: parent.top; verticalCenter: parent.verticalCenter }
@@ -102,7 +104,7 @@ Page {
                             text: records.current ? helpers.relativeTimeString(records.current.start) : ""
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                            verticalAlignment: Text.AlignRight
+                            horizontalAlignment: Text.AlignRight
                         }
                     }
 
