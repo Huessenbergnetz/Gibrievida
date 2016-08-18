@@ -114,7 +114,7 @@ Page {
                         text: helpers.relativeTimeString(item.start)
                         font.pixelSize: Theme.fontSizeExtraSmall
                         color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                        verticalAlignment: Text.AlignRight
+                        horizontalAlignment: Text.AlignRight
                     }
                 }
 
