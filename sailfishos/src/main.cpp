@@ -24,6 +24,10 @@
 #include <QtDebug>
 #endif
 
+#include <QtQml>
+#include <QGuiApplication>
+#include <QQuickView>
+
 #ifndef CLAZY
 #include <sailfishapp.h>
 #endif

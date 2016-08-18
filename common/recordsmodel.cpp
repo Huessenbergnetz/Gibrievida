@@ -140,7 +140,6 @@ void RecordsModel::update()
 
     if (!q.prepare(queryString)) {
         setInOperation(false);
-        qDebug() << q.lastError().text();
         return;
     }
 
@@ -150,7 +149,6 @@ void RecordsModel::update()
 
     if (!q.exec()) {
         setInOperation(false);
-        qDebug() << q.lastError().text();
         return;
     }
 
