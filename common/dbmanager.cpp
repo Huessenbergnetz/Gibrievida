@@ -102,6 +102,9 @@ bool DBManager::createDatabase()
                                "name TEXT NOT NULL, "
                                "color TEXT NOT NULL)"
                                ))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
         return false;
     }
 
@@ -111,8 +114,12 @@ bool DBManager::createDatabase()
                                "name TEXT NOT NULL, "
                                "minrepeats INTEGER NOT NULL, "
                                "maxrepeats INTEGER NOT NULL, "
-                               "distance INTEGER NOT NULL)"
+                               "distance INTEGER NOT NULL, "
+                               "FOREIGN KEY(category) REFERENCES categories(id) ON DELETE CASCADE)"
                                ))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
         return false;
     }
 
@@ -124,8 +131,12 @@ bool DBManager::createDatabase()
                                "duration INTEGER NOT NULL DEFAULT 0, "
                                "repetitions INTEGER DEFAULT 0, "
                                "distance REAL DEFAULT 0.0, "
-                               "note TEXT)"
+                               "note TEXT, "
+                               "FOREIGN KEY(activity) REFERENCES activities(id) ON DELETE CASCADE)"
                                ))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
         return false;
     }
 
