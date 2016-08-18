@@ -29,10 +29,12 @@ ApplicationWindow
     allowedOrientations: Orientation.Portrait
     _defaultPageOrientations: Orientation.Portrait
 
-    function updateVisibility()
+    function updateVisibility(coverStatus)
     {
-        if (pageStack.currentPage.objectName === "MainPage" || (pageStack.currentPage.objectName === "SingleRecordPage" && pageStack.currentPage.record.active) || cover.status === Cover.Active) {
-            records.visible = true
+//        console.log("APPLICATION STATE: " + Qt.application.state)
+//        console.log("COVER STATE: " + coverStatus)
+        if ((Qt.application.state === Qt.ApplicationActive && (pageStack.currentPage.objectName === "MainPage" || (pageStack.currentPage.objectName === "SingleRecordPage" && pageStack.currentPage.record.active))) || coverStatus === Cover.Active || (Qt.application.state === Qt.ApplicationInactive && coverStatus === undefined)) {
+            records.visible = true;
         } else {
             records.visible = false
         }
@@ -40,7 +42,30 @@ ApplicationWindow
 
     Connections {
         target: pageStack
-        onCurrentPageChanged: updateVisibility()
+        onCurrentPageChanged: updateVisibility(gibrievida.cover.status)
+    }
+
+    Connections {
+        target: Qt.application
+        onStateChanged: {
+            updateVisibility(gibrievida.cover.status)
+//            switch(Qt.application.state) {
+//            case Qt.ApplicationActive:
+//                console.log("ACTIVE");
+//                break;
+//            case Qt.ApplicationHidden:
+//                console.log("HIDDEN");
+//                break;
+//            case Qt.ApplicationInactive:
+//                console.log("INACTIVE");
+//                break;
+//            case Qt.ApplicationSuspended:
+//                console.log("SUSPENDED");
+//                break;
+//            default:
+//                break;
+//            }
+        }
     }
 }
 

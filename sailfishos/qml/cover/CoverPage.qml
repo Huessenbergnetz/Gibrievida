@@ -20,9 +20,10 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 
 CoverBackground {
+    id: gibrievidaCover
     anchors.fill: parent
 
-    onStatusChanged: gibrievida.updateVisibility()
+    onStatusChanged: gibrievida.updateVisibility(status)
 
     CoverPlaceholder {
         visible: !records.current || records.current.databaseId < 0
