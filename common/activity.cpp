@@ -43,7 +43,9 @@ Activity::Activity(QObject *parent) :
 #endif
 }
 
-
+/*!
+ * \overload
+ */
 Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, QObject *parent) :
     QObject(parent), m_databaseId(databaseId), m_name(name), m_minRepeats(minRepeats), m_maxRepeats(maxRepeats), m_useDistance(useDistance), m_records(records)
 {
@@ -55,6 +57,11 @@ Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxR
 }
 
 
+/*!
+ * \brief Constructs a new Activity from pointer to \c other Activity.
+ *
+ * This will create a deep copy. Copying every member data from the \c other Activity to the new Activity.
+ */
 Activity::Activity(Activity *other, QObject *parent) :
     QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records())
 {

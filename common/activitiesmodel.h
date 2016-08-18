@@ -29,6 +29,11 @@ class CategoriesController;
 class Category;
 class Activity;
 
+/*!
+ * \brief Model containing a set of Activity objects.
+ *
+ * On cunstruction, the model will load all available data from the SQL database, no further actions are needed.
+ */
 class ActivitiesModel : public DBModel
 {
     Q_OBJECT
@@ -36,8 +41,13 @@ public:
     explicit ActivitiesModel(QObject *parent = nullptr);
     ~ActivitiesModel();
 
+    /*!
+     * \brief The model roles.
+     *
+     * Use the enumeration name starting lowercase to access the role from QML.
+     */
     enum Roles {
-        Item = Qt::UserRole + 1
+        Item = Qt::UserRole + 1 /*!< The main model item. Pointer to an Activity object. */
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE Q_DECL_FINAL;

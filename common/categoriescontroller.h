@@ -26,6 +26,11 @@ namespace Gibrievida {
 
 class Category;
 
+/*!
+ * \brief Controller class to manage Category objects.
+ *
+ * This controller is used to manage single Category objects. It can perform operations like adding, removing and updateing of Category objects to, from and in the database.
+ */
 class CategoriesController : public BaseController
 {
     Q_OBJECT
@@ -40,9 +45,21 @@ public:
     Q_INVOKABLE QString createRandomColor();
 
 signals:
+    /*!
+     * \brief Emitted if a Category has been added successfully to the database.
+     */
     void added(int databaseId, const QString &name, const QString &color);
+    /*!
+     * \brief Emitted if a Category has been updated successfully in the database.
+     */
     void updated(Category *c);
+    /*!
+     * \brief Emitted if a Cateogry has been removed successfully from the database.
+     */
     void removed(int databaseId);
+    /*!
+     * \brief Emitted if all categories have been removed successfully from the database.
+     */
     void removedAll();
 
 private:

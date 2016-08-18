@@ -23,6 +23,9 @@
 
 namespace Gibrievida {
 
+/*!
+ * \brief Provides helper functions.
+ */
 class Helpers : public QObject
 {
     Q_OBJECT

@@ -28,6 +28,9 @@ class CategoriesModel;
 class CategoriesController;
 class ActivitiesController;
 
+/*!
+ * \brief Proxy model to filter the CategoriesModel.
+ */
 class CategoriesFilterModel : public FilterModel
 {
     Q_OBJECT

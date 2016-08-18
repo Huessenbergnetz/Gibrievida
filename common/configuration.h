@@ -23,6 +23,11 @@
 
 namespace Gibrievida {
 
+/*!
+ * \brief Configuration interface class.
+ *
+ * Makes the configuration available to the QML part.
+ */
 class Configuration : public QSettings
 {
     Q_OBJECT

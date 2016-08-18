@@ -26,7 +26,13 @@ namespace Gibrievida {
 class Category;
 
 /*!
- * \brief The Activity class.
+ * \brief Represents a single activity.
+ *
+ * An Activity is a set of definitions that makes a specific activity. The activity may support repeats or distance or both.
+ * Every Activity belongs to one category. For example, a "Sit-Ups" actvitiy might belong to the category "Sport" and supports
+ * repeats from 1 to 100.
+ *
+ * Activities are managed by the ActivitiesController and are accessible through the ActivitiesFilterModel.
  */
 class Activity : public QObject
 {

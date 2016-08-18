@@ -98,7 +98,9 @@ QString Helpers::createDurationString(uint duration)
 }
 
 
-
+/*!
+ * \brief Creates a human readable relative time string.
+ */
 QString Helpers::relativeTimeString(const QDateTime &time)
 {
     QDateTime now = QDateTime::currentDateTime();

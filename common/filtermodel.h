@@ -24,6 +24,11 @@
 
 namespace Gibrievida {
 
+/*!
+ * \brief Base class for filter proxy models.
+ *
+ * This implements base functions like busy/inOpeartion state and search interface to QML.
+ */
 class FilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT

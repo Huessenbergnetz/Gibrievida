@@ -27,6 +27,11 @@ namespace Gibrievida {
 class Category;
 class Activity;
 
+/*!
+ * \brief Controller class to manage Activity objects.
+ *
+ * This controller is used to to manage activities. It can create, update and remove activities.
+ */
 class ActivitiesController : public BaseController
 {
     Q_OBJECT
@@ -40,9 +45,21 @@ public:
     Q_INVOKABLE bool removeAll();
 
 signals:
+    /*!
+     * \brief Emitted if a new Activity has been successfully added to the database.
+     */
     void added(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance);
+    /*!
+     * \brief Emitted if an Activitiy has been successfully updated in the database.
+     */
     void updated(Activity *a, int oldCategoryId);
+    /*!
+     * \brief Emitted if an Activitiy has been successfully removed from the database.
+     */
     void removed(int databaseId, int category);
+    /*!
+     * \brief Emitted if all activities haven been successfully removed from the database.
+     */
     void removedAll();
 
 private:

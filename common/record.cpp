@@ -47,7 +47,7 @@ Record::Record(QObject *parent) :
 
 
 /*!
- * \override
+ * \overload
  */
 Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, QObject *parent) :
     QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note)

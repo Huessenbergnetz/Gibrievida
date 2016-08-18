@@ -459,11 +459,6 @@ void RecordsController::setCurrent(Record *nCurrent)
  */
 
 /*!
- * \fn void RecordsController::visibleChanged(bool visible)
- * \brief Part of the \link RecordsController::visible visible \endlink property.
- */
-
-/*!
  * \brief Part of the \link RecordsController::visible visible \endlink property.
  */
 bool RecordsController::isVisible() const { return m_visible; }

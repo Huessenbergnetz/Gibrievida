@@ -24,6 +24,12 @@
 
 namespace Gibrievida {
 
+/*!
+ * \brief Base controller class.
+ *
+ * Other conroller classes should be subclasses of this class. The BaseController provides
+ * methods to connect to the database.
+ */
 class BaseController : public QObject
 {
     Q_OBJECT
@@ -33,7 +39,7 @@ public:
 
 protected:
     bool connectDb();
-    QSqlDatabase m_db;
+    QSqlDatabase m_db;  /*!< Contains the default database. */
 
 private:
     Q_DISABLE_COPY(BaseController)

@@ -160,6 +160,8 @@ bool CategoriesController::removeAll()
 
 /*!
  * \brief Returns a random color string.
+ *
+ * The color value is returned as hexadecimal RGB value starting with a #.
  */
 QString CategoriesController::createRandomColor()
 {

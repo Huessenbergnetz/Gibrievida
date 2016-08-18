@@ -25,7 +25,12 @@
 namespace Gibrievida {
 
 /*!
- * \brief Stores information about a single category.
+ * \brief Stores information about a single Category.
+ *
+ * A Category is the main root for every Activity and Record. Activities belong to categories and records belong to activities.
+ * A Category is defined by a \link Category::name name \endlink and a \link Category::color color \endlink.
+ *
+ * Categories are managed by the CategoriesController aber accessible through the CategoriesFilterModel.
  */
 class Category : public QObject
 {

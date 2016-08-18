@@ -31,6 +31,8 @@ using namespace Gibrievida;
 
 /*!
  * \brief Constructs a new activities model.
+ *
+ * On construction the model will be populated with data from the SQL database.
  */
 ActivitiesModel::ActivitiesModel(QObject *parent) : DBModel(parent)
 {
@@ -189,7 +191,7 @@ void ActivitiesModel::add(int databaseId, const QString &name, Category *c, int 
 
 
 /*!
- * \brief Removes the activity with \a databaseId.
+ * \brief Removes the activity identified by \a databaseId.
  */
 void ActivitiesModel::remove(int databaseId, int category)
 {
@@ -220,7 +222,7 @@ void ActivitiesModel::removeAll()
 
 
 /*!
- * \brief Reloads the model after a category has been removed.
+ * \brief Reloads the model after a Category has been removed.
  */
 void ActivitiesModel::removeCategory(int category)
 {
@@ -232,7 +234,7 @@ void ActivitiesModel::removeCategory(int category)
 
 
 /*!
- * \brief Updates the model items after a category has been updated.
+ * \brief Updates the model items after a Category has been updated.
  */
 void ActivitiesModel::updateCategory(Category *c)
 {

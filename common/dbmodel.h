@@ -25,6 +25,11 @@
 
 namespace Gibrievida {
 
+/*!
+ * \brief Base model class for all database models.
+ *
+ * This class provides methods to connect to the SQL database as well as indicating busy models.
+ */
 class DBModel : public QAbstractListModel
 {
     Q_OBJECT
