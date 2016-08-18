@@ -27,6 +27,7 @@ namespace Gibrievida {
 class ActivitiesModel;
 class ActivitiesController;
 class CategoriesController;
+class RecordsController;
 
 /*!
  * \brief Proxy model to filter the ActivitiesModel.
@@ -36,15 +37,18 @@ class ActivitiesFilterModel : public FilterModel
     Q_OBJECT
     Q_PROPERTY(Gibrievida::ActivitiesController *activitiesController READ getActivitiesController WRITE setActivitiesController)
     Q_PROPERTY(Gibrievida::CategoriesController *categoriesController READ getCategoriesController WRITE setCategoriesController)
+    Q_PROPERTY(Gibrievida::RecordsController *recordsController READ getRecordsController WRITE setRecordsController)
 public:
     explicit ActivitiesFilterModel(QObject *parent = nullptr);
     ~ActivitiesFilterModel();
 
     ActivitiesController *getActivitiesController() const;
     CategoriesController *getCategoriesController() const;
+    RecordsController *getRecordsController() const;
 
     void setActivitiesController(ActivitiesController *activitiesController);
     void setCategoriesController(CategoriesController *categoriesController);
+    void setRecordsController(RecordsController *recordsController);
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const Q_DECL_OVERRIDE;

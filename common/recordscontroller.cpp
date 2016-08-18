@@ -376,8 +376,16 @@ void RecordsController::remove(Record *r)
  *
  * \c category is given to the removedByActivity() signal that is emitted on success.
  */
-void RecordsController::removeByActivity(int activity, int category)
+void RecordsController::removeByActivity(Activity *a)
 {
+    if (!a) {
+        qCritical("No actvitiy given. Returning.");
+    }
+
+    if (!a->isValid()) {
+        qCritical("Invalid activity. Returning.");
+    }
+
     if (!connectDb()) {
         return;
     }
@@ -388,13 +396,13 @@ void RecordsController::removeByActivity(int activity, int category)
         return;
     }
 
-    q.addBindValue(activity);
+    q.addBindValue(a->databaseId());
 
     if (!q.exec()) {
         return;
     }
 
-    emit removedByActivity(activity, category);
+    emit removedByActivity(a->databaseId(), a->category()->databaseId());
 }
 
 

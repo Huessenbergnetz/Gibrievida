@@ -19,6 +19,7 @@
 #include "activitiesmodel.h"
 #include "activitiescontroller.h"
 #include "categoriescontroller.h"
+#include "recordscontroller.h"
 #include "category.h"
 #include "activity.h"
 #include <QSqlQuery>
@@ -38,6 +39,7 @@ ActivitiesModel::ActivitiesModel(QObject *parent) : DBModel(parent)
 {
     m_actsController = nullptr;
     m_catsController = nullptr;
+    m_recsController = nullptr;
     init();
 }
 
@@ -344,4 +346,73 @@ void ActivitiesModel::setCategoriesController(CategoriesController *controller)
 CategoriesController *ActivitiesModel::getCategoriesController() const
 {
     return m_catsController;
+}
+
+
+/*!
+ * \brief Sets the records controller.
+ */
+void ActivitiesModel::setRecordsController(RecordsController *controller)
+{
+    if (controller != m_recsController) {
+
+        if (m_recsController) {
+            disconnect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
+            disconnect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
+        }
+        m_recsController = controller;
+        if (m_recsController) {
+            connect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
+            connect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
+        }
+    }
+}
+
+
+/*!
+ * \brief Returns the currently set records controller.
+ */
+RecordsController *ActivitiesModel::getRecordsController() const
+{
+    return m_recsController;
+}
+
+
+
+
+/*!
+ * \brief Updates the records count of the \c activity after a records has been removed.
+ */
+void ActivitiesModel::recordRemoved(int record, int activity, int category)
+{
+    Q_UNUSED(record)
+    Q_UNUSED(category)
+
+    int idx = find(activity);
+
+    if (idx < 0) {
+        return;
+    }
+
+    Activity *a = m_activities.at(idx);
+
+    a->setRecords(a->records()-1);
+}
+
+
+
+/*!
+ * \brief Updates the records count of \c activity after all records of that activity have been removed.
+ */
+void ActivitiesModel::recordsRemovedByActivity(int activity, int category)
+{
+    Q_UNUSED(category)
+
+    int idx = find(activity);
+
+    if (idx < 0) {
+        return;
+    }
+
+    m_activities.at(idx)->setRecords(0);
 }

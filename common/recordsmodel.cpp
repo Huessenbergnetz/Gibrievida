@@ -238,6 +238,7 @@ void RecordsModel::setRecordsController(RecordsController *recordsController)
         disconnect(m_recsController, &RecordsController::finished, this, &RecordsModel::finished);
         disconnect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
         disconnect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
+        disconnect(m_recsController, &RecordsController::removedByActivity, this, &RecordsModel::removedByActivity);
     }
 
     m_recsController = recordsController;
@@ -249,6 +250,7 @@ void RecordsModel::setRecordsController(RecordsController *recordsController)
         connect(m_recsController, &RecordsController::finished, this, &RecordsModel::finished);
         connect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
         connect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
+        connect(m_recsController, &RecordsController::removedByActivity, this, &RecordsModel::removedByActivity);
     }
 }
 

@@ -24,7 +24,13 @@ import "../common"
 Page {
     id: recordsManager
 
+    property Activity activity: null
+    property Category category: null
+
     Component.onCompleted: {
+        if (activity) {
+            recordsModel.activityId = activity.databaseId
+        }
         recordsModel.update()
     }
 
@@ -37,7 +43,13 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Remove all")
-                onClicked: remorse.execute(qsTr("Removing all"), function() {records.removeAll()})
+                onClicked: {
+                    if (activity) {
+                        remorse.execute(qsTr("Removing all"), function() {records.removeByActivity(activity)})
+                    } else {
+                        remorse.execute(qsTr("Removing all"), function() {records.removeAll()})
+                    }
+                }
             }
 
             MenuItem {
@@ -61,6 +73,7 @@ Page {
         header: PageHeader {
             title: qsTr("Records")
             page: recordsManager
+            description: activity ? activity.name : category ? category.name : qsTr("All")
         }
 
         BusyIndicator {

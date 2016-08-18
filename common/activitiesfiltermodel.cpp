@@ -117,3 +117,26 @@ void ActivitiesFilterModel::setCategoriesController(CategoriesController *catego
 {
     m_actsModel->setCategoriesController(categoriesController);
 }
+
+
+
+/*!
+ * \property ActivitiesFilterModel::recordsController
+ * \brief Sets the records controller.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>RecordsController*</TD><TD>getRecordsController() const</TD></TR><TR><TD>void</TD><TD>setRecordsController(RecordsController *recordsController)</TD></TR></TABLE>
+ */
+
+/*!
+ * \brief Part of the \link ActivitiesFilterModel::recordsController recordsController \endlink property.
+ */
+RecordsController *ActivitiesFilterModel::getRecordsController() const { return m_actsModel->getRecordsController(); }
+
+/*!
+ * \brief Part of the \link ActivitiesFilterModel::recordsController recordsController \endlink property.
+ */
+void ActivitiesFilterModel::setRecordsController(RecordsController *recordsController)
+{
+   m_actsModel->setRecordsController(recordsController);
+}

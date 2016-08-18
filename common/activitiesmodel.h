@@ -26,6 +26,7 @@ namespace Gibrievida {
 
 class ActivitiesController;
 class CategoriesController;
+class RecordsController;
 class Category;
 class Activity;
 
@@ -61,6 +62,9 @@ public:
     void setActivitiesController(ActivitiesController *controller);
     ActivitiesController *getActivitiesController() const;
 
+    void setRecordsController(RecordsController *controller);
+    RecordsController *getRecordsController() const;
+
 public slots:
     void add(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool distance);
     void remove(int databaseId, int category);
@@ -68,6 +72,9 @@ public slots:
 
     void updateCategory(Category *c);
     void removeCategory(int category);
+
+    void recordRemoved(int record, int activity, int category);
+    void recordsRemovedByActivity(int activity, int category);
 
 private:
     QList<Activity*> m_activities;
@@ -79,6 +86,7 @@ private:
 
     ActivitiesController *m_actsController;
     CategoriesController *m_catsController;
+    RecordsController *m_recsController;
 
     Q_DISABLE_COPY(ActivitiesModel)
 };

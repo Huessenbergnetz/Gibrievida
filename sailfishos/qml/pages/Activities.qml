@@ -74,6 +74,7 @@ Page {
             id: activitiesModel
             activitiesController: activities
             categoriesController: categories
+            recordsController: records
         }
 
         header: Item {
@@ -90,6 +91,9 @@ Page {
             menu: contextMenu
 
             ListView.onRemove: animateRemoval(actsManagerItem)
+            ListView.onAdd: AddAnimation { target: actsManagerItem }
+
+            onClicked: pageStack.push(Qt.resolvedUrl("Records.qml"), {activity: model.item})
 
             function remove() {
                 remorseAction(qsTr("Removing"), function() {activities.remove(item)})

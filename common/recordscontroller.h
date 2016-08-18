@@ -54,7 +54,7 @@ public:
     Q_INVOKABLE void finish();
     Q_INVOKABLE void update(Gibrievida::Record *r, int oldActivityId);
     Q_INVOKABLE void remove(Gibrievida::Record *r);
-    Q_INVOKABLE void removeByActivity(int activity, int category);
+    Q_INVOKABLE void removeByActivity(Gibrievida::Activity *a);
     Q_INVOKABLE void removeAll();
 
     Record *current() const;
