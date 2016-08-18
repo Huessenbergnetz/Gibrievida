@@ -18,6 +18,7 @@
 
 #include "record.h"
 #include "activity.h"
+#include "category.h"
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -30,11 +31,18 @@ using namespace Gibrievida;
 Record::Record(QObject *parent) :
     QObject(parent)
 {
-    m_databaseId = 0;
+    m_databaseId = -1;
     m_activity = nullptr;
     m_duration = 0;
     m_repetitions = 0;
     m_distance = 0.0;
+    m_active = false;
+    m_start = QDateTime::fromTime_t(0);
+    m_end = QDateTime::fromTime_t(0);
+
+#ifdef QT_DEBUG
+    qDebug() << "Constructed a new empty" << this;
+#endif
 }
 
 
@@ -44,7 +52,11 @@ Record::Record(QObject *parent) :
 Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, QObject *parent) :
     QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note)
 {
+    m_active = (end == QDateTime::fromTime_t(0));
 
+#ifdef QT_DEBUG
+    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Start:" << start << "End:" << end << "Duration:" << duration << "Repetitions:" << repetitions << "Distance:" << distance << "Note:" << note;
+#endif
 }
 
 
@@ -53,6 +65,9 @@ Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uin
  */
 Record::~Record()
 {
+#ifdef QT_DEBUG
+    qDebug() << "Destroying" << this;
+#endif
 }
 
 
@@ -197,6 +212,9 @@ void Record::setEnd(const QDateTime &nEnd)
 #ifdef QT_DEBUG
         qDebug() << "Changed end to" << m_end;
 #endif
+
+        setActive(m_end == QDateTime::fromTime_t(0));
+
         emit endChanged(end());
     }
 }
@@ -341,7 +359,7 @@ QString Record::note() const { return m_note; }
 void Record::setNote(const QString &nNote)
 {
     if (nNote != m_note) {
-        m_note = nNote;
+        m_note = nNote.trimmed();
 #ifdef QT_DEBUG
         qDebug() << "Changed note to" << m_note;
 #endif
@@ -351,10 +369,101 @@ void Record::setNote(const QString &nNote)
 
 
 
+
+/*!
+ * \property Record::active
+ * \brief Returns true while this record is in active state.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>bool</TD><TD>isActive() const</TD></TR><TR><TD>void</TD><TD>setActive(bool active)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>activeChanged(bool active)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Record::activeChanged(bool active)
+ * \brief Part of the \link Record::active active \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Record::active active \endlink property.
+ */
+bool Record::isActive() const { return m_active; }
+
+/*!
+ * \brief Part of the \link Record::active active \endlink property.
+ */
+void Record::setActive(bool active)
+{
+    if (active != m_active) {
+        m_active = active;
+#ifdef QT_DEBUG
+        qDebug() << "Changed active to" << m_active;
+#endif
+        emit activeChanged(isActive());
+    }
+}
+
+
+
+
+
+
 /*!
  * \brief Returns true if this is a valid record.
+ *
+ * Tests if the databaseId has a valid value and if a valid Activity is set.
  */
 bool Record::isValid() const
 {
     return (m_databaseId > 0 && activity() && activity()->isValid());
+}
+
+
+/*!
+ * \brief Updates the duration and according the end time.
+ *
+ * This should be used for finished recordings, it is not meant for active recordings.
+ */
+void Record::updateDuration(uint nDuration)
+{
+    if (m_duration != nDuration) {
+        setDuration(nDuration);
+        setEnd(m_start.addSecs(nDuration));
+    }
+}
+
+
+/*!
+ * \brief Updates the activity the record belongs to.
+ */
+void Record::updateActivity(Activity *activity)
+{
+    if (m_activity && (m_activity->databaseId() != activity->databaseId())) {
+        m_activity->setDatabaseId(activity->databaseId());
+        m_activity->setName(activity->name());
+        m_activity->setMinRepeats(activity->minRepeats());
+        m_activity->setMaxRepeats(activity->maxRepeats());
+        m_activity->setUseRepeats(activity->useRepeats());
+        m_activity->setUseDistance(activity->useDistance());
+        m_activity->setRecords(activity->records());
+
+        Category *c = m_activity->category();
+        Category *o = activity->category();
+
+        if (c) {
+            c->setDatabaseId(o->databaseId());
+            c->setName(o->name());
+            c->setColor(o->color());
+            c->setActivities(o->activities());
+        }
+
+        if (!m_activity->useRepeats()) {
+            setRepetitions(0);
+        }
+
+        if (!m_activity->useDistance()) {
+            setDistance(0.0);
+        }
+    }
 }

@@ -27,7 +27,12 @@ namespace Gibrievida {
 class Activity;
 
 /*!
- * \brief The Record class.
+ * \brief Represents a single data record.
+ *
+ * A Record is a data set that represents an Activity at a specific \link Record::start start \endlink time together
+ * with the \link Record::duration duration \endlink of the activity. It is active as long as no \link Record::end end \endlink time has been set.
+ *
+ * Records are managed by the RecordsController and accessible through the RecordsModel.
  */
 class Record : public QObject
 {
@@ -40,6 +45,7 @@ class Record : public QObject
     Q_PROPERTY(uint repetitions READ repetitions WRITE setRepetitions NOTIFY repetitionsChanged)
     Q_PROPERTY(double distance READ distance WRITE setDistance NOTIFY distanceChanged)
     Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
+    Q_PROPERTY(bool active READ isActive NOTIFY activeChanged)
 public:
     explicit Record(QObject *parent = nullptr);
     explicit Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, QObject *parent = nullptr);
@@ -53,6 +59,7 @@ public:
     uint repetitions() const;
     double distance() const;
     QString note() const;
+    bool isActive() const;
 
     void setDatabaseId(int nDatabaseId);
     void setActivity(Activity *nActivity);
@@ -63,7 +70,9 @@ public:
     void setDistance(double nDistance);
     void setNote(const QString &nNote);
 
-    bool isValid() const;
+    Q_INVOKABLE bool isValid() const;
+    Q_INVOKABLE void updateDuration(uint nDuration);
+    Q_INVOKABLE void updateActivity(Gibrievida::Activity *activity);
 
 
 signals:
@@ -75,6 +84,7 @@ signals:
     void repetitionsChanged(uint repetitions);
     void distanceChanged(double distance);
     void noteChanged(const QString &note);
+    void activeChanged(bool active);
 
 private:
     Q_DISABLE_COPY(Record)
@@ -86,6 +96,9 @@ private:
     uint m_repetitions;
     double m_distance;
     QString m_note;
+    bool m_active;
+
+    void setActive(bool active);
 
 };
 
