@@ -125,7 +125,7 @@ bool ActivitiesController::update(Activity *a, int oldCategoryId)
 
 
 /*!
- * \brief Removes the Activity \c a.
+ * \brief Removes the Activity \c a and all associated records.
  *
  * Emits the removed() signal and return true on success.
  */
