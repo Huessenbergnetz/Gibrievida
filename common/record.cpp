@@ -36,7 +36,7 @@ Record::Record(QObject *parent) :
     m_duration = 0;
     m_repetitions = 0;
     m_distance = 0.0;
-    m_active = false;
+    m_active = true;
     m_start = QDateTime::fromTime_t(0);
     m_end = QDateTime::fromTime_t(0);
 
