@@ -24,26 +24,21 @@ import "../common"
 Dialog {
     id: recDialog
 
-//    property int databaseId: -1
-//    property alias activityId: activity.chosenValue
-//    property alias activityName: activity.value
-//    property alias note: noteText.text
-//    property alias start: startTime.dateTime
-//    property alias duration: durationButton.duration
-//    property alias durationString: durationButton.value
-//    property alias repetitions: repetitionsField.text
-
     property Record record: null
+
+    property int oldActivityId
 
     ActivitiesModel { id: activitiesModel }
 
-//    canAccept: databaseId < 0 ? (activity.chosenValue > 0) : repetitionsField.acceptableInput
     canAccept: activityButton.chosenActivity && repetitionsField.acceptableInput
 
     Component.onCompleted: {
         if (record) {
+            oldActivityId = record.activity.databaseId
             activityButton.chosenActivity = record.activity
             activityButton.value = record.activity.name
+        } else {
+            records.prepare()
         }
     }
 
@@ -65,7 +60,6 @@ Dialog {
             DialogHeader {
                 dialog: recDialog
                 flickable: recDialogFlick
-//                acceptText: (databaseId < 0) ? qsTr("Add") : qsTr("Edit")
                 acceptText: record ? qsTr("Edit") : qsTr("Add")
             }
 
@@ -74,7 +68,6 @@ Dialog {
                 label: qsTr("Activity")
                 value: qsTr("Please select")
 
-//                property int chosenValue
                 property Activity chosenActivity: null
 
                 onChosenActivityChanged: {
@@ -86,8 +79,6 @@ Dialog {
                 }
 
                 onClicked: {
-//                    var dialog = pageStack.push(actChoserComp, {chosenValue: activityButton.chosenValue, chosenText: activityButton.value, label: activityButton.label})
-//                    dialog.accepted.connect(function() {activityButton.chosenValue = dialog.chosenValue; activityButton.value = dialog.chosenText})
                     var dialog = pageStack.push(actChoserComp, {chosenActivity: activityButton.chosenActivity, label: activityButton.label, model: activitiesModel})
                     dialog.accepted.connect(function() {activityButton.chosenActivity = dialog.chosenActivity})
                 }
@@ -100,8 +91,6 @@ Dialog {
 
                         signal accepted()
 
-//                        property int chosenValue
-//                        property string chosenText
                         property Activity chosenActivity: null
                         property alias label: pHeader.title
                         property alias model: list.model
@@ -135,12 +124,9 @@ Dialog {
                                 ListView.onAdd: AddAnimation { target: listItem }
                                 ListView.onRemove: animateRemoval(listItem)
 
-//                                highlighted: model.databaseId === actChoser.chosenValue
                                 highlighted: actChoser.chosenActivity ? model.item.databaseId === actChoser.chosenActivity.databaseId : false
 
                                 onClicked: {
-//                                    actChoser.chosenValue = model.databaseId
-//                                    actChoser.chosenText = model.name
                                     actChoser.chosenActivity = model.item
                                     actChoser.accepted()
                                     search.text = ""
@@ -226,11 +212,13 @@ Dialog {
             TextField {
                 id: repetitionsField
                 width: parent.width
-                visible: record
+                visible: record && activityButton.chosenActivity.useRepeats
                 label: qsTr("Repetitions"); placeholderText: label
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: IntValidator { bottom: 1 }
-                text: record ? record.repetitions : "1"
+                validator: IntValidator { bottom: record && record.activity.useRepeats ? 1 : 0 }
+                text: record && record.activity.useRepeats ? record.repetitions : "0"
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: repetitionsField.focus = false
             }
 
             TextArea {
@@ -240,16 +228,32 @@ Dialog {
                 placeholderText: qsTr("Note")
                 label: qsTr("Note")
                 text: record ? record.note : ""
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: noteText.focus = false
             }
         }
     }
 
+    acceptDestination: !record ? Qt.resolvedUrl("../pages/Record.qml") : null
+    acceptDestinationProperties: !record ? {record: records.current} : {}
+    acceptDestinationAction: !record ? PageStackAction.Replace : PageStackAction.Push
+
     onAccepted: {
         if (record) {
-
+            record.updateActivity(activityButton.chosenActivity)
+            record.start = startTime.dateTime
+            record.updateDuration(durationButton.duration)
+            record.repetitions = parseInt(repetitionsField.text)
+            record.note = noteText.text
+            records.update(record, oldActivityId)
         } else {
-//            records.add(activityId, note)
             records.add(activityButton.chosenActivity, noteText.text)
+        }
+    }
+
+    onRejected: {
+        if (!record) {
+            records.cancel()
         }
     }
 }
