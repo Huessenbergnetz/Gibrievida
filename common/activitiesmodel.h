@@ -75,6 +75,7 @@ public slots:
 
     void recordRemoved(int record, int activity, int category);
     void recordsRemovedByActivity(int activity, int category);
+    void recordsRemovedByCategory(int category);
 
 private:
     QList<Activity*> m_activities;

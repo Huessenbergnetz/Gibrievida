@@ -30,6 +30,7 @@ namespace Gibrievida {
 
 class Record;
 class Activity;
+class Category;
 
 /*!
  * \brief Controller class to manage Record objects.
@@ -55,6 +56,7 @@ public:
     Q_INVOKABLE void update(Gibrievida::Record *r, int oldActivityId);
     Q_INVOKABLE void remove(Gibrievida::Record *r);
     Q_INVOKABLE void removeByActivity(Gibrievida::Activity *a);
+    Q_INVOKABLE void removeByCategory(Gibrievida::Category *c);
     Q_INVOKABLE void removeAll();
 
     Record *current() const;
@@ -82,6 +84,10 @@ signals:
      * \brief Emitted if a set of records has been removed successfully from the database.
      */
     void removedByActivity(int activity, int category);
+    /*!
+     * \brief Emitted if a set of records has been removed successfully from the database.
+     */
+    void removedByCategory(int category);
     /*!
      * \brief Emitted if all records have been removed successfully from the database.
      */

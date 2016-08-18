@@ -88,6 +88,9 @@ Page {
             menu: contextMenu
 
             ListView.onRemove: animateRemoval(catManagerListItem)
+            ListView.onAdd: AddAnimation { target: catManagerListItem }
+
+            onClicked: pageStack.push(Qt.resolvedUrl("Records.qml"), {category: model.item})
 
             function remove() {
                 remorseAction(qsTr("Removing"), function() {categories.remove(item)})

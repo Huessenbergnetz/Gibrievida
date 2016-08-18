@@ -372,18 +372,20 @@ void RecordsController::remove(Record *r)
 
 
 /*!
- * \brief Removes all records that are part of \c activity.
+ * \brief Removes all records that are part of Activity \c a.
  *
- * \c category is given to the removedByActivity() signal that is emitted on success.
+ * On success the removedByActivity() signal will be emitted.
  */
 void RecordsController::removeByActivity(Activity *a)
 {
     if (!a) {
         qCritical("No actvitiy given. Returning.");
+        return;
     }
 
     if (!a->isValid()) {
         qCritical("Invalid activity. Returning.");
+        return;
     }
 
     if (!connectDb()) {
@@ -392,7 +394,7 @@ void RecordsController::removeByActivity(Activity *a)
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("DELETE FROM records WHERE activity = ?"))) {
+    if (!q.prepare(QStringLiteral("DELETE FROM records WHERE activity = ? AND end > 0"))) {
         return;
     }
 
@@ -408,6 +410,43 @@ void RecordsController::removeByActivity(Activity *a)
 
 
 /*!
+ * \brief Removes all records that are part of Category \c c.
+ *
+ * On success the removedByCategory() signal will be emitted.
+ */
+void RecordsController::removeByCategory(Category *c)
+{
+    if (!c) {
+        qCritical("No category given. Returning.");
+        return;
+    }
+
+    if (!c->isValid()) {
+        qCritical("Invalid category. Returning.");
+        return;
+    }
+
+    if (!connectDb()) {
+        return;
+    }
+
+    QSqlQuery q(m_db);
+
+    if (!q.prepare(QStringLiteral("DELETE FROM records WHERE end > 0 AND activity IN (SELECT id FROM activities WHERE category = ?)"))) {
+        return;
+    }
+
+    q.addBindValue(c->databaseId());
+
+    if (!q.exec()) {
+        return;
+    }
+
+    emit removedByCategory(c->databaseId());
+}
+
+
+/*!
  * \brief Removes all records from the database.
  *
  * On success, the removedAll() signal will be emitted.
@@ -420,7 +459,7 @@ void RecordsController::removeAll()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("DELETE FROM records"))) {
+    if (!q.exec(QStringLiteral("DELETE FROM records WHERE end > 0"))) {
         return;
     }
 

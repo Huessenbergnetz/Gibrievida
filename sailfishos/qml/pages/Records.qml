@@ -28,9 +28,12 @@ Page {
     property Category category: null
 
     Component.onCompleted: {
-        if (activity) {
+        if (category) {
+            recordsModel.categoryId = category.databaseId
+        } else if (activity) {
             recordsModel.activityId = activity.databaseId
         }
+
         recordsModel.update()
     }
 
@@ -44,7 +47,9 @@ Page {
             MenuItem {
                 text: qsTr("Remove all")
                 onClicked: {
-                    if (activity) {
+                    if (category) {
+                        remorse.execute(qsTr("Removing all"), function() {records.removeByCategory(category)})
+                    } else if (activity) {
                         remorse.execute(qsTr("Removing all"), function() {records.removeByActivity(activity)})
                     } else {
                         remorse.execute(qsTr("Removing all"), function() {records.removeAll()})
@@ -73,7 +78,7 @@ Page {
         header: PageHeader {
             title: qsTr("Records")
             page: recordsManager
-            description: activity ? activity.name : category ? category.name : qsTr("All")
+            description: category ? category.name : activity ? activity.name : qsTr("All")
         }
 
         BusyIndicator {

@@ -41,6 +41,7 @@ RecordsModel::RecordsModel(QObject *parent) : DBModel(parent)
     m_actsController = nullptr;
     m_catsController = nullptr;
     m_activityId = 0;
+    m_categoryId = 0;
     m_order = QStringLiteral("DESC");
     m_orderBy = QStringLiteral("start");
 }
@@ -130,7 +131,9 @@ void RecordsModel::update()
 
     QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.minSpeed, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
-    if (m_activityId > 0) {
+    if (m_categoryId > 0) {
+        queryString.append(QLatin1String(" AND a.category = ?"));
+    } else if (m_activityId > 0) {
         queryString.append(QLatin1String(" AND r.activity = ?"));
     }
 
@@ -143,7 +146,9 @@ void RecordsModel::update()
         return;
     }
 
-    if (m_activityId > 0) {
+    if (m_categoryId > 0) {
+        q.addBindValue(m_categoryId);
+    } else if (m_activityId > 0) {
         q.addBindValue(m_activityId);
     }
 
@@ -239,6 +244,7 @@ void RecordsModel::setRecordsController(RecordsController *recordsController)
         disconnect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
         disconnect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
         disconnect(m_recsController, &RecordsController::removedByActivity, this, &RecordsModel::removedByActivity);
+        disconnect(m_recsController, &RecordsController::removedByCategory, this, &RecordsModel::removedByCategory);
     }
 
     m_recsController = recordsController;
@@ -251,6 +257,7 @@ void RecordsModel::setRecordsController(RecordsController *recordsController)
         connect(m_recsController, &RecordsController::removed, this, &RecordsModel::removed);
         connect(m_recsController, &RecordsController::removedAll, this, &RecordsModel::removedAll);
         connect(m_recsController, &RecordsController::removedByActivity, this, &RecordsModel::removedByActivity);
+        connect(m_recsController, &RecordsController::removedByCategory, this, &RecordsModel::removedByCategory);
     }
 }
 
@@ -356,6 +363,33 @@ void RecordsModel::setActivityId(int activityId)
     qDebug() << " Set activityId to" << m_activityId;
 #endif
 }
+
+
+
+/*!
+ * \property RecordsModel::categoryId
+ * \brief Database ID of the category to request records for.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>getCategoryId() const</TD></TR><TR><TD>void</TD><TD>setCategoryId(int categoryId)</TD></TR></TABLE>
+ */
+
+/*!
+ * \brief Part of the \link RecordsModel::categoryId categoryId \endlink property.
+ */
+int RecordsModel::getCategoryId() const { return m_categoryId; }
+
+/*!
+ * \brief Part of the \link RecordsModel::categoryId categoryId \endlink property.
+ */
+void RecordsModel::setCategoryId(int categoryId)
+{
+    m_categoryId = categoryId;
+#ifdef QT_DEBUG
+    qDebug() << " Set categoryId to" << m_categoryId;
+#endif
+}
+
 
 
 
@@ -492,29 +526,34 @@ QList<int> RecordsModel::findByCategory(int category) const
  */
 void RecordsModel::finished(Record *record)
 {
+    // let's check if the new record is part of the current model data
+    // model might display all records or only records for a specific category or activity
+    if ((m_activityId <= 0 && m_categoryId <= 0) || m_categoryId == record->activity()->category()->databaseId() || m_activityId == record->activity()->databaseId()) {
 
-    if (record->isValid()) {
-        record->setParent(this);
-    } else {
-        return;
-    }
+        if (record->isValid()) {
+            record->setParent(this);
+        } else {
+            return;
+        }
 
-    if (m_orderBy == QLatin1String("start")) {
+        if (m_orderBy == QLatin1String("start")) {
 
-        if (m_order == QLatin1String("DESC")) {
-            beginInsertRows(QModelIndex(), 0, 0);
-            m_records.prepend(record);
-            endInsertRows();
-        } else if (m_order == QLatin1String("ASC")) {
-            beginInsertRows(QModelIndex(), rowCount(), rowCount());
-            m_records.append(record);
-            endInsertRows();
+            if (m_order == QLatin1String("DESC")) {
+                beginInsertRows(QModelIndex(), 0, 0);
+                m_records.prepend(record);
+                endInsertRows();
+            } else if (m_order == QLatin1String("ASC")) {
+                beginInsertRows(QModelIndex(), rowCount(), rowCount());
+                m_records.append(record);
+                endInsertRows();
+            } else {
+                update();
+            }
+
         } else {
             update();
         }
 
-    } else {
-        update();
     }
 }
 
@@ -551,7 +590,8 @@ void RecordsModel::removedByActivity(int activity, int category)
 {
     Q_UNUSED(category)
 
-    if (!connectDb()) {
+    if (m_activityId > 0 && m_activityId == activity) {
+        clear();
         return;
     }
 
@@ -579,7 +619,8 @@ void RecordsModel::removedByActivity(int activity, int category)
  */
 void RecordsModel::removedByCategory(int categoryId)
 {
-    if (!connectDb()) {
+    if (m_categoryId > 0 && m_categoryId == categoryId) {
+        clear();
         return;
     }
 

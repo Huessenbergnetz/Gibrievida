@@ -43,6 +43,7 @@ class RecordsModel : public DBModel
     Q_PROPERTY(Gibrievida::CategoriesController *categoriesController READ getCategoriesController WRITE setCategoriesController)
     Q_PROPERTY(Gibrievida::ActivitiesController *activitiesController READ getActivitiesController WRITE setActivitiesController)
     Q_PROPERTY(int activityId READ getActivityId WRITE setActivityId)
+    Q_PROPERTY(int categoryId READ getCategoryId WRITE setCategoryId)
     Q_PROPERTY(QString order READ getOrder WRITE setOrder)
     Q_PROPERTY(QString orderBy READ getOrderBy WRITE setOrderBy)
 public:
@@ -70,6 +71,9 @@ public:
     void setActivityId(int activityId);
     int getActivityId() const;
 
+    void setCategoryId(int categoryId);
+    int getCategoryId() const;
+
     void setOrder(const QString &order);
     QString getOrder() const;
 
@@ -91,6 +95,7 @@ private:
     CategoriesController *m_catsController;
     ActivitiesController *m_actsController;
     int m_activityId;
+    int m_categoryId;
     QString m_order;
     QString m_orderBy;
 

@@ -359,11 +359,13 @@ void ActivitiesModel::setRecordsController(RecordsController *controller)
         if (m_recsController) {
             disconnect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
             disconnect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
+            disconnect(m_recsController, &RecordsController::removedByCategory, this, &ActivitiesModel::recordsRemovedByCategory);
         }
         m_recsController = controller;
         if (m_recsController) {
             connect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
             connect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
+            connect(m_recsController, &RecordsController::removedByCategory, this, &ActivitiesModel::recordsRemovedByCategory);
         }
     }
 }
@@ -415,4 +417,21 @@ void ActivitiesModel::recordsRemovedByActivity(int activity, int category)
     }
 
     m_activities.at(idx)->setRecords(0);
+}
+
+
+/*!
+ * \brief Updates the records count of activities belonging to \c category after the records of that category have been removed.
+ */
+void ActivitiesModel::recordsRemovedByCategory(int category)
+{
+    if (m_activities.isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < m_activities.size(); ++i) {
+        if (m_activities.at(i)->category()->databaseId() == category) {
+            m_activities.at(i)->setRecords(0);
+        }
+    }
 }
