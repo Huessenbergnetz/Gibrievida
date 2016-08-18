@@ -151,6 +151,8 @@ void RecordsController::cancel()
         setCurrent(nullptr);
         delete r;
     }
+
+    startStopTimer();
 }
 
 
