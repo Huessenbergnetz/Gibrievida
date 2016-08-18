@@ -24,19 +24,37 @@ import "../common"
 Page {
     id: singleRecordPage
 
+    objectName: "SingleRecordPage"
+
     property Record record: null
 
     SilicaFlickable {
         PullDownMenu {
             MenuItem {
+                visible: record && !record.active
                 text: qsTr("Edit")
                 onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/RecordDialog.qml"), {record: record})
+            }
+
+            MenuItem {
+                visible: record && record.active
+                //: pull down menu entry name
+                text: qsTr("Cancel recording")
+                //: remorse popup text
+                onClicked: remorse.execute(qsTr("Cancel recording"), function() {records.cancel(); pageStack.pop()})
+            }
+
+            MenuItem {
+                visible: record && record.active
+                //: pull down menu entry name
+                text: qsTr("Finish recording")
+                onClicked: records.finish()
             }
         }
 
         id: singleRecordFlick
         anchors.fill: parent
-        contentHeight: singleRecordCol.height
+        contentHeight: singleRecordCol.height + increaseRepArea.height
 
         VerticalScrollDecorator {
             flickable: singleRecordFlick
@@ -84,7 +102,7 @@ Page {
             IconSectionHeader {
                 icon: "image://theme/icon-s-retweet"
                 text: qsTr("Repetitions")
-                visible: record ? record.repetitions > 0 : false
+                visible: record ? record.activity.useRepeats : false
             }
 
             Text {
@@ -92,13 +110,13 @@ Page {
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
                 text: record ? record.repetitions : ""
-                visible: record ? record.repetitions > 0 : false
+                visible: record ? record.activity.useRepeats : false
             }
 
             IconSectionHeader {
                 icon: "image://theme/icon-s-edit"
                 text: qsTr("Note")
-                visible: record ? record.note : false
+                visible: record ? record.note != "" : false
             }
 
             Text {
@@ -106,8 +124,33 @@ Page {
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
                 text: record ? record.note : ""
-                visible: record ? record.note : false
+                visible: record ? record.note != "" : false
             }
+        }
+
+        BackgroundItem {
+            id: increaseRepArea
+            anchors { left: parent.left; right: parent.right; top: singleRecordCol.bottom }
+            visible: record && record.active && record.activity.useRepeats
+            contentHeight: increaseRepArea.height
+            height: Screen.height - singleRecordCol.height
+
+            onClicked: records.increaseRepetitions()
+
+            Label {
+                id: increaseRepLabel
+                anchors.centerIn: parent
+                width: parent.width - (2 * Theme.horizontalPageMargin)
+                text: qsTr("Click in this free space to add a repetition")
+                font.pixelSize: Theme.fontSizeLarge
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                color: increaseRepArea.highlighted ? Theme.highlightColor : Theme.primaryColor
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+
+        RemorsePopup {
+            id: remorse
         }
     }
 }
