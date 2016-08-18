@@ -73,6 +73,7 @@ public:
     Q_INVOKABLE bool isValid() const;
     Q_INVOKABLE void updateDuration(uint nDuration);
     Q_INVOKABLE void updateActivity(Gibrievida::Activity *activity);
+    Q_INVOKABLE void remove();
 
 
 signals:
@@ -85,6 +86,10 @@ signals:
     void distanceChanged(double distance);
     void noteChanged(const QString &note);
     void activeChanged(bool active);
+    /*!
+     * \brief Emitted by remove() to indicate that the user wants to delete the record.
+     */
+    void startRemoving();
 
 private:
     Q_DISABLE_COPY(Record)

@@ -467,3 +467,14 @@ void Record::updateActivity(Activity *activity)
         }
     }
 }
+
+
+/*!
+ * \brief Emits the startRemoving() signal.
+ *
+ * Does nothing more than emitting the startRemoving() signal.
+ */
+void Record::remove()
+{
+    emit startRemoving();
+}

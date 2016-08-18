@@ -27,9 +27,23 @@ Page {
     objectName: "SingleRecordPage"
 
     property Record record: null
+    property bool comingFromList: false
 
     SilicaFlickable {
         PullDownMenu {
+            MenuItem {
+                visible: record && !record.active
+                text: qsTr("Delete")
+                onClicked: {
+                    if (comingFromList) {
+                        record.remove()
+                        pageStack.pop()
+                    } else {
+                        remorse.execute(qsTr("Deleting"), function() {records.remove(record); pageStack.pop()})
+                    }
+                }
+            }
+
             MenuItem {
                 visible: record && !record.active
                 text: qsTr("Edit")

@@ -79,7 +79,12 @@ Page {
             ListView.onAdd: AddAnimation { target: recManagerListItem }
             ListView.onRemove: animateRemoval(recManagerListItem)
 
-            onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {record: model.item})
+            onClicked: pageStack.push(Qt.resolvedUrl("Record.qml"), {record: model.item, comingFromList: true})
+
+            Connections {
+                target: model.item
+                onStartRemoving: recManagerListItem.remove()
+            }
 
             function remove() {
                 remorseAction(qsTr("Removing"), function() {records.remove(model.item)})
