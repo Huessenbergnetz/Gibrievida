@@ -123,6 +123,13 @@ bool DBManager::createDatabase()
         return false;
     }
 
+    if (!q.exec(QStringLiteral("CREATE INDEX IF NOT EXISTS idx_activities_category ON activities (category)"))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
+        return false;
+    }
+
     if (!q.exec(QStringLiteral("CREATE TABLE IF NOT EXISTS records "
                                "(id INTEGER PRIMARY KEY NOT NULL, "
                                "activity INTEGER NOT NULL, "
@@ -138,6 +145,13 @@ bool DBManager::createDatabase()
                                "avgSpeed REAL DEFAULT 0.0, "
                                "FOREIGN KEY(activity) REFERENCES activities(id) ON DELETE CASCADE)"
                                ))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
+        return false;
+    }
+
+    if (!q.exec(QStringLiteral("CREATE INDEX IF NOT EXISTS idx_records_activity ON records (activity)"))) {
 #ifdef QT_DEBUG
         qDebug() << q.lastError().text();
 #endif
