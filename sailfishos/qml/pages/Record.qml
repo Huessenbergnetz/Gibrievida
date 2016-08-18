@@ -170,8 +170,8 @@ Page {
                 id: increaseRepLabel
                 anchors.centerIn: parent
                 width: parent.width - (2 * Theme.horizontalPageMargin)
-                text: qsTr("Click in this free space to add a repetition")
-                font.pixelSize: Theme.fontSizeLarge
+                text: record && record.repetitions ? record.repetitions : qsTr("Click in this free space to add a repetition")
+                font.pixelSize: record && record.repetitions ? (Theme.fontSizeExtraLarge * 5) : Theme.fontSizeLarge
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 color: increaseRepArea.highlighted ? Theme.highlightColor : Theme.primaryColor
                 horizontalAlignment: Text.AlignHCenter
