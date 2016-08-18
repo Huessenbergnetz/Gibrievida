@@ -94,6 +94,7 @@ int ActivitiesController::add(const QString &name, Category *c, int minRepeats, 
 bool ActivitiesController::update(Activity *a, int oldCategoryId)
 {
     if (!a->isValid()) {
+        qCritical("Activity is not valid. Returning.");
         return false;
     }
 

@@ -225,7 +225,6 @@ Dialog {
             activity.category.databaseId = categoryButton.chosenCategory.databaseId
             activity.category.name = categoryButton.chosenCategory.name
             activity.category.color = categoryButton.chosenCategory.color
-            activity.category.activities = categoryButton.chosenCategory.activities
             activities.update(activity, oldCategoryId)
         } else {
             activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked)
