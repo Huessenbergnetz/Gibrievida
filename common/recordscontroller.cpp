@@ -290,6 +290,8 @@ void RecordsController::finish()
     emit finished(current());
 
     setCurrent(nullptr);
+
+    startStopTimer();
 }
 
 
