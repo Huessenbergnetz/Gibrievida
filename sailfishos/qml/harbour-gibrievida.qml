@@ -18,6 +18,7 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import harbour.gibrievida 1.0
 import "pages"
 
 ApplicationWindow
@@ -30,7 +31,7 @@ ApplicationWindow
 
     function updateVisibility()
     {
-        if (pageStack.currentPage.objectName === "MainPage" || cover.status === Cover.Active) {
+        if (pageStack.currentPage.objectName === "MainPage" || (pageStack.currentPage.objectName === "SingleRecordPage" && pageStack.currentPage.record.active) || cover.status === Cover.Active) {
             records.visible = true
         } else {
             records.visible = false
