@@ -21,6 +21,8 @@
 #include <QSqlError>
 #include <QtCore/qmath.h>
 #include "recordscontroller.h"
+#include "activitiescontroller.h"
+#include "categoriescontroller.h"
 #include "category.h"
 #include "activity.h"
 #include "record.h"
@@ -31,7 +33,7 @@
 using namespace Gibrievida;
 
 /*!
- * \brief Constructs a new records model.
+ * \brief Constructs a new empty records model.
  */
 RecordsModel::RecordsModel(QObject *parent) : DBModel(parent)
 {
@@ -49,8 +51,7 @@ RecordsModel::RecordsModel(QObject *parent) : DBModel(parent)
  */
 RecordsModel::~RecordsModel()
 {
-    qDeleteAll(m_records);
-    m_records.clear();
+
 }
 
 
@@ -214,65 +215,6 @@ void RecordsModel::clear()
 
 
 /*!
- * \brief Creates a human readable string from a duration in seconds.
- */
-QString RecordsModel::createDurationString(uint duration)
-{
-    if (duration <= 0) {
-        return tr("invalid");
-    }
-
-    if (duration > 0 && duration < 60) {
-        //: the s is the abbreviation for second(s)
-        return tr("%1s").arg(duration);
-    }
-
-    uint secs = duration;
-
-    float fDays = secs/86400;
-    uint days = qFloor(fDays);
-
-    secs = secs - (86400*days);
-
-    float fHours = secs/3600;
-    uint hours = qFloor(fHours);
-
-    secs = secs - (3600*hours);
-
-    float fMins = secs/60;
-    int mins = qFloor(fMins);
-
-    secs = secs - (60*mins);
-
-    QString durString;
-
-    if (days) {
-        //: d is the abbreviation for day, used in duration time display.
-        durString.append(tr("%1d").arg(days)).append(QLatin1String(" "));
-    }
-
-    if (hours) {
-        //: h is the abbreviation for hour, used in duration time display
-        durString.append(tr("%1h").arg(hours)).append(QLatin1String(" "));
-    }
-
-    if (mins) {
-        //: m is the abbreviation for minute. Used in duration time display.
-        durString.append(tr("%1m").arg(mins)).append(QLatin1String(" "));
-    }
-
-    if (secs) {
-        //: s is the abbreviation for second. Used in duration time display.
-        durString.append(tr("%1s").arg(secs));
-    }
-
-    return durString;
-}
-
-
-
-
-/*!
  * \property RecordsModel::recordsController
  * \brief Sets the records controller object.
  *
@@ -329,10 +271,20 @@ CategoriesController *RecordsModel::getCategoriesController() const { return m_c
  */
 void RecordsModel::setCategoriesController(CategoriesController *categoriesController)
 {
+    if (m_catsController) {
+        disconnect(m_catsController, &CategoriesController::removed, this, &RecordsModel::removedByCategory);
+        disconnect(m_catsController, &CategoriesController::removedAll, this, &RecordsModel::removedAll);
+    }
+
     m_catsController = categoriesController;
 #ifdef QT_DEBUG
     qDebug() << " Set categoriesController to" << m_catsController;
 #endif
+
+    if (m_catsController) {
+        connect(m_catsController, &CategoriesController::removed, this, &RecordsModel::removedByCategory);
+        connect(m_catsController, &CategoriesController::removedAll, this, &RecordsModel::removedAll);
+    }
 }
 
 
@@ -356,10 +308,20 @@ ActivitiesController *RecordsModel::getActivitiesController() const { return m_a
  */
 void RecordsModel::setActivitiesController(ActivitiesController *activitiesController)
 {
+    if (m_actsController) {
+        disconnect(m_actsController, &ActivitiesController::removed, this, &RecordsModel::removedByActivity);
+        disconnect(m_actsController, &ActivitiesController::removedAll, this, &RecordsModel::removedAll);
+    }
+
     m_actsController = activitiesController;
 #ifdef QT_DEBUG
     qDebug() << " Set activitiesController to" << m_actsController;
 #endif
+
+    if (m_actsController) {
+        connect(m_actsController, &ActivitiesController::removed, this, &RecordsModel::removedByActivity);
+        connect(m_actsController, &ActivitiesController::removedAll, this, &RecordsModel::removedAll);
+    }
 }
 
 
@@ -473,7 +435,11 @@ int RecordsModel::find(int databaseId) const
 }
 
 
-
+/*!
+ * \brief Returns a list of model indeces of records that are part of \c activity.
+ *
+ * \c activity is the database ID of the Activity.
+ */
 QList<int> RecordsModel::findByActivity(int activity) const
 {
     if (m_records.isEmpty()) {
@@ -484,6 +450,30 @@ QList<int> RecordsModel::findByActivity(int activity) const
 
     for (int i = 0; i < m_records.size(); ++i) {
         if (m_records.at(i)->activity()->databaseId() == activity) {
+            idxs.append(i);
+        }
+    }
+
+    return idxs;
+}
+
+
+
+/*!
+ * \brief Returns a list of model indeces of records that are part of \c category.
+ *
+ * \c category is the database ID of the Category.
+ */
+QList<int> RecordsModel::findByCategory(int category) const
+{
+    if (m_records.isEmpty()) {
+        return QList<int>();
+    }
+
+    QList<int> idxs;
+
+    for (int i = 0; i < m_records.size(); ++i) {
+        if (m_records.at(i)->activity()->category()->databaseId() == category) {
             idxs.append(i);
         }
     }
@@ -547,6 +537,12 @@ void RecordsModel::removed(int databaseId, int activity, int category)
 }
 
 
+
+/*!
+ * \brief Removes all records that are part of the \c activity.
+ *
+ * \c activity is the database ID of the Activity.
+ */
 void RecordsModel::removedByActivity(int activity, int category)
 {
     Q_UNUSED(category)
@@ -571,6 +567,33 @@ void RecordsModel::removedByActivity(int activity, int category)
     }
 }
 
+
+/*!
+ * \brief Removes all records that are part of the Category identified by \c categoryId.
+ *
+ * \c categoryId is the database ID of the Category.
+ */
+void RecordsModel::removedByCategory(int categoryId)
+{
+    if (!connectDb()) {
+        return;
+    }
+
+    QList<int> idxs = findByCategory(categoryId);
+
+    if (idxs.isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < idxs.size(); ++i) {
+        int idx = idxs.at(i) - i;
+        beginRemoveRows(QModelIndex(), idx, idx);
+
+        delete m_records.takeAt(idx);
+
+        endRemoveRows();
+    }
+}
 
 
 /*!

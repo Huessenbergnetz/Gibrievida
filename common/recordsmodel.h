@@ -31,6 +31,11 @@ class ActivitiesController;
 class CategoriesController;
 class Record;
 
+/*!
+ * \brief Model containig a set of Record objects.
+ *
+ * In order to populate the model, you have to call the update() slot.
+ */
 class RecordsModel : public DBModel
 {
     Q_OBJECT
@@ -76,6 +81,7 @@ public slots:
     void finished(Record *record);
     void removed(int databaseId, int activity, int category);
     void removedByActivity(int activity, int category);
+    void removedByCategory(int categoryId);
     void removedAll();
 
 private:
@@ -94,8 +100,7 @@ private:
 
     int find(int databaseId) const;
     QList<int> findByActivity(int activity) const;
-
-    QString createDurationString(uint duration);
+    QList<int> findByCategory(int category) const;
 
     Q_DISABLE_COPY(RecordsModel)
 };
