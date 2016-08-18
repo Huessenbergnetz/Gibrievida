@@ -25,12 +25,12 @@ CoverBackground {
     onStatusChanged: gibrievida.updateVisibility()
 
     CoverPlaceholder {
-        visible: !records.current
+        visible: !records.current || records.current.databaseId < 0
         text: qsTr("Gibrievida")
     }
 
     Column {
-        visible: records.current
+        visible: records.current && records.current.databaseId > 0
         anchors { left: parent.left; right: parent.right; top: parent.top; leftMargin: Theme.paddingMedium; topMargin: Theme.paddingMedium; rightMargin: Theme.paddingMedium }
         spacing: Theme.paddingSmall
 
@@ -130,16 +130,22 @@ CoverBackground {
 
     CoverActionList {
         id: defaultActionList
-        enabled: !records.current
+        enabled: !records.current || records.current.databaseId < 0
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
+            onTriggered: {
+                if (pageStack.currentPage.objectName !== "RecordDialog") {
+                    pageStack.push("../dialogs/RecordDialog.qml", {}, PageStackAction.Immediate)
+                }
+                gibrievida.activate()
+            }
         }
     }
 
     CoverActionList {
         id: recordActionlist
-        enabled: records.current && records.current.activity.useRepeats
+        enabled: records.current && records.current.activity.useRepeats && records.current.databaseId > 0
 
         CoverAction {
             iconSource: "image://theme/icon-cover-sync"
@@ -154,7 +160,7 @@ CoverBackground {
 
     CoverActionList {
         id: recordWithoutRepeatActionlist
-        enabled: records.current && !records.current.activity.useRepeats
+        enabled: records.current && !records.current.activity.useRepeats && records.current.databaseId > 0
 
         CoverAction {
             iconSource: "image://theme/icon-cover-sync"

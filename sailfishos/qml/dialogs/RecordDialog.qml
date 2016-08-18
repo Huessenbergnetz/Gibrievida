@@ -24,6 +24,8 @@ import "../common"
 Dialog {
     id: recDialog
 
+    objectName: "RecordDialog"
+
     property Record record: null
 
     property int oldActivityId
