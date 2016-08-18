@@ -95,7 +95,7 @@ QVariant CategoriesModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (role = Item) {
+    if (role == Item) {
         return QVariant::fromValue<Category*>(m_categories.at(index.row()));
     } else {
         return QVariant();
