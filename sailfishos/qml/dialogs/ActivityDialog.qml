@@ -39,8 +39,14 @@ Dialog {
     }
 
     SilicaFlickable {
+        id: catDialogFlick
         anchors.fill: parent
         contentHeight: catDialogCol.height
+
+        VerticalScrollDecorator {
+            flickable: catDialogFlick
+            page: catDialog
+        }
 
         Column {
             id: catDialogCol
@@ -48,6 +54,8 @@ Dialog {
             spacing: Theme.paddingLarge
 
             DialogHeader {
+                dialog: catDialog
+                flickable: catDialogFlick
                 acceptText: activity ? qsTr("Edit") : qsTr("Add")
             }
 
@@ -162,10 +170,20 @@ Dialog {
                 id: distanceSwitch
                 text: qsTr("Distance tracking")
                 checked: activity ? activity.useDistance : false
+                description: qsTr("There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.")
             }
 
             SectionHeader {
                 text: qsTr("Repetition")
+            }
+
+            Text {
+                anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin }
+                width: parent.width - (2 * Theme.horizontalPageMargin)
+                font.pixelSize: Theme.fontSizeExtraSmall
+                text: qsTr("To activate repetitions for this activity, enter minimum and maximum repetitions greater than 0.")
+                color: Theme.secondaryColor
+                wrapMode: Text.WordWrap
             }
 
             Row {
@@ -177,8 +195,8 @@ Dialog {
                     width: (parent.width - parent.spacing)/2
                     label: qsTr("Minimum"); placeholderText: label
                     text: activity ? activity.minRepeats : "0"
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: minRepeatsField.focus = false
+                    EnterKey.iconSource: parseInt(minRepeatsField.text) > 0 ? "image://theme/icon-m-enter-next" : "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: parseInt(minRepeatsField.text) > 0 ? maxRepeatsField.focus = true : minRepeatsField.focus = false
                     validator: IntValidator { bottom: 0 }
                     inputMethodHints: Qt.ImhDigitsOnly
                 }
@@ -188,8 +206,8 @@ Dialog {
                     width: (parent.width - parent.spacing)/2
                     label: qsTr("Maximum"); placeholderText: label
                     text: activity ? activity.maxRepeats : "0"
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: maxRepeatsField.focus = false
+                    EnterKey.iconSource: catDialog.canAccept ? "image://theme/icon-m-enter-accept" : "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: catDialog.canAccept ? catDialog.accept() : maxRepeatsField.focus = false
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0 }
                     enabled: parseInt(minRepeatsField.text) > 0
