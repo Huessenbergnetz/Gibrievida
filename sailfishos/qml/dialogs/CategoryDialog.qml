@@ -70,8 +70,8 @@ Dialog {
                     id: nameField
                     width: parent.width - chosedColor.width - Theme.horizontalPageMargin
                     label: qsTr("Name"); placeholderText: label
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: nameField.focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                    EnterKey.onClicked: catDialog.accept()
                 }
 
             }
