@@ -128,6 +128,21 @@ Page {
             }
 
             IconSectionHeader {
+                icon: "image://theme/icon-s-timer"
+                text: qsTr("Time per repetition")
+                visible: record && record.activity.useRepeats && !record.active
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                //: the s is the abbreviation for seconds
+                text: record ? qsTr("%1s").arg(Number(record.tpr).toLocaleString(Qt.locale(), 'f', 3)) : ""
+                visible: record && record.activity.useRepeats && !record.active
+            }
+
+            IconSectionHeader {
                 icon: "image://theme/icon-s-edit"
                 text: qsTr("Note")
                 visible: record ? record.note != "" : false

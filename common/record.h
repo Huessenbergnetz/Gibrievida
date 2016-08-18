@@ -46,9 +46,13 @@ class Record : public QObject
     Q_PROPERTY(double distance READ distance WRITE setDistance NOTIFY distanceChanged)
     Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
     Q_PROPERTY(bool active READ isActive NOTIFY activeChanged)
+    Q_PROPERTY(float tpr READ tpr NOTIFY tprChanged)
+    Q_PROPERTY(float minSpeed READ minSpeed WRITE setMinSpeed NOTIFY minSpeedChanged)
+    Q_PROPERTY(float maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged)
+    Q_PROPERTY(float avgSpeed READ avgSpeed WRITE setAvgSpeed NOTIFY avgSpeedChanged)
 public:
     explicit Record(QObject *parent = nullptr);
-    explicit Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, QObject *parent = nullptr);
+    explicit Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, float tpr, float minSpeed, float maxSpeed, float avgSpeed, QObject *parent = nullptr);
     ~Record();
 
     int databaseId() const;
@@ -60,6 +64,10 @@ public:
     double distance() const;
     QString note() const;
     bool isActive() const;
+    float tpr() const;
+    float minSpeed() const;
+    float maxSpeed() const;
+    float avgSpeed() const;
 
     void setDatabaseId(int nDatabaseId);
     void setActivity(Activity *nActivity);
@@ -69,9 +77,14 @@ public:
     void setRepetitions(uint nRepetitions);
     void setDistance(double nDistance);
     void setNote(const QString &nNote);
+    void setTpr(float nTpr);
+    void setMinSpeed(float nMinSpeed);
+    void setMaxSpeed(float nMaxSpeed);
+    void setAvgSpeed(float nAvgSpeed);
 
     Q_INVOKABLE bool isValid() const;
     Q_INVOKABLE void updateDuration(uint nDuration);
+    Q_INVOKABLE void updateRepetitions(uint nRepetitions);
     Q_INVOKABLE void updateActivity(Gibrievida::Activity *activity);
     Q_INVOKABLE void remove();
 
@@ -86,6 +99,10 @@ signals:
     void distanceChanged(double distance);
     void noteChanged(const QString &note);
     void activeChanged(bool active);
+    void tprChanged(float tpr);
+    void minSpeedChanged(float minSpeed);
+    void maxSpeedChanged(float maxSpeed);
+    void avgSpeedChanged(float avgSpeed);
     /*!
      * \brief Emitted by remove() to indicate that the user wants to delete the record.
      */
@@ -102,6 +119,10 @@ private:
     double m_distance;
     QString m_note;
     bool m_active;
+    float m_tpr;
+    float m_minSpeed;
+    float m_maxSpeed;
+    float m_avgSpeed;
 
     void setActive(bool active);
 

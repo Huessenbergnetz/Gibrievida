@@ -132,6 +132,10 @@ bool DBManager::createDatabase()
                                "repetitions INTEGER DEFAULT 0, "
                                "distance REAL DEFAULT 0.0, "
                                "note TEXT, "
+                               "tpr REAL DEFAULT 0.0, "
+                               "minSpeed REAL DEFAULT 0.0, "
+                               "maxSpeed REAL DEFAULT 0.0, "
+                               "avgSpeed REAL DEFAULT 0.0, "
                                "FOREIGN KEY(activity) REFERENCES activities(id) ON DELETE CASCADE)"
                                ))) {
 #ifdef QT_DEBUG

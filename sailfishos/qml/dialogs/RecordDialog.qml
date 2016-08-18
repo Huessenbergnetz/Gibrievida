@@ -62,7 +62,7 @@ Dialog {
             DialogHeader {
                 dialog: recDialog
                 flickable: recDialogFlick
-                acceptText: record ? qsTr("Edit") : qsTr("Add")
+                acceptText: record ? qsTr("Edit") : qsTr("Start")
             }
 
             ValueButton {
@@ -245,7 +245,7 @@ Dialog {
             record.updateActivity(activityButton.chosenActivity)
             record.start = startTime.dateTime
             record.updateDuration(durationButton.duration)
-            record.repetitions = parseInt(repetitionsField.text)
+            record.updateRepetitions(parseInt(repetitionsField.text))
             record.note = noteText.text
             records.update(record, oldActivityId)
         } else {

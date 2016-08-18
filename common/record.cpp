@@ -39,6 +39,10 @@ Record::Record(QObject *parent) :
     m_active = true;
     m_start = QDateTime::fromTime_t(0);
     m_end = QDateTime::fromTime_t(0);
+    m_tpr = 0.0;
+    m_minSpeed = 0.0;
+    m_maxSpeed = 0.0;
+    m_avgSpeed = 0.0;
 
 #ifdef QT_DEBUG
     qDebug() << "Constructed a new empty" << this;
@@ -49,13 +53,13 @@ Record::Record(QObject *parent) :
 /*!
  * \overload
  */
-Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, QObject *parent) :
-    QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note)
+Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, float tpr, float minSpeed, float maxSpeed, float avgSpeed, QObject *parent) :
+    QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note), m_tpr(tpr), m_minSpeed(minSpeed), m_maxSpeed(maxSpeed), m_avgSpeed(avgSpeed)
 {
     m_active = (end == QDateTime::fromTime_t(0));
 
 #ifdef QT_DEBUG
-    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Start:" << start << "End:" << end << "Duration:" << duration << "Repetitions:" << repetitions << "Distance:" << distance << "Note:" << note;
+    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Start:" << start << "End:" << end << "Duration:" << duration << "Repetitions:" << repetitions << "Distance:" << distance << "Note:" << note << "TPR:" << tpr;
 #endif
 }
 
@@ -407,6 +411,149 @@ void Record::setActive(bool active)
 
 
 
+/*!
+ * \property Record::tpr
+ * \brief Time per repetition
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>float</TD><TD>tpr() const</TD></TR><TR><TD>void</TD><TD>setTpr(float nTpr)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>tprChanged(float tpr)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Record::tprChanged(float tpr)
+ * \brief Part of the \link Record::tpr tpr \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Record::tpr tpr \endlink property.
+ */
+float Record::tpr() const { return m_tpr; }
+
+/*!
+ * \brief Part of the \link Record::tpr tpr \endlink property.
+ */
+void Record::setTpr(float nTpr)
+{
+    if (nTpr != m_tpr) {
+        m_tpr = nTpr;
+#ifdef QT_DEBUG
+        qDebug() << "Changed tpr to" << m_tpr;
+#endif
+        emit tprChanged(tpr());
+    }
+}
+
+
+/*!
+ * \property Record::minSpeed
+ * \brief Minimum speed in meter per second.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>float</TD><TD>minSpeed() const</TD></TR><TR><TD>void</TD><TD>setMinSpeed(float nMinSpeed)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>minSpeedChanged(float minSpeed)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Record::minSpeedChanged(float minSpeed)
+ * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
+ */
+float Record::minSpeed() const { return m_minSpeed; }
+
+/*!
+ * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
+ */
+void Record::setMinSpeed(float nMinSpeed)
+{
+    if (nMinSpeed != m_minSpeed) {
+        m_minSpeed = nMinSpeed;
+#ifdef QT_DEBUG
+        qDebug() << "Changed minSpeed to" << m_minSpeed;
+#endif
+        emit minSpeedChanged(minSpeed());
+    }
+}
+
+
+
+
+/*!
+ * \property Record::maxSpeed
+ * \brief Maximum speed in meter per second.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>float</TD><TD>maxSpeed() const</TD></TR><TR><TD>void</TD><TD>setMaxSpeed(float nMaxSpeed)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>maxSpeedChanged(float maxSpeed)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Record::maxSpeedChanged(float maxSpeed)
+ * \brief Part of the \link Record::maxSpeed maxSpeed \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Record::maxSpeed maxSpeed \endlink property.
+ */
+float Record::maxSpeed() const { return m_maxSpeed; }
+
+/*!
+ * \brief Part of the \link Record::maxSpeed maxSpeed \endlink property.
+ */
+void Record::setMaxSpeed(float nMaxSpeed)
+{
+    if (nMaxSpeed != m_maxSpeed) {
+        m_maxSpeed = nMaxSpeed;
+#ifdef QT_DEBUG
+        qDebug() << "Changed maxSpeed to" << m_maxSpeed;
+#endif
+        emit maxSpeedChanged(maxSpeed());
+    }
+}
+
+
+
+
+/*!
+ * \property Record::avgSpeed
+ * \brief Average speed in meter per second.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>float</TD><TD>avgSpeed() const</TD></TR><TR><TD>void</TD><TD>setAvgSpeed(float nAvgSpeed)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>avgSpeedChanged(float avgSpeed)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Record::avgSpeedChanged(float avgSpeed)
+ * \brief Part of the \link Record::avgSpeed avgSpeed \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Record::avgSpeed avgSpeed \endlink property.
+ */
+float Record::avgSpeed() const { return m_avgSpeed; }
+
+/*!
+ * \brief Part of the \link Record::avgSpeed avgSpeed \endlink property.
+ */
+void Record::setAvgSpeed(float nAvgSpeed)
+{
+    if (nAvgSpeed != m_avgSpeed) {
+        m_avgSpeed = nAvgSpeed;
+#ifdef QT_DEBUG
+        qDebug() << "Changed avgSpeed to" << m_avgSpeed;
+#endif
+        emit avgSpeedChanged(avgSpeed());
+    }
+}
+
 
 
 /*!
@@ -421,7 +568,7 @@ bool Record::isValid() const
 
 
 /*!
- * \brief Updates the duration and according the end time.
+ * \brief Updates the duration and according the end time and time per repetition (tpr).
  *
  * This should be used for finished recordings, it is not meant for active recordings.
  */
@@ -430,6 +577,27 @@ void Record::updateDuration(uint nDuration)
     if (m_duration != nDuration) {
         setDuration(nDuration);
         setEnd(m_start.addSecs(nDuration));
+        if (m_repetitions > 0) {
+            setTpr((float)m_duration/(float)m_repetitions);
+        } else {
+            setTpr(0.0);
+        }
+    }
+}
+
+
+/*!
+ * \brief Updates the repetitions and according the time per repetition (tpr).
+ */
+void Record::updateRepetitions(uint nRepetitions)
+{
+    if (m_repetitions != nRepetitions) {
+        setRepetitions(nRepetitions);
+        if (m_repetitions > 0) {
+            setTpr((float)m_duration/(float)m_repetitions);
+        } else {
+            setTpr(0.0);
+        }
     }
 }
 
