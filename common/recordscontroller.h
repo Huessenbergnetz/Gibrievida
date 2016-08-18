@@ -31,6 +31,14 @@ namespace Gibrievida {
 class Record;
 class Activity;
 
+/*!
+ * \brief Controller class to manage Record objects.
+ *
+ * This controller is used to manage single Record object like preparing new records, update active and finished records
+ * as well as delete records.
+ *
+ * The workflow to create new records should be prepare(), add(), finish(). Active records can be canceled via cancel() method.
+ */
 class RecordsController : public BaseController
 {
     Q_OBJECT
@@ -40,8 +48,11 @@ public:
     explicit RecordsController(QObject *parent = nullptr);
     ~RecordsController();
 
+    Q_INVOKABLE void prepare();
+    Q_INVOKABLE void cancel();
     Q_INVOKABLE int add(Gibrievida::Activity *activity, const QString &note = QString());
     Q_INVOKABLE void finish();
+    Q_INVOKABLE void update(Gibrievida::Record *r, int oldActivityId);
     Q_INVOKABLE void remove(Gibrievida::Record *r);
     Q_INVOKABLE void removeByActivity(int activity, int category);
     Q_INVOKABLE void removeAll();
@@ -55,9 +66,25 @@ public:
     Q_INVOKABLE void decreaseRepetitions();
 
 signals:
+    /*!
+     * \brief Emitted if a Record has been finished successfully and it's data has been written to database.
+     */
     void finished(Record *record);
+    /*!
+     * \brief Emitted if a Record has been updated successfully in the database.
+     */
+    void updated(Record *record, int oldActivityId);
+    /*!
+     * \brief Emitted if a Record has been removed successfully from the database.
+     */
     void removed(int databaseId, int activity, int category);
+    /*!
+     * \brief Emitted if a set of records has been removed successfully from the database.
+     */
     void removedByActivity(int activity, int category);
+    /*!
+     * \brief Emitted if all records have been removed successfully from the database.
+     */
     void removedAll();
 
     void currentChanged(Record *current);

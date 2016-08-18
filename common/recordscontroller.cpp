@@ -32,6 +32,8 @@ using namespace Gibrievida;
 
 /*!
  * \brief Constructs a new records controller object.
+ *
+ * This will also search the database for an active Record and load it as \link RecordsController::current current \endlink Record.
  */
 RecordsController::RecordsController(QObject *parent) : BaseController(parent)
 {
@@ -50,23 +52,30 @@ RecordsController::RecordsController(QObject *parent) : BaseController(parent)
 /*!
  * \brief Destroys the records controler object.
  *
- * If there is a current record, it will save the last state to the database.
+ * If there is a current record it will be saved to the database if it is active.
  */
 RecordsController::~RecordsController()
 {
     if (m_current) {
 
-        if (connectDb()) {
+        if (m_current->isValid()) {
 
-            QSqlQuery q(m_db);
+#ifdef QT_DEBUG
+            qDebug("Synchronizing the current record data to the database.");
+#endif
 
-            if (q.prepare(QStringLiteral("UPDATE records SET repetitions = ?, distance = ? WHERE id = ?"))) {
+            if (connectDb()) {
 
-                q.addBindValue(m_current->repetitions());
-                q.addBindValue(m_current->distance());
-                q.addBindValue(m_current->databaseId());
+                QSqlQuery q(m_db);
 
-                q.exec();
+                if (q.prepare(QStringLiteral("UPDATE records SET repetitions = ?, distance = ? WHERE id = ?"))) {
+
+                    q.addBindValue(m_current->repetitions());
+                    q.addBindValue(m_current->distance());
+                    q.addBindValue(m_current->databaseId());
+
+                    q.exec();
+                }
             }
         }
 
@@ -75,19 +84,99 @@ RecordsController::~RecordsController()
 }
 
 
+/*!
+ * \brief Prepares a new Record.
+ *
+ * This should be called before add(). It creates a new empty set of Record, Activity and Category
+ * to populate the \link RecordsController::current current \endlink Record property in order to have
+ * minimal valid data for further operations, especially for UI display.
+ */
+void RecordsController::prepare()
+{
+#ifdef QT_DEBUG
+    qDebug() << "Preaparing a new record";
+#endif
+
+    if (m_current && m_current->isValid()) {
+        qWarning("Current record is already set an active. Returning.");
+        return;
+    }
+
+    Record *r = new Record();
+    Activity *a = new Activity(r);
+    Category *c = new Category(a);
+
+    a->setCategory(c);
+    r->setActivity(a);
+
+    setCurrent(r);
+}
+
 
 /*!
- * \brief Adds a new recording identified by \c activitiy id.
+ * \brief Cancels the current recording if any.
  *
- * Setting a not is optional.
+ * Will also delete the Record from the database if it is active.
+ */
+void RecordsController::cancel()
+{
+#ifdef QT_DEBUG
+    qDebug("Canceling the current recording.");
+#endif
+
+    if (m_current && m_current->isValid()) {
+        Record *r = current();
+        int id = r->databaseId();
+        setCurrent(nullptr);
+        delete r;
+
+        if (id > -1) {
+
+            if (connectDb()) {
+
+                QSqlQuery q(m_db);
+
+                if (q.prepare(QStringLiteral("DELETE FROM records WHERE id = ?"))) {
+
+                    q.addBindValue(id);
+
+                    q.exec();
+
+                }
+            }
+        }
+
+    } else if (m_current && !m_current->isValid()) {
+        Record *r = current();
+        setCurrent(nullptr);
+        delete r;
+    }
+}
+
+
+/*!
+ * \brief Adds a new recording identified by \c activitiy.
+ *
+ * You should call prepare() before you call this. Setting a note is optional.
  */
 int RecordsController::add(Activity *activity, const QString &note)
 {
+#ifdef QT_DEBUG
+    qDebug("Adding a new record.");
+#endif
+
     if (!activity) {
+        qCritical("No pointer to an activitiy is given. Returning.");
         return -1;
     }
 
-    if (m_current) {
+    if (!activity->isValid()) {
+        qCritical("Given activitiy is not valid. Returning.");
+        return -1;
+    }
+
+    if (m_current && m_current->isValid()) {
+        qWarning("Current record is already set and valid. Returning.");
         return -1;
     }
 
@@ -97,7 +186,15 @@ int RecordsController::add(Activity *activity, const QString &note)
 
     QDateTime startTime = QDateTime::currentDateTimeUtc();
 
-    Record *r = new Record(-1, startTime, QDateTime::fromTime_t(0), 0, 0, 0.0, note);
+    Record *r = nullptr;
+
+    if (current()) {
+        r = current();
+        r->setStart(startTime);
+        r->setNote(note);
+    } else {
+        r = new Record(-1, startTime, QDateTime::fromTime_t(0), 0, 0, 0.0, note);
+    }
 
     Activity *a = new Activity(activity, r);
 
@@ -106,6 +203,7 @@ int RecordsController::add(Activity *activity, const QString &note)
     QSqlQuery q(m_db);
 
     if (!q.prepare(QStringLiteral("INSERT INTO records (activity, start, note) VALUES (?, ?, ?)"))) {
+        setCurrent(nullptr);
         delete r;
         return -1;
     }
@@ -115,6 +213,7 @@ int RecordsController::add(Activity *activity, const QString &note)
     q.addBindValue(note);
 
     if (!q.exec()) {
+        setCurrent(nullptr);
         delete r;
         return -1;
     }
@@ -135,11 +234,24 @@ int RecordsController::add(Activity *activity, const QString &note)
 
 
 /*!
- * \brief Finishes the current activity.
+ * \brief Finishes the current recording.
+ *
+ * Will set the end time and the calculated duration to the \link RecordsController::current current \endlink Record
+ * and synchronizes it's data to the database. On success the finished() signal will be emitted.
  */
 void RecordsController::finish()
 {
+#ifdef QT_DEBUG
+    qDebug() << "Finishing the current recording.";
+#endif
+
     if (!m_current) {
+        qWarning("No current recording set. Returning.");
+        return;
+    }
+
+    if (!m_current->isValid()) {
+        qWarning("Current recording is not valid. Returning");
         return;
     }
 
@@ -172,6 +284,9 @@ void RecordsController::finish()
         return;
     }
 
+    m_current->setEnd(endTime);
+    m_current->setDuration(duration);
+
     emit finished(current());
 
     setCurrent(nullptr);
@@ -181,9 +296,46 @@ void RecordsController::finish()
 
 
 /*!
- * \brief Removes one single recored from the database identified by \c databaseId.
+ * \brief Updates Record data in the database.
  *
- * \c activity and \c category are given to the removed() signal that is emitted on success.
+ * On success the updated() signal will be emitted. \c oldActivityId is given to that signal
+ * for further processing.
+ */
+void RecordsController::update(Record *r, int oldActivityId)
+{
+    if (!connectDb()) {
+        return;
+    }
+
+    QSqlQuery q(m_db);
+
+    if (!q.prepare(QStringLiteral("UPDATE records SET activity = ?, start = ?, end = ?, duration = ?, repetitions = ?, distance = ?, note = ? WHERE id = ?"))) {
+        return;
+    }
+
+    q.addBindValue(r->activity()->databaseId());
+    q.addBindValue(r->start().toTime_t());
+    q.addBindValue(r->end().toTime_t());
+    q.addBindValue(r->duration());
+    q.addBindValue(r->repetitions());
+    q.addBindValue(r->distance());
+    q.addBindValue(r->note());
+    q.addBindValue(r->databaseId());
+
+    if (!q.exec()) {
+        return;
+    }
+
+    emit updated(r, oldActivityId);
+}
+
+
+
+
+/*!
+ * \brief Removes one single Record from the database.
+ *
+ * On success the removed() signal will be emitted.
  */
 void RecordsController::remove(Record *r)
 {
@@ -337,6 +489,10 @@ void RecordsController::setVisible(bool visible)
  */
 void RecordsController::init()
 {
+#ifdef QT_DEBUG
+    qDebug() << "Initializing" << this;
+#endif
+
     if (!connectDb()) {
         setCurrent(nullptr);
         return;
@@ -384,6 +540,7 @@ void RecordsController::init()
 void RecordsController::increaseRepetitions()
 {
     if (!m_current) {
+        qWarning("No current record set. Returning.");
         return;
     }
 
@@ -406,6 +563,7 @@ void RecordsController::increaseRepetitions()
 void RecordsController::decreaseRepetitions()
 {
     if (!m_current) {
+        qWarning("No current record set. Returning.");
         return;
     }
 
@@ -422,11 +580,12 @@ void RecordsController::decreaseRepetitions()
 
 
 /*!
- * \brief Updates the current recording's duration value and string.
+ * \brief Updates the current recording's duration value.
  */
 void RecordsController::updateDuration()
 {
     if (!m_current) {
+        qWarning("No current record set. Returning.");
         return;
     }
 
@@ -439,21 +598,25 @@ void RecordsController::updateDuration()
 /*!
  * \brief Starts or stops the duration update timer.
  *
- * If the application is somehow visible to the user and ther is
+ * If the application is somehow visible to the user and there is
  * a current recording, the timer will be started. Otherwise the timer will
  * be stopped.
  */
 void RecordsController::startStopTimer()
 {
     if (m_visible && m_current) {
+        if (!m_timer->isActive()) {
 #ifdef QT_DEBUG
         qDebug() << "Starting timer for duration updates.";
 #endif
         m_timer->start();
+        }
     } else {
+        if (m_timer->isActive()) {
 #ifdef QT_DEBUG
         qDebug() << "Stopping timer for duration updates.";
 #endif
         m_timer->stop();
+        }
     }
 }
