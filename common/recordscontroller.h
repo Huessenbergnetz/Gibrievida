@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QDateTime>
 #include "basecontroller.h"
-#include "helpers.h"
 
 class QTimer;
 
@@ -110,8 +109,6 @@ private:
     bool m_visible;
 
     QTimer *m_timer;
-
-    Helpers helpers;
 };
 
 }

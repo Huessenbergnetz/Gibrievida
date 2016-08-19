@@ -129,7 +129,7 @@ void RecordsModel::update()
         return;
     }
 
-    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.minSpeed, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
+    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
     if (m_categoryId > 0) {
         queryString.append(QLatin1String(" AND a.category = ?"));
@@ -170,7 +170,6 @@ void RecordsModel::update()
                                q.value(15).toFloat(),
                                q.value(16).toFloat(),
                                q.value(17).toFloat(),
-                               q.value(18).toFloat(),
                                this
                                );
 

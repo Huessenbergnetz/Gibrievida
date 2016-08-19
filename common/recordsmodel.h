@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QDateTime>
 #include "dbmodel.h"
-#include "helpers.h"
 
 namespace Gibrievida {
 
@@ -100,8 +99,6 @@ private:
     QString m_orderBy;
 
     void clear();
-
-    Helpers helpers;
 
     int find(int databaseId) const;
     QList<int> findByActivity(int activity) const;

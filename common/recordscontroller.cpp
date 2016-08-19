@@ -195,7 +195,7 @@ int RecordsController::add(Activity *activity, const QString &note)
         r->setStart(startTime);
         r->setNote(note);
     } else {
-        r = new Record(-1, startTime, QDateTime::fromTime_t(0), 0, 0, 0.0, note, 0.0, 0.0, 0.0, 0.0);
+        r = new Record(-1, startTime, QDateTime::fromTime_t(0), 0, 0, 0.0, note, 0.0, 0.0, 0.0);
     }
 
     Activity *a = new Activity(activity, r);
@@ -268,9 +268,14 @@ void RecordsController::finish()
         tpr = (float)m_current->duration()/(float)m_current->repetitions();
     }
 
+    float avgSpeed = 0.0;
+    if (m_current->distance() > 0.0) {
+        avgSpeed = m_current->distance()/(double)duration;
+    }
+
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("UPDATE records SET end = ?, duration = ?, repetitions = ?, distance = ?, tpr = ? WHERE id = ?"))) {
+    if (!q.prepare(QStringLiteral("UPDATE records SET end = ?, duration = ?, repetitions = ?, distance = ?, tpr = ?, maxSpeed = ?, avgSpeed = ? WHERE id = ?"))) {
         Record *current = m_current;
         setCurrent(nullptr);
         delete current;
@@ -282,6 +287,8 @@ void RecordsController::finish()
     q.addBindValue(m_current->repetitions());
     q.addBindValue(m_current->distance());
     q.addBindValue(tpr);
+    q.addBindValue(m_current->maxSpeed());
+    q.addBindValue(avgSpeed);
     q.addBindValue(m_current->databaseId());
 
     if (!q.exec()) {
@@ -294,6 +301,7 @@ void RecordsController::finish()
     m_current->setEnd(endTime);
     m_current->setDuration(duration);
     m_current->setTpr(tpr);
+    m_current->setAvgSpeed(avgSpeed);
 
     emit finished(current());
 
@@ -319,7 +327,7 @@ void RecordsController::update(Record *r, int oldActivityId)
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("UPDATE records SET activity = ?, start = ?, end = ?, duration = ?, repetitions = ?, distance = ?, note = ?, tpr = ? WHERE id = ?"))) {
+    if (!q.prepare(QStringLiteral("UPDATE records SET activity = ?, start = ?, end = ?, duration = ?, repetitions = ?, distance = ?, note = ?, tpr = ?, avgSpeed = ?, maxSpeed = ? WHERE id = ?"))) {
         return;
     }
 
@@ -331,6 +339,8 @@ void RecordsController::update(Record *r, int oldActivityId)
     q.addBindValue(r->distance());
     q.addBindValue(r->note());
     q.addBindValue(r->tpr());
+    q.addBindValue(r->avgSpeed());
+    q.addBindValue(r->maxSpeed());
     q.addBindValue(r->databaseId());
 
     if (!q.exec()) {
@@ -553,14 +563,14 @@ void RecordsController::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.minSpeed, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
+    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
         setCurrent(nullptr);
         return;
     }
 
     if (q.next()) {
         QDateTime startTime = QDateTime::fromTime_t(q.value(6).toUInt());
-        Record *r = new Record(q.value(0).toInt(), startTime, QDateTime::fromTime_t(0), startTime.secsTo(QDateTime::currentDateTimeUtc()), q.value(7).toInt(), q.value(8).toDouble(), q.value(12).toString(), q.value(13).toFloat(), q.value(14).toFloat(), q.value(15).toFloat(), q.value(16).toFloat());
+        Record *r = new Record(q.value(0).toInt(), startTime, QDateTime::fromTime_t(0), startTime.secsTo(QDateTime::currentDateTimeUtc()), q.value(7).toInt(), q.value(8).toDouble(), q.value(12).toString(), q.value(13).toFloat(), q.value(14).toFloat(), q.value(15).toFloat());
 
         Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, r);
 
