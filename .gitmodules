@@ -1,0 +1,3 @@
+[submodule "sailfishos/qml/btcomponents"]
+	path = sailfishos/qml/btcomponents
+	url = https://github.com/Buschtrommel/BT_SFOS_Components.git
