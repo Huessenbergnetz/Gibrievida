@@ -40,7 +40,6 @@ Record::Record(QObject *parent) :
     m_start = QDateTime::fromTime_t(0);
     m_end = QDateTime::fromTime_t(0);
     m_tpr = 0.0;
-    m_minSpeed = 0.0;
     m_maxSpeed = 0.0;
     m_avgSpeed = 0.0;
 
@@ -53,13 +52,13 @@ Record::Record(QObject *parent) :
 /*!
  * \overload
  */
-Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, float tpr, float minSpeed, float maxSpeed, float avgSpeed, QObject *parent) :
-    QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note), m_tpr(tpr), m_minSpeed(minSpeed), m_maxSpeed(maxSpeed), m_avgSpeed(avgSpeed)
+Record::Record(int databaseId, const QDateTime &start, const QDateTime &end, uint duration, uint repetitions, double distance, const QString &note, float tpr, float maxSpeed, float avgSpeed, QObject *parent) :
+    QObject(parent), m_databaseId(databaseId), m_start(start), m_end(end), m_duration(duration), m_repetitions(repetitions), m_distance(distance), m_note(note), m_tpr(tpr), m_maxSpeed(maxSpeed), m_avgSpeed(avgSpeed)
 {
     m_active = (end == QDateTime::fromTime_t(0));
 
 #ifdef QT_DEBUG
-    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Start:" << start << "End:" << end << "Duration:" << duration << "Repetitions:" << repetitions << "Distance:" << distance << "Note:" << note << "TPR:" << tpr;
+    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Start:" << start << "End:" << end << "Duration:" << duration << "Repetitions:" << repetitions << "Distance:" << distance << "Note:" << note << "TPR:" << tpr << "Max Speed:" << maxSpeed << "Avg Speed:" << avgSpeed;
 #endif
 }
 
@@ -446,41 +445,6 @@ void Record::setTpr(float nTpr)
 }
 
 
-/*!
- * \property Record::minSpeed
- * \brief Minimum speed in meter per second.
- *
- * \par Access functions:
- * <TABLE><TR><TD>float</TD><TD>minSpeed() const</TD></TR><TR><TD>void</TD><TD>setMinSpeed(float nMinSpeed)</TD></TR></TABLE>
- * \par Notifier signal:
- * <TABLE><TR><TD>void</TD><TD>minSpeedChanged(float minSpeed)</TD></TR></TABLE>
- */
-
-/*!
- * \fn void Record::minSpeedChanged(float minSpeed)
- * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
- */
-
-/*!
- * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
- */
-float Record::minSpeed() const { return m_minSpeed; }
-
-/*!
- * \brief Part of the \link Record::minSpeed minSpeed \endlink property.
- */
-void Record::setMinSpeed(float nMinSpeed)
-{
-    if (nMinSpeed != m_minSpeed) {
-        m_minSpeed = nMinSpeed;
-#ifdef QT_DEBUG
-        qDebug() << "Changed minSpeed to" << m_minSpeed;
-#endif
-        emit minSpeedChanged(minSpeed());
-    }
-}
-
-
 
 
 /*!
@@ -568,7 +532,7 @@ bool Record::isValid() const
 
 
 /*!
- * \brief Updates the duration and according the end time and time per repetition (tpr).
+ * \brief Updates the duration and according the end time, the average speed and time per repetition (tpr).
  *
  * This should be used for finished recordings, it is not meant for active recordings.
  */
@@ -581,6 +545,12 @@ void Record::updateDuration(uint nDuration)
             setTpr((float)m_duration/(float)m_repetitions);
         } else {
             setTpr(0.0);
+        }
+
+        if (m_distance > 0.0) {
+            setAvgSpeed(m_distance/(double)m_duration);
+        } else {
+            setAvgSpeed(0.0);
         }
     }
 }
@@ -597,6 +567,22 @@ void Record::updateRepetitions(uint nRepetitions)
             setTpr((float)m_duration/(float)m_repetitions);
         } else {
             setTpr(0.0);
+        }
+    }
+}
+
+
+/*!
+ * \brief Updates the distance and according the average speed.
+ */
+void Record::updateDistance(double nDistance)
+{
+    if (m_distance != nDistance) {
+        setDistance(nDistance);
+        if (m_distance > 0.0) {
+            setAvgSpeed(m_distance/(double)m_duration);
+        } else {
+            setAvgSpeed(0.0);
         }
     }
 }
