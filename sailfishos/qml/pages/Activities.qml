@@ -38,6 +38,7 @@ Page {
             width: parent.width
             EnterKey.iconSource: "image://theme/icon-m-enter-close"
             EnterKey.onClicked: searchField.focus = false
+            visible: activitiesListView.count > 0
 
             Binding {
                 target: activitiesModel
@@ -57,6 +58,7 @@ Page {
             MenuItem {
                 text: qsTr("Remove all")
                 onClicked: remorse.execute(qsTr("Removing all"), function() {activities.removeAll()})
+                enabled: activitiesListView.count > 0
             }
 
             MenuItem {
@@ -138,8 +140,7 @@ Page {
                     ImageHighlight {
                         id: cRepeats
                         anchors { verticalCenter: cName.verticalCenter; right: recordsCount.left; rightMargin: Theme.paddingMedium; top: parent.top }
-                        source: "image://theme/icon-cover-sync"
-                        width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
+                        source: "image://theme/icon-s-retweet"
                         highlighted: actsManagerItem.highlighted
                         visible: item.useRepeats
                     }
