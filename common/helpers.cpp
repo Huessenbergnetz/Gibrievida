@@ -19,13 +19,17 @@
 #include "helpers.h"
 #include <QtCore/qmath.h>
 #include <QDateTime>
+#include "configuration.h"
 
 using namespace Gibrievida;
 
 /*!
  * \brief Constructs a new helpers class object.
+ *
+ * A pointer to a Configuration object has to be set in order to calculate values based
+ * on the currently set measurement system.
  */
-Helpers::Helpers(QObject *parent) : QObject(parent)
+Helpers::Helpers(Configuration *config, QLocale locale, QObject *parent) : QObject(parent), m_c(config), m_l(locale)
 {
 
 }
@@ -46,11 +50,8 @@ Helpers::~Helpers()
  */
 QString Helpers::createDurationString(uint duration)
 {
-    if (duration <= 0) {
-        return tr("invalid");
-    }
 
-    if (duration > 0 && duration < 60) {
+    if (duration < 60) {
         //: the s is the abbreviation for second(s)
         return tr("%1s").arg(duration);
     }
@@ -126,4 +127,83 @@ QString Helpers::relativeTimeString(const QDateTime &time)
         return local.toString(tr("dd.MM.yy hh:mmap"));
     }
 
+}
+
+
+
+/*!
+ * \brief Converts a numeric value into a distance string.
+ *
+ * Based on the configured measurement system it will be returned as yards/miles or metres/kilo metres.
+ */
+QString Helpers::toDistanceString(double distance)
+{
+    if (m_c->distanceMeasurement() == QLocale::MetricSystem) {
+
+        if (distance > 999.99999999) {
+            //: km is the abbreviation for kilo metres
+            return tr("%1 km").arg(m_l.toString(distance/1000.0, 'f', 2));
+        } else {
+            //: m is the abbreviation for metres
+            return tr("%1 m").arg(m_l.toString(distance, 'f', 2));
+        }
+
+    } else {
+
+        double yards = toYards(distance);
+
+        if (yards > 1759.999999999) {
+            //: mi is the abbreviation for mile
+            return tr("%1 mi").arg(m_l.toString(yards/1760.0, 'f', 2));
+        } else {
+            //: yd is the abbreviation for yard
+            return tr("%1 yd").arg(m_l.toString(yards, 'f', 2));
+        }
+
+    }
+}
+
+
+/*!
+ * \brief Converts a numeric value into a speed string.
+ *
+ * Based on the configured measurement system, it will be returned as mph or km/h.
+ */
+QString Helpers::toSpeedString(float speed)
+{
+    if (m_c->distanceMeasurement() == QLocale::MetricSystem ) {
+        return tr("%1 km/h").arg(m_l.toString(speed*3.6, 'f', 2));
+    } else {
+        return tr("%1 mph").arg(m_l.toString(speed/0.44704, 'f', 2));
+    }
+}
+
+
+/*!
+ * \brief Converts yards to metres.
+ *
+ * This is based on the currently configured measurement system.
+ */
+double Helpers::toMetres(double yards)
+{
+    if (m_c->distanceMeasurement() == QLocale::ImperialUSSystem) {
+        return yards * 0.914401829;
+    } else {
+        return yards * 0.9143993;
+    }
+}
+
+
+/*!
+ * \brief Converts metres to yards.
+ *
+ * This is based on the currently configured measurement system.
+ */
+double Helpers::toYards(double metres)
+{
+    if (m_c->distanceMeasurement() == QLocale::ImperialUSSystem) {
+        return metres / 0.914401829;
+    } else {
+        return metres / 0.9143993;
+    }
 }

@@ -20,8 +20,11 @@
 #define HELPERS_H
 
 #include <QObject>
+#include <QLocale>
 
 namespace Gibrievida {
+
+class Configuration;
 
 /*!
  * \brief Provides helper functions.
@@ -30,14 +33,20 @@ class Helpers : public QObject
 {
     Q_OBJECT
 public:
-    explicit Helpers(QObject *parent = nullptr);
+    explicit Helpers(Configuration *config, QLocale locale = QLocale(), QObject *parent = nullptr);
     ~Helpers();
 
     Q_INVOKABLE QString createDurationString(uint duration);
     Q_INVOKABLE QString relativeTimeString(const QDateTime &time);
+    Q_INVOKABLE QString toDistanceString(double distance);
+    Q_INVOKABLE QString toSpeedString(float speed);
+    Q_INVOKABLE double toMetres(double yards);
+    Q_INVOKABLE double toYards(double metres);
 
 private:
     Q_DISABLE_COPY(Helpers)
+    Configuration *m_c;
+    QLocale m_l;
 };
 
 }

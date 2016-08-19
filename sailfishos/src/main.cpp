@@ -44,6 +44,7 @@
 #include "../common/recordscontroller.h"
 #include "../common/recordsmodel.h"
 #include "../common/helpers.h"
+#include "../common/configuration.h"
 
 int main(int argc, char *argv[])
 {
@@ -82,12 +83,14 @@ int main(int argc, char *argv[])
     Gibrievida::CategoriesController catsController;
     Gibrievida::ActivitiesController actsController;
     Gibrievida::RecordsController recsController;
-    Gibrievida::Helpers helpers;
+    Gibrievida::Configuration config;
+    Gibrievida::Helpers *helpers = new Gibrievida::Helpers(&config);
 
     view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
     view->rootContext()->setContextProperty(QStringLiteral("activities"), &actsController);
     view->rootContext()->setContextProperty(QStringLiteral("records"), &recsController);
-    view->rootContext()->setContextProperty(QStringLiteral("helpers"), &helpers);
+    view->rootContext()->setContextProperty(QStringLiteral("helpers"), helpers);
+    view->rootContext()->setContextProperty(QStringLiteral("config"), &config);
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));

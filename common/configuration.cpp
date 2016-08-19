@@ -26,7 +26,7 @@ using namespace Gibrievida;
  */
 Configuration::Configuration(QObject *parent) : QSettings(parent)
 {
-
+    m_distanceMeasurement = (QLocale::MeasurementSystem)value(QStringLiteral("distanceMeasurement"), 0).toInt();
 }
 
 
@@ -38,3 +38,37 @@ Configuration::~Configuration()
 
 }
 
+
+/*!
+ * \property Configuration::distanceMeasurement
+ * \brief The measurement system for distances.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>QLocale::MeasurementSystem</TD><TD>distanceMeasurement() const</TD></TR><TR><TD>void</TD><TD>setDistanceMeasurement(QLocale::MeasurementSystem nDistanceMeasurement)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::distanceMeasurementChanged(QLocale::MeasurementSystem distanceMeasurement)
+ * \brief Part of the \link Configuration::distanceMeasurement distanceMeasurement \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::distanceMeasurement distanceMeasurement \endlink property.
+ */
+QLocale::MeasurementSystem Configuration::distanceMeasurement() const { return m_distanceMeasurement; }
+
+/*!
+ * \brief Part of the \link Configuration::distanceMeasurement distanceMeasurement \endlink property.
+ */
+void Configuration::setDistanceMeasurement(QLocale::MeasurementSystem nDistanceMeasurement)
+{
+    if (m_distanceMeasurement != nDistanceMeasurement) {
+        m_distanceMeasurement = nDistanceMeasurement;
+#ifdef QT_DEBUG
+        qDebug() << " Set distanceMeasurement to" << m_distanceMeasurement;
+#endif
+        setValue(QStringLiteral("distanceMeasurement"), (int)m_distanceMeasurement);
+
+        emit distanceMeasurementChanged(distanceMeasurement());
+    }
+}

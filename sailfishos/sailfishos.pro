@@ -43,5 +43,6 @@ DISTFILES += \
     qml/pages/Record.qml \
     qml/common/IconSectionHeader.qml \
     qml/common/DateTimeButton.qml \
-    qml/common/DurationButton.qml
+    qml/common/DurationButton.qml \
+    qml/pages/Settings.qml
 
