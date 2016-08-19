@@ -27,6 +27,7 @@ using namespace Gibrievida;
 Configuration::Configuration(QObject *parent) : QSettings(parent)
 {
     m_distanceMeasurement = (QLocale::MeasurementSystem)value(QStringLiteral("distanceMeasurement"), 0).toInt();
+    m_repetitionClickSound = value(QStringLiteral("repetitionClickSound"), 0).toInt();
 }
 
 
@@ -70,5 +71,43 @@ void Configuration::setDistanceMeasurement(QLocale::MeasurementSystem nDistanceM
         setValue(QStringLiteral("distanceMeasurement"), (int)m_distanceMeasurement);
 
         emit distanceMeasurementChanged(distanceMeasurement());
+    }
+}
+
+
+
+/*!
+ * \property Configuration::repetitionClickSound
+ * \brief Index of the sound effect file to play if the repetition increase button is clicked.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>repetitionClickSound() const</TD></TR><TR><TD>void</TD><TD>setRepetitionClickSound(int nRepetitionClickSound)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>repetitionClickSoundChanged(int repetitionClickSound)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::repetitionClickSoundChanged(int repetitionClickSound)
+ * \brief Part of the \link Configuration::repetitionClickSound repetitionClickSound \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::repetitionClickSound repetitionClickSound \endlink property.
+ */
+int Configuration::repetitionClickSound() const { return m_repetitionClickSound; }
+
+/*!
+ * \brief Part of the \link Configuration::repetitionClickSound repetitionClickSound \endlink property.
+ */
+void Configuration::setRepetitionClickSound(int nRepetitionClickSound)
+{
+    if (nRepetitionClickSound != m_repetitionClickSound) {
+        m_repetitionClickSound = nRepetitionClickSound;
+#ifdef QT_DEBUG
+        qDebug() << "Changed repetitionClickSound to" << m_repetitionClickSound;
+#endif
+        setValue(QStringLiteral("repetitionClickSound"), m_repetitionClickSound);
+
+        emit repetitionClickSoundChanged(repetitionClickSound());
     }
 }

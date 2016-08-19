@@ -47,6 +47,21 @@ Page {
                 onCurrentIndexChanged: config.distanceMeasurement = currentIndex
                 description: qsTr("Distances are stored internally in metres. If you choose a different measurement system, the application will convert the data on the fly.")
             }
+
+            ComboBox {
+                width: parent.width
+                currentIndex: config.repetitionClickSound
+                label: qsTr("Repetition click sound")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Disabled") }
+                    Repeater {
+                        model: 9
+                        MenuItem { text: qsTr("Sound %1").arg(model.index + 1) }
+                    }
+                }
+                onCurrentIndexChanged: config.repetitionClickSound = currentIndex
+                description: qsTr("The sound will be played if you click on a button or area to increase the repetition count of an acitivity.")
+            }
         }
     }
 }

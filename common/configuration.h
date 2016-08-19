@@ -33,6 +33,7 @@ class Configuration : public QSettings
 {
     Q_OBJECT
     Q_PROPERTY(QLocale::MeasurementSystem distanceMeasurement READ distanceMeasurement WRITE setDistanceMeasurement NOTIFY distanceMeasurementChanged)
+    Q_PROPERTY(int repetitionClickSound READ repetitionClickSound WRITE setRepetitionClickSound NOTIFY repetitionClickSoundChanged)
     Q_ENUMS(QLocale::MeasurementSystem)
 public:
     explicit Configuration(QObject *parent = nullptr);
@@ -41,12 +42,17 @@ public:
     QLocale::MeasurementSystem distanceMeasurement() const;
     void setDistanceMeasurement(QLocale::MeasurementSystem nDistanceMeasurement);
 
+    int repetitionClickSound() const;
+    void setRepetitionClickSound(int nRepetitionClickSound);
+
 signals:
     void distanceMeasurementChanged(QLocale::MeasurementSystem distanceMeasurement);
+    void repetitionClickSoundChanged(int repetitionClickSound);
 
 private:
     Q_DISABLE_COPY(Configuration)
     QLocale::MeasurementSystem m_distanceMeasurement;
+    int m_repetitionClickSound;
 };
 
 }
