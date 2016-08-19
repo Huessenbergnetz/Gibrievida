@@ -44,5 +44,10 @@ DISTFILES += \
     qml/common/IconSectionHeader.qml \
     qml/common/DateTimeButton.qml \
     qml/common/DurationButton.qml \
-    qml/pages/Settings.qml
+    qml/pages/Settings.qml \
+    qml/btcomponents/AboutPage.qml \
+    qml/btcomponents/Changelog.qml \
+    qml/btcomponents/ChangelogDelegate.qml \
+    qml/btcomponents/Contributors.qml \
+    qml/btcomponents/ContributorsDelegate.qml
 
