@@ -21,6 +21,10 @@ contributors.path = /usr/share/harbour-gibrievida/icons/contributors
 contributors.files = images/contributors/*.png
 INSTALLS += contributors
 
+soundfiles.path = /usr/share/harbour-gibrievida/sounds
+soundfiles.files = ../common/sounds/*
+INSTALLS += soundfiles
+
 include(../common/common.pri)
 
 SOURCES += \
