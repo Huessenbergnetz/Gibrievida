@@ -143,6 +143,35 @@ Page {
             }
 
             IconSectionHeader {
+                icon: "image://theme/icon-s-task"
+                text: qsTr("Distance")
+                visible: record && record.activity.useDistance
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: record ? helpers.toDistanceString(record.distance) : ""
+                visible: record && record.activity.useDistance
+            }
+
+            IconSectionHeader {
+                icon: "image://theme/icon-s-alarm"
+                text: qsTr("Average speed")
+                visible: record && record.activity.useDistance && !record.active
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+//                text: record ? Number(record.avgSpeed).toLocaleString(Qt.locale(), 'f', 1) : ""
+                text: record ? helpers.toSpeedString(record.avgSpeed) : ""
+                visible: record && record.activity.useDistance && !record.active
+            }
+
+            IconSectionHeader {
                 icon: "image://theme/icon-s-edit"
                 text: qsTr("Note")
                 visible: record ? record.note != "" : false

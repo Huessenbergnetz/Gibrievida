@@ -32,7 +32,7 @@ Dialog {
 
     ActivitiesModel { id: activitiesModel }
 
-    canAccept: activityButton.chosenActivity && repetitionsField.acceptableInput
+    canAccept: activityButton.chosenActivity && repetitionsField.acceptableInput && distanceField.acceptableInput
 
     Component.onCompleted: {
         if (record) {
@@ -175,7 +175,7 @@ Dialog {
                                         ImageHighlight {
                                             id: cRepeats
                                             anchors { verticalCenter: cName.verticalCenter; right: recordsCount.left; rightMargin: Theme.paddingMedium; top: parent.top }
-                                            source: "image://theme/icon-cover-sync"
+                                            source: "image://theme/icon-s-retweet"
                                             width: Theme.fontSizeExtraSmall; height: Theme.fontSizeExtraSmall
                                             highlighted: listItem.highlighted
                                             visible: model.item.useRepeats
@@ -217,10 +217,22 @@ Dialog {
                 visible: record && activityButton.chosenActivity.useRepeats
                 label: qsTr("Repetitions"); placeholderText: label
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: IntValidator { bottom: record && record.activity.useRepeats ? 1 : 0 }
-                text: record && record.activity.useRepeats ? record.repetitions : "0"
+                validator: IntValidator { bottom: record && activityButton.chosenActivity.useRepeats ? 1 : 0 }
+                text: record && activityButton.chosenActivity.useRepeats ? record.repetitions : "0"
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: repetitionsField.focus = false
+            }
+
+            TextField {
+                id: distanceField
+                width: parent.width
+                visible: record && activityButton.chosenActivity.useDistance
+                label: qsTr("Distance in %1").arg(config.distanceMeasurement === Locale.MetricSystem ? qsTr("metres") : qsTr("yards")); placeholderText: label
+                inputMethodHints: Qt.ImhDigitsOnly
+                validator: DoubleValidator { bottom: record && activityButton.chosenActivity.useDistance ? 0.01 : 0.0; locale: Qt.locale().string }
+                text: record && activityButton.chosenActivity.useDistance ? config.distanceMeasurement === Locale.MetricSystem ? record.distance : helpers.toYards(record.distance) : ""
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: distanceField.focus = false
             }
 
             TextArea {
@@ -246,6 +258,11 @@ Dialog {
             record.start = startTime.dateTime
             record.updateDuration(durationButton.duration)
             record.updateRepetitions(parseInt(repetitionsField.text))
+            if (config.distanceMeasurement === Locale.MetricSystem) {
+                record.updateDistance(parseFloat(distanceField.text))
+            } else {
+                record.updateDistance(helpers.toMetres(parseFloat(distanceField.text)))
+            }
             record.note = noteText.text
             records.update(record, oldActivityId)
         } else {

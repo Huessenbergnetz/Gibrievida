@@ -46,6 +46,7 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Remove all")
+                enabled: recordsListView.count > 0
                 onClicked: {
                     if (category) {
                         remorse.execute(qsTr("Removing all"), function() {records.removeByCategory(category)})
@@ -214,7 +215,7 @@ Page {
                         Text {
                             id: distText
                             anchors { left: distIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                            text: item.distance
+                            text: helpers.toDistanceString(item.distance)
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: recManagerListItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         }
