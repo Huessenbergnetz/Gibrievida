@@ -17,6 +17,10 @@ CONFIG += c++11
 
 QT += sql network
 
+contributors.path = /usr/share/harbour-gibrievida/icons/contributors
+contributors.files = images/contributors/*.png
+INSTALLS += contributors
+
 include(../common/common.pri)
 
 SOURCES += \
@@ -49,5 +53,8 @@ DISTFILES += \
     qml/btcomponents/Changelog.qml \
     qml/btcomponents/ChangelogDelegate.qml \
     qml/btcomponents/Contributors.qml \
-    qml/btcomponents/ContributorsDelegate.qml
+    qml/btcomponents/ContributorsDelegate.qml \
+    qml/pages/About.qml \
+    qml/pages/ContributorsModel.qml \
+    qml/pages/ChangelogModel.qml
 
