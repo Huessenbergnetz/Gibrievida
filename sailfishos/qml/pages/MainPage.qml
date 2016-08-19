@@ -26,11 +26,14 @@ Page {
     objectName: "MainPage"
 
     SilicaFlickable {
-        anchors.fill: parent
-
         PullDownMenu {
             MenuItem {
                 text: qsTr("About")
+            }
+
+            MenuItem {
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
             }
 
             MenuItem {
@@ -39,6 +42,7 @@ Page {
             }
         }
 
+        anchors.fill: parent
         contentHeight: column.height
 
         Column {
