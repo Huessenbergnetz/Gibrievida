@@ -37,6 +37,7 @@ Page {
             width: parent.width
             EnterKey.iconSource: "image://theme/icon-m-enter-close"
             EnterKey.onClicked: searchField.focus = false
+            visible: categoriesListView.count > 0
 
             Binding {
                 target: categoryModel
@@ -55,6 +56,7 @@ Page {
             MenuItem {
                 text: qsTr("Remove all")
                 onClicked: remorse.execute(qsTr("Removing all"), function() {categories.removeAll()})
+                enabled: categoriesListView.count > 0
             }
 
             MenuItem {
