@@ -115,6 +115,7 @@ bool DBManager::createDatabase()
                                "minrepeats INTEGER NOT NULL, "
                                "maxrepeats INTEGER NOT NULL, "
                                "distance INTEGER NOT NULL, "
+                               "note TEXT, "
                                "FOREIGN KEY(category) REFERENCES categories(id) ON DELETE CASCADE)"
                                ))) {
 #ifdef QT_DEBUG
@@ -140,7 +141,6 @@ bool DBManager::createDatabase()
                                "distance REAL DEFAULT 0.0, "
                                "note TEXT, "
                                "tpr REAL DEFAULT 0.0, "
-                               "minSpeed REAL DEFAULT 0.0, "
                                "maxSpeed REAL DEFAULT 0.0, "
                                "avgSpeed REAL DEFAULT 0.0, "
                                "FOREIGN KEY(activity) REFERENCES activities(id) ON DELETE CASCADE)"
