@@ -32,7 +32,7 @@ Dialog {
 
     ActivitiesModel { id: activitiesModel }
 
-    canAccept: activityButton.chosenActivity && repetitionsField.acceptableInput && distanceField.acceptableInput
+    canAccept: record ? activityButton.chosenActivity && repetitionsField.acceptableInput && distanceField.acceptableInput : activityButton.chosenActivity
 
     Component.onCompleted: {
         if (record) {
@@ -230,7 +230,7 @@ Dialog {
                 label: qsTr("Distance in %1").arg(config.distanceMeasurement === Locale.MetricSystem ? qsTr("metres") : qsTr("yards")); placeholderText: label
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: DoubleValidator { bottom: record && activityButton.chosenActivity.useDistance ? 0.01 : 0.0; locale: Qt.locale().string }
-                text: record && activityButton.chosenActivity.useDistance ? config.distanceMeasurement === Locale.MetricSystem ? record.distance : helpers.toYards(record.distance) : ""
+                text: record && activityButton.chosenActivity.useDistance ? config.distanceMeasurement === Locale.MetricSystem ? record.distance : helpers.toYards(record.distance) : "0"
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: distanceField.focus = false
             }
