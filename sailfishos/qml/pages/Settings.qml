@@ -18,6 +18,8 @@
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import QtMultimedia 5.0
+import "../common"
 
 Page {
     id: settingsPage
@@ -49,6 +51,7 @@ Page {
             }
 
             ComboBox {
+                id: clickSoundChoser
                 width: parent.width
                 currentIndex: config.repetitionClickSound
                 label: qsTr("Repetition click sound")
@@ -56,11 +59,21 @@ Page {
                     MenuItem { text: qsTr("Disabled") }
                     Repeater {
                         model: 9
-                        MenuItem { text: qsTr("Sound %1").arg(model.index + 1) }
+                        MenuItem {
+                            text: qsTr("Sound %1").arg(model.index + 1)
+                            onClicked: {
+                                clickSoundPlayer.source = "/usr/share/harbour-gibrievida/sounds/sound" + (model.index + 1) + ".wav"
+                                clickSoundPlayer.play()
+                            }
+                        }
                     }
                 }
                 onCurrentIndexChanged: config.repetitionClickSound = currentIndex
                 description: qsTr("The sound will be played if you click on a button or area to increase the repetition count of an acitivity.")
+            }
+
+            Audio {
+                id: clickSoundPlayer
             }
         }
     }
