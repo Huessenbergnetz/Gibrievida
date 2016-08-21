@@ -4,3 +4,4 @@ X-Nemo-Application-Type=silica-qt5
 Icon=harbour-gibrievida
 Exec=harbour-gibrievida
 Name=Gibrievida
+Categories=Office;Database;
