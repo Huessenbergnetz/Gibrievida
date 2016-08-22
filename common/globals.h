@@ -26,6 +26,7 @@
 #define VER_MAJ 0
 #define VER_MIN 1
 #define VER_PAT 0
+#define DB_SCHEMA_VERSION 2
 
 #define REPETITION_CLICKSOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/sound"
 #define LANGFILES_BASE_URL "/usr/share/harbour-gibrievida/l10n/"

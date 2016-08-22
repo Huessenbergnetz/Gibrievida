@@ -21,6 +21,9 @@
 
 #include <QObject>
 #include <QThread>
+#include <QSqlDatabase>
+
+class QSqlError;
 
 namespace Gibrievida {
 
@@ -39,7 +42,11 @@ protected:
 
 private:
     bool createDatabase();
-    QString m_dbpath;
+    bool updateDatabase();
+    bool updateToSchemaV2();
+
+    void fatalError(const char *message, const QSqlError &error);
+    QSqlDatabase m_db;
 
     Q_DISABLE_COPY(DBManager)
 };

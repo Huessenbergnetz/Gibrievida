@@ -17,11 +17,9 @@
 */
 
 #include "dbmanager.h"
+#include "globals.h"
 
-#ifdef QT_DEBUG
-#include <QtDebug>
-#endif
-
+#include <QVariant>
 #include <QStandardPaths>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -63,17 +61,28 @@ void DBManager::run()
         return;
     }
 
-    m_dbpath = dirs.first();
-    m_dbpath.append(QLatin1String("/")).append(QLatin1String(APP_NAME));
+    QString dbpath = dirs.first();
+    dbpath.append(QLatin1String("/")).append(QLatin1String(APP_NAME));
 
-    QDir dbdir(m_dbpath);
+    QDir dbdir(dbpath);
     if (!dbdir.exists()) {
-        dbdir.mkpath(m_dbpath);
+        dbdir.mkpath(dbpath);
     }
 
-    m_dbpath.append(QStringLiteral("/database.sqlite"));
+    dbpath.append(QStringLiteral("/database.sqlite"));
+
+    m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
+    m_db.setDatabaseName(dbpath);
+
+    if (!m_db.open()) {
+        fatalError("Failed to open database", m_db.lastError());
+    }
 
     if (!createDatabase()) {
+        return;
+    }
+
+    if (!updateDatabase()) {
         return;
     }
 }
@@ -84,16 +93,12 @@ void DBManager::run()
  */
 bool DBManager::createDatabase()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
-    db.setDatabaseName(m_dbpath);
+    qDebug("Checking basic database schema");
 
-    if (!db.open()) {
-        return false;
-    }
+    QSqlQuery q(m_db);
 
-    QSqlQuery q(db);
-
-    if (!db.transaction()) {
+    if (!m_db.transaction()) {
+        fatalError("Failed to create database transaction", q.lastError());
         return false;
     }
 
@@ -102,9 +107,7 @@ bool DBManager::createDatabase()
                                "name TEXT NOT NULL, "
                                "color TEXT NOT NULL)"
                                ))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
+        fatalError("Failed to create table categories", q.lastError());
         return false;
     }
 
@@ -116,26 +119,14 @@ bool DBManager::createDatabase()
                                "maxrepeats INTEGER NOT NULL, "
                                "distance INTEGER NOT NULL, "
                                "note TEXT, "
-                               "sensor INTEGER DEFAULT 0, "
                                "FOREIGN KEY(category) REFERENCES categories(id) ON DELETE CASCADE)"
                                ))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
-        return false;
-    }
-
-    if (!q.exec(QStringLiteral("ALTER TABLE activities ADD COLUMN sensor INTEGER DEFAULT 0"))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
+        fatalError("Failed to create table activities", q.lastError());
         return false;
     }
 
     if (!q.exec(QStringLiteral("CREATE INDEX IF NOT EXISTS idx_activities_category ON activities (category)"))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
+        fatalError("Failed to create index", q.lastError());
         return false;
     }
 
@@ -153,22 +144,111 @@ bool DBManager::createDatabase()
                                "avgSpeed REAL DEFAULT 0.0, "
                                "FOREIGN KEY(activity) REFERENCES activities(id) ON DELETE CASCADE)"
                                ))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
+        fatalError("Failed to create table records", q.lastError());
         return false;
     }
 
     if (!q.exec(QStringLiteral("CREATE INDEX IF NOT EXISTS idx_records_activity ON records (activity)"))) {
-#ifdef QT_DEBUG
-        qDebug() << q.lastError().text();
-#endif
+        fatalError("Failed to create index", q.lastError());
         return false;
     }
 
-    if (!db.commit()) {
+    if (!m_db.commit()) {
+        fatalError("Failed to execute database transaction", q.lastError());
         return false;
     }
 
     return true;
+}
+
+
+bool DBManager::updateDatabase()
+{
+    int db_schema_version = 0;
+
+    QSqlQuery q(m_db);
+
+    if (q.exec(QStringLiteral("SELECT value FROM system WHERE key = 'schema_version'"))) {
+        if (q.next()) {
+            db_schema_version = q.value(0).toInt();
+        }
+    }
+
+    if (db_schema_version < DB_SCHEMA_VERSION) {
+        return updateToSchemaV2();
+    }
+
+    if (db_schema_version < DB_SCHEMA_VERSION) {
+
+        qDebug("Updating database schema version");
+
+        if (!q.prepare(QStringLiteral("UPDATE system SET value = ? WHERE key = 'schema_version'"))) {
+            fatalError("Failed to prepare database query", q.lastError());
+        }
+
+        q.addBindValue(DB_SCHEMA_VERSION);
+
+        if (!q.exec()) {
+            fatalError("Failed to execute database query", q.lastError());
+        }
+
+    }
+
+    return true;
+}
+
+
+
+
+bool DBManager::updateToSchemaV2()
+{
+    qDebug("Update database to schema version 2");
+
+    QSqlQuery q(m_db);
+
+    if (!m_db.transaction()) {
+        fatalError("Failed to create database transaction", m_db.lastError());
+        return false;
+    }
+
+    if(!q.exec(QStringLiteral("CREATE TABLE IF NOT EXISTS system "
+                              "(id INTEGER PRIMARY KEY NOT NULL, "
+                              "key TEXT NOT NULL, "
+                              "value TEXT NOT NULL)"
+                              ))) {
+        fatalError("Failed to create system table", q.lastError());
+        return false;
+    }
+
+    if (!q.prepare(QStringLiteral("INSERT INTO system (key, value) VALUES (?, ?)"))) {
+        fatalError("Failed to prepare database query", q.lastError());
+        return false;
+    }
+
+    q.addBindValue(QStringLiteral("schema_version"));
+    q.addBindValue(QStringLiteral("2"));
+
+    if (!q.exec()) {
+        fatalError("Failed to execute database query", q.lastError());
+        return false;
+    }
+
+    if (!q.exec(QStringLiteral("ALTER TABLE activities ADD COLUMN sensor INTEGER DEFAULT 0"))) {
+        fatalError("Failed to add column sensor to table activities", q.lastError());
+        return false;
+    }
+
+    if (!m_db.commit()) {
+        fatalError("Failed to commit database transaction", m_db.lastError());
+        return false;
+    }
+
+    return true;
+}
+
+
+
+void DBManager::fatalError(const char *message, const QSqlError &error)
+{
+    qFatal("%s: %s", message, error.text().toLocal8Bit().constData());
 }
