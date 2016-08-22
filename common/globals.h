@@ -28,6 +28,7 @@
 #define VER_PAT 0
 
 #define REPETITION_CLICKSOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/sound"
+#define LANGFILES_BASE_URL "/usr/share/harbour-gibrievida/l10n/"
 
 #endif // GLOBALS
 

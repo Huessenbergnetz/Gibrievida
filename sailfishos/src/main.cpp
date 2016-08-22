@@ -27,6 +27,7 @@
 #include <QtQml>
 #include <QGuiApplication>
 #include <QQuickView>
+#include <QTranslator>
 
 #ifndef CLAZY
 #include <sailfishapp.h>
@@ -45,6 +46,7 @@
 #include "../common/recordsmodel.h"
 #include "../common/helpers.h"
 #include "../common/configuration.h"
+#include "../common/languagemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -62,6 +64,21 @@ int main(int argc, char *argv[])
     QObject::connect(dbm, &QThread::finished, dbm, &QObject::deleteLater);
     dbm->start(QThread::LowPriority);
 
+    Gibrievida::Configuration config;
+
+
+    QString lang = config.language();
+    if (lang == QLatin1String("")) {
+        lang = QLocale::system().name();
+    }
+    QTranslator *translator = new QTranslator;
+#ifndef CLAZY
+    if (translator->load(lang, SailfishApp::pathTo(QStringLiteral("l10n")).toString(QUrl::RemoveScheme))) {
+        app->installTranslator(translator);
+    }
+#endif
+
+
     qmlRegisterType<Gibrievida::Category>("harbour.gibrievida", 1, 0, "Category");
     qmlRegisterUncreatableType<Gibrievida::CategoriesController>("harbour.gibrievida", 1, 0, "CategoriesController", QStringLiteral("CategoriesController can not be created."));
     qmlRegisterType<Gibrievida::CategoriesFilterModel>("harbour.gibrievida", 1, 0, "CategoriesModel");
@@ -74,13 +91,13 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created"));
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
+    qmlRegisterType<Gibrievida::LanguageModel>("harbour.gibrievida", 1, 0, "LanguageModel");
+
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();
 #else
     QQuickView *view = new QQuickView();
 #endif
-
-    Gibrievida::Configuration config;
 
     Gibrievida::CategoriesController catsController;
     Gibrievida::ActivitiesController actsController;

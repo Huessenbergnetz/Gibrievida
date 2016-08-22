@@ -27,7 +27,7 @@ CoverBackground {
 
     CoverPlaceholder {
         visible: !records.current || records.current.databaseId < 0
-        text: qsTr("Gibrievida")
+        text: "Gibrievida"
         icon.source: Screen.sizeCategory <= Screen.Medium ? "/usr/share/icons/hicolor/86x86/apps/harbour-gibrievida.png" : "/usr/share/icons/hicolor/128x128/apps/harbour-gibrievida.png"
     }
 

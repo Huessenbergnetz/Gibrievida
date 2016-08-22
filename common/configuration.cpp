@@ -28,6 +28,7 @@ Configuration::Configuration(QObject *parent) : QSettings(parent)
 {
     m_distanceMeasurement = (QLocale::MeasurementSystem)value(QStringLiteral("distanceMeasurement"), 0).toInt();
     m_repetitionClickSound = value(QStringLiteral("repetitionClickSound"), 0).toInt();
+    m_language = value(QStringLiteral("language"), QStringLiteral("")).toString();
 }
 
 
@@ -111,3 +112,41 @@ void Configuration::setRepetitionClickSound(int nRepetitionClickSound)
         emit repetitionClickSoundChanged(repetitionClickSound());
     }
 }
+
+
+/*!
+ * \property Configuration::language
+ * \brief The currently selected language.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>QString</TD><TD>language() const</TD></TR><TR><TD>void</TD><TD>setLanguage(const QString &nLanguage)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>languageChanged(const QString &language)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::languageChanged(const QString &language)
+ * \brief Part of the \link Configuration::language language \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::language language \endlink property.
+ */
+QString Configuration::language() const { return m_language; }
+
+/*!
+ * \brief Part of the \link Configuration::language language \endlink property.
+ */
+void Configuration::setLanguage(const QString &nLanguage)
+{
+    if (nLanguage != m_language) {
+        m_language = nLanguage;
+#ifdef QT_DEBUG
+        qDebug() << "Changed language to" << m_language;
+#endif
+        setValue(QStringLiteral("language"), m_language);
+
+        emit languageChanged(language());
+    }
+}
+

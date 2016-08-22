@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[gibrievida.main]
+file_filter = l10n/<lang>.ts
+source_file = l10n/gibrievida.ts
+source_lang = en
+type = QT

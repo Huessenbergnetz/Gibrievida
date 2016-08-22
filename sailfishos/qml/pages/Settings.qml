@@ -19,6 +19,7 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
 import QtMultimedia 5.0
+import harbour.gibrievida 1.0
 import "../common"
 
 Page {
@@ -74,6 +75,21 @@ Page {
 
             Audio {
                 id: clickSoundPlayer
+            }
+
+            ComboBox {
+                id: langChoser
+                label: qsTr("Language")
+                description: qsTr("To change the language, you have to restart the application.")
+                width: parent.width
+                menu: ContextMenu {
+                    Repeater {
+                        model: LanguageModel {id: langModel }
+                        MenuItem { text: model.name; readonly property string value: model.code }
+                    }
+                }
+                onCurrentIndexChanged: { if (currentItem) { config.language = currentItem.value } }
+                currentIndex: langModel.findIndex(config.language)
             }
         }
     }

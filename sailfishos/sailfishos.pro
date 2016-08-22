@@ -25,6 +25,10 @@ soundfiles.path = /usr/share/harbour-gibrievida/sounds
 soundfiles.files = ../common/sounds/*
 INSTALLS += soundfiles
 
+langfiles.path = /usr/share/harbour-gibrievida/l10n
+langfiles.files = ../l10n/*.qm
+INSTALLS += langfiles
+
 include(../common/common.pri)
 
 SOURCES += \

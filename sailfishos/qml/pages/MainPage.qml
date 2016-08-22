@@ -227,7 +227,7 @@ Page {
                     }
 
                     Label {
-                        text: qsTranslate("mainPage",name)
+                        text: qsTranslate("MainPage",name)
                         color: catsItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         anchors { left: catsIcon.right; leftMargin: Theme.paddingLarge; right: parent.right; rightMargin: Theme.horizontalPageMargin; verticalCenter: parent.verticalCenter }
                     }
