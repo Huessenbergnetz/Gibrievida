@@ -111,7 +111,7 @@ QString Helpers::relativeTimeString(const QDateTime &time)
     switch (days) {
     case 0:
         //: date and time foramt, see http://doc.qt.io/qt-5/qdatetime.html#toString
-        return local.toString(tr("hh:mmap"));
+        return tr("Today, %1").arg(local.toString(tr("hh:mmap")));
     case 1:
         //: date and time foramt, see http://doc.qt.io/qt-5/qdatetime.html#toString
         return tr("Yesterday, %1").arg(local.toString(tr("hh:mmap")));
