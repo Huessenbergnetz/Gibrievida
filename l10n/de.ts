@@ -114,21 +114,26 @@
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
+        <source>Start new record</source>
+        <translation>Neue Aufzeichnung starten</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="172"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="167"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="176"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="176"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="185"/>
         <source>No activities</source>
         <translation>Keine Aktivitäten</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="177"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="186"/>
         <source>Use the pull down menu to add new activities</source>
         <translation>Ziehen Sie das Menü herunter, um neue Aktivitäten hinzuzufügen</translation>
     </message>
@@ -202,7 +207,7 @@
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="185"/>
         <source>The selected sensor will be used to increase repetitions.</source>
-        <translation>Der gewählte Sensor wird genutzt, um die Wiederholungen zu erhöhen.</translation>
+        <translation>Der gewählte Sensor wird genutzt, im die Wiederholungen zu erhöhen.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="189"/>

@@ -113,21 +113,26 @@
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
+        <source>Start new record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="172"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="167"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="176"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="176"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="185"/>
         <source>No activities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Activities.qml" line="177"/>
+        <location filename="../sailfishos/qml/pages/Activities.qml" line="186"/>
         <source>Use the pull down menu to add new activities</source>
         <translation type="unfinished"></translation>
     </message>

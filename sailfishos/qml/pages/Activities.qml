@@ -160,6 +160,15 @@ Page {
                 id: contextMenu
                 ContextMenu {
                     MenuItem {
+                        text: qsTr("Start new record")
+                        onClicked: {
+                            records.prepare()
+                            records.add(model.item)
+                            pageStack.push(Qt.resolvedUrl("../pages/Record.qml"), {record: records.current})
+                        }
+                    }
+
+                    MenuItem {
                         text: qsTr("Edit")
                         onClicked: pageStack.push(Qt.resolvedUrl("../dialogs/ActivityDialog.qml"), {activity: model.item})
                     }
