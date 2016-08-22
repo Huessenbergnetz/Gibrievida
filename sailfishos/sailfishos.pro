@@ -61,5 +61,6 @@ DISTFILES += \
     qml/pages/About.qml \
     qml/pages/ContributorsModel.qml \
     qml/pages/ChangelogModel.qml \
-    qml/pages/AttachedFilters.qml
+    qml/pages/AttachedFilters.qml \
+    qml/pages/Help.qml
 

@@ -33,6 +33,11 @@ Page {
             }
 
             MenuItem {
+                text: qsTr("Help")
+                onClicked: pageStack.push(Qt.resolvedUrl("Help.qml"))
+            }
+
+            MenuItem {
                 text: qsTr("Settings")
                 onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
             }
