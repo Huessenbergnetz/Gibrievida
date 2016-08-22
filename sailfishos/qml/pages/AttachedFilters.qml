@@ -51,15 +51,7 @@ Page {
             PageHeader {
                 page: filtersPage
                 title: qsTr("Sorting")
-//                description: qsTr("Sorting will be applied after moving back to list.")
             }
-
-//            Label {
-//                text:  qsTr("Sorting")
-//                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin }
-//                horizontalAlignment: Text.AlignRight
-//                color: Theme.highlightColor
-//            }
 
             Text {
                 anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin }
