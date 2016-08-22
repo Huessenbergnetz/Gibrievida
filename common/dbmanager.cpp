@@ -116,8 +116,16 @@ bool DBManager::createDatabase()
                                "maxrepeats INTEGER NOT NULL, "
                                "distance INTEGER NOT NULL, "
                                "note TEXT, "
+                               "sensor INTEGER DEFAULT 0, "
                                "FOREIGN KEY(category) REFERENCES categories(id) ON DELETE CASCADE)"
                                ))) {
+#ifdef QT_DEBUG
+        qDebug() << q.lastError().text();
+#endif
+        return false;
+    }
+
+    if (!q.exec(QStringLiteral("ALTER TABLE activities ADD COLUMN sensor INTEGER DEFAULT 0"))) {
 #ifdef QT_DEBUG
         qDebug() << q.lastError().text();
 #endif

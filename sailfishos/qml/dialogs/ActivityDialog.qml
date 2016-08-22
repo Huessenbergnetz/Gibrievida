@@ -173,6 +173,18 @@ Dialog {
                 description: qsTr("There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.")
             }
 
+            ComboBox {
+                id: sensorChoser
+                currentIndex: activity ? activity.sensorType : 0
+                width: parent.width
+                label: qsTr("Use sensor")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("No sensor") }
+                    MenuItem { text: qsTr("Proximity") }
+                }
+                description: qsTr("The selected sensor will be used to increase repetitions.")
+            }
+
             SectionHeader {
                 text: qsTr("Repetition")
             }
@@ -225,9 +237,10 @@ Dialog {
             activity.category.databaseId = categoryButton.chosenCategory.databaseId
             activity.category.name = categoryButton.chosenCategory.name
             activity.category.color = categoryButton.chosenCategory.color
+            activity.sensorType = sensorChoser.currentIndex
             activities.update(activity, oldCategoryId)
         } else {
-            activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked)
+            activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked, sensorChoser.currentIndex)
         }
     }
 }

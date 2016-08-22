@@ -183,22 +183,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="177"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="180"/>
+        <source>Use sensor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="182"/>
+        <source>No sensor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="183"/>
+        <source>Proximity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="185"/>
+        <source>The selected sensor will be used to increase repetitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="189"/>
         <source>Repetition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="184"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="196"/>
         <source>To activate repetitions for this activity, enter minimum and maximum repetitions greater than 0.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="196"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="208"/>
         <source>Minimum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="207"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="219"/>
         <source>Maximum</source>
         <translation type="unfinished"></translation>
     </message>

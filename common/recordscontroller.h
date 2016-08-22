@@ -25,6 +25,7 @@
 #include "basecontroller.h"
 
 class QTimer;
+class QProximitySensor;
 
 namespace Gibrievida {
 
@@ -99,6 +100,7 @@ signals:
 private slots:
     void updateDuration();
     void updateRepetitionClickSound(int clickSound);
+    void proximityUpdate();
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -107,6 +109,8 @@ private:
 
     void init();
     void startStopTimer();
+    void setSensor();
+    void removeSensor();
 
     Record *m_current;
     bool m_visible;
@@ -115,6 +119,7 @@ private:
     Configuration *m_config;
 
     QSoundEffect m_repetitionClickSound;
+    QProximitySensor *m_proximitySensor;
 };
 
 }

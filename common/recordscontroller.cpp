@@ -26,6 +26,8 @@
 #include "category.h"
 #include "configuration.h"
 #include "globals.h"
+#include <QProximitySensor>
+#include <QProximityReading>
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -41,6 +43,7 @@ RecordsController::RecordsController(Configuration *config, QObject *parent) : B
 {
     m_current = nullptr;
     m_visible = false;
+    m_proximitySensor = nullptr;
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
@@ -131,6 +134,8 @@ void RecordsController::cancel()
 #ifdef QT_DEBUG
     qDebug("Canceling the current recording.");
 #endif
+
+    removeSensor();
 
     if (m_current && m_current->isValid()) {
         Record *r = current();
@@ -232,6 +237,7 @@ int RecordsController::add(Activity *activity, const QString &note)
 
     if (r->isValid()) {
         setCurrent(r);
+        setSensor();
         return r->databaseId();
     } else {
         setCurrent(nullptr);
@@ -254,6 +260,8 @@ void RecordsController::finish()
 #ifdef QT_DEBUG
     qDebug() << "Finishing the current recording.";
 #endif
+
+    removeSensor();
 
     if (!m_current) {
         qWarning("No current recording set. Returning.");
@@ -571,7 +579,7 @@ void RecordsController::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
+    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
         setCurrent(nullptr);
         return;
     }
@@ -580,7 +588,7 @@ void RecordsController::init()
         QDateTime startTime = QDateTime::fromTime_t(q.value(6).toUInt());
         Record *r = new Record(q.value(0).toInt(), startTime, QDateTime::fromTime_t(0), startTime.secsTo(QDateTime::currentDateTimeUtc()), q.value(7).toInt(), q.value(8).toDouble(), q.value(12).toString(), q.value(13).toFloat(), q.value(14).toFloat(), q.value(15).toFloat());
 
-        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, r);
+        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, q.value(16).toInt(), r);
 
         Category *c = new Category(q.value(3).toInt(), q.value(4).toString(), q.value(5).toString(), 0, a);
 
@@ -589,6 +597,7 @@ void RecordsController::init()
 
         if (r->isValid()) {
             setCurrent(r);
+            setSensor();
         } else {
             setCurrent(nullptr);
             delete r;
@@ -704,5 +713,46 @@ void RecordsController::updateRepetitionClickSound(int clickSound)
 {
     if (clickSound > 0) {
         m_repetitionClickSound.setSource(QUrl::fromLocalFile(QStringLiteral(REPETITION_CLICKSOUND_BASE_URL).append(QString::number(clickSound)).append(QStringLiteral(".wav"))));
+    }
+}
+
+
+/*!
+ * \brief Sets the used sensor according to the activity sensor type.
+ */
+void RecordsController::setSensor()
+{
+    if (current()->activity()->sensorType() == 1) {
+        if (!m_proximitySensor) {
+            m_proximitySensor = new QProximitySensor(this);
+            m_proximitySensor->setAlwaysOn(true);
+            connect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
+            m_proximitySensor->start();
+        }
+    }
+}
+
+
+/*!
+ * \brief Reads data from the proximity sensor and increases the repetition count if user is nera to phone.
+ */
+void RecordsController::proximityUpdate()
+{
+    if (m_proximitySensor->reading()->close()) {
+        increaseRepetitions();
+    }
+}
+
+
+/*!
+ * \brief Removes the current sensor and its connections.
+ */
+void RecordsController::removeSensor()
+{
+    if (m_proximitySensor) {
+        m_proximitySensor->stop();
+        disconnect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
+        delete m_proximitySensor;
+        m_proximitySensor = nullptr;
     }
 }

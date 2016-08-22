@@ -39,7 +39,7 @@ public:
     explicit ActivitiesController(QObject *parent = nullptr);
     ~ActivitiesController();
 
-    Q_INVOKABLE int add(const QString &name, Gibrievida::Category *c, int minRepeats, int maxRepeats, bool useDistance);
+    Q_INVOKABLE int add(const QString &name, Gibrievida::Category *c, int minRepeats, int maxRepeats, bool useDistance, int sensorType);
     Q_INVOKABLE bool update(Gibrievida::Activity *a, int oldCategoryId);
     Q_INVOKABLE bool remove(Gibrievida::Activity *a);
     Q_INVOKABLE bool removeAll();
@@ -48,7 +48,7 @@ signals:
     /*!
      * \brief Emitted if a new Activity has been successfully added to the database.
      */
-    void added(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance);
+    void added(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance, int sensorType);
     /*!
      * \brief Emitted if an Activitiy has been successfully updated in the database.
      */

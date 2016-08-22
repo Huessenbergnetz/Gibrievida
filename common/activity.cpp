@@ -37,6 +37,7 @@ Activity::Activity(QObject *parent) :
     m_useDistance = false;
     m_records = 0;
     m_category = nullptr;
+    m_sensorType = 0;
 
 #ifdef QT_DEBUG
     qDebug() << "Constructed a new empty" << this;
@@ -46,8 +47,8 @@ Activity::Activity(QObject *parent) :
 /*!
  * \overload
  */
-Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, QObject *parent) :
-    QObject(parent), m_databaseId(databaseId), m_name(name), m_minRepeats(minRepeats), m_maxRepeats(maxRepeats), m_useDistance(useDistance), m_records(records)
+Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, int sensorType, QObject *parent) :
+    QObject(parent), m_databaseId(databaseId), m_name(name), m_minRepeats(minRepeats), m_maxRepeats(maxRepeats), m_useDistance(useDistance), m_records(records), m_sensorType(sensorType)
 {
     m_useRepeats = (minRepeats > 0 && maxRepeats > 0);
 
@@ -63,7 +64,7 @@ Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxR
  * This will create a deep copy. Copying every member data from the \c other Activity to the new Activity.
  */
 Activity::Activity(Activity *other, QObject *parent) :
-    QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records())
+    QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records()), m_sensorType(other->sensorType())
 {
     m_useRepeats = (other->minRepeats() > 0 && other->maxRepeats() > 0);
 
@@ -380,6 +381,42 @@ void Activity::setCategory(Category *nCategory)
         emit categoryChanged(category());
     }
 }
+
+
+/*!
+ * \property Activity::sensorType
+ * \brief Stores the current set sensor used to increase repetitions.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>sensorType() const</TD></TR><TR><TD>void</TD><TD>setSensorType(int nSensorType)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>sensorTypeChanged(int sensorType)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Activity::sensorTypeChanged(int sensorType)
+ * \brief Part of the \link Activity::sensorType sensorType \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Activity::sensorType sensorType \endlink property.
+ */
+int Activity::sensorType() const { return m_sensorType; }
+
+/*!
+ * \brief Part of the \link Activity::sensorType sensorType \endlink property.
+ */
+void Activity::setSensorType(int nSensorType)
+{
+    if (nSensorType != m_sensorType) {
+        m_sensorType = nSensorType;
+#ifdef QT_DEBUG
+        qDebug() << "Changed sensorType to" << m_sensorType;
+#endif
+        emit sensorTypeChanged(sensorType());
+    }
+}
+
 
 
 

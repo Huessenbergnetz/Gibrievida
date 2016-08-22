@@ -45,9 +45,10 @@ class Activity : public QObject
     Q_PROPERTY(bool useDistance READ useDistance WRITE setUseDistance NOTIFY useDistanceChanged)
     Q_PROPERTY(int records READ records NOTIFY recordsChanged)
     Q_PROPERTY(Gibrievida::Category *category READ category NOTIFY categoryChanged)
+    Q_PROPERTY(int sensorType READ sensorType WRITE setSensorType NOTIFY sensorTypeChanged)
 public:
     explicit Activity(QObject *parent = nullptr);
-    explicit Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, QObject *parent = nullptr);
+    explicit Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, int sensorType, QObject *parent = nullptr);
     explicit Activity(Activity *other, QObject *parent = nullptr);
     ~Activity();
 
@@ -59,6 +60,7 @@ public:
     bool useDistance() const;
     int records() const;
     Category *category() const;
+    int sensorType() const;
 
     void setDatabaseId(int nDatabaseId);
     void setName(const QString &nName);
@@ -68,6 +70,7 @@ public:
     void setUseDistance(bool nUseDistance);
     void setRecords(int nRecords);
     void setCategory(Category *nCategory);
+    void setSensorType(int nSensorType);
 
     Q_INVOKABLE bool isValid() const;
 
@@ -81,6 +84,7 @@ signals:
     void useDistanceChanged(bool useDistance);
     void recordsChanged(int records);
     void categoryChanged(Category *category);
+    void sensorTypeChanged(int sensorType);
 
 private:
     Q_DISABLE_COPY(Activity)
@@ -92,7 +96,7 @@ private:
     bool m_useDistance;
     int m_records;
     Category *m_category;
-
+    int m_sensorType;
 };
 
 }

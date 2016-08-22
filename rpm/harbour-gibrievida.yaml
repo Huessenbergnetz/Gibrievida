@@ -28,6 +28,7 @@ PkgConfigBR:
   - Qt5Network
   - Qt5Sql
   - Qt5Multimedia
+  - Qt5Sensors
 
 # Build dependencies without a pkgconfig setup can be listed here
 # PkgBR:

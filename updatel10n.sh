@@ -8,6 +8,6 @@ lupdate-qt5 -source-language en -target-language $LANG -pluralonly -no-obsolete 
 done
 
 tx push -s
-sleep 10
 echo 'Waiting 10 seconds to pull translations'
+sleep 10
 tx pull -a
