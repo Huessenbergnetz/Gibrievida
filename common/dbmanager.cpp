@@ -162,6 +162,9 @@ bool DBManager::createDatabase()
 }
 
 
+/*!
+ * \brief Check if the database schema has to be upgraded.
+ */
 bool DBManager::updateDatabase()
 {
     int db_schema_version = 0;
@@ -198,8 +201,9 @@ bool DBManager::updateDatabase()
 }
 
 
-
-
+/*!
+ * \brief Upgrade database schema to version 2.
+ */
 bool DBManager::updateToSchemaV2()
 {
     qDebug("Update database to schema version 2");
@@ -247,7 +251,9 @@ bool DBManager::updateToSchemaV2()
 }
 
 
-
+/*!
+ * \brief Report a fatal error to the stderr output and abort the application.
+ */
 void DBManager::fatalError(const char *message, const QSqlError &error)
 {
     qFatal("%s: %s", message, error.text().toLocal8Bit().constData());
