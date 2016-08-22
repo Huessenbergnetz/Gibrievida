@@ -15,9 +15,9 @@ Name:       harbour-gibrievida
 Summary:    Gibrievida
 Version:    0.1.0
 Release:    1
-Group:      Qt/Qt
-License:    LICENSE
-URL:        http://example.org/
+Group:      Applications/Databases
+License:    GPL-3.0
+URL:        http://gibrievida.buschmann23.de
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-gibrievida.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -31,7 +31,7 @@ BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my SailfishOS Application
+Gibrievida helps you tracking your sportiv or daily activities.
 
 
 %prep
