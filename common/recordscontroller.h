@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QSoundEffect>
 #include "basecontroller.h"
 
 class QTimer;
@@ -30,6 +31,7 @@ namespace Gibrievida {
 class Record;
 class Activity;
 class Category;
+class Configuration;
 
 /*!
  * \brief Controller class to manage Record objects.
@@ -45,7 +47,7 @@ class RecordsController : public BaseController
     Q_PROPERTY(Gibrievida::Record *current READ current WRITE setCurrent NOTIFY currentChanged)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
 public:
-    explicit RecordsController(QObject *parent = nullptr);
+    explicit RecordsController(Configuration *config, QObject *parent = nullptr);
     ~RecordsController();
 
     Q_INVOKABLE void prepare();
@@ -96,6 +98,7 @@ signals:
 
 private slots:
     void updateDuration();
+    void updateRepetitionClickSound(int clickSound);
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -109,6 +112,9 @@ private:
     bool m_visible;
 
     QTimer *m_timer;
+    Configuration *m_config;
+
+    QSoundEffect m_repetitionClickSound;
 };
 
 }

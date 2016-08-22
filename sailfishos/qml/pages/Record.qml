@@ -19,7 +19,6 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
 import harbour.gibrievida 1.0
-import QtMultimedia 5.0
 import "../common"
 
 Page {
@@ -167,7 +166,6 @@ Page {
                 width: parent.width
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
-//                text: record ? Number(record.avgSpeed).toLocaleString(Qt.locale(), 'f', 1) : ""
                 text: record ? helpers.toSpeedString(record.avgSpeed) : ""
                 visible: record && record.activity.useDistance && !record.active
             }
@@ -194,12 +192,7 @@ Page {
             contentHeight: increaseRepArea.height
             height: Screen.height - singleRecordCol.height
 
-            onClicked: {
-                if (config.repetitionClickSound > 0) {
-                    incSound.play()
-                }
-                records.increaseRepetitions()
-            }
+            onClicked: records.increaseRepetitions()
 
             Label {
                 id: increaseRepLabel
@@ -210,11 +203,6 @@ Page {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 color: increaseRepArea.highlighted ? Theme.highlightColor : Theme.primaryColor
                 horizontalAlignment: Text.AlignHCenter
-            }
-
-            SoundEffect {
-                id: incSound
-                source: config.repetitionClickSound > 0 ? "/usr/share/harbour-gibrievida/sounds/sound" + config.repetitionClickSound + ".wav" : ""
             }
         }
 

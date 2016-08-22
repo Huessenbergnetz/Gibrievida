@@ -15,7 +15,7 @@ TARGET = harbour-gibrievida
 CONFIG += sailfishapp
 CONFIG += c++11
 
-QT += sql network
+QT += sql network multimedia
 
 contributors.path = /usr/share/harbour-gibrievida/icons/contributors
 contributors.files = images/contributors/*.png

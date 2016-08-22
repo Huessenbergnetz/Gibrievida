@@ -24,6 +24,8 @@
 #include "record.h"
 #include "activity.h"
 #include "category.h"
+#include "configuration.h"
+#include "globals.h"
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -35,7 +37,7 @@ using namespace Gibrievida;
  *
  * This will also search the database for an active Record and load it as \link RecordsController::current current \endlink Record.
  */
-RecordsController::RecordsController(QObject *parent) : BaseController(parent)
+RecordsController::RecordsController(Configuration *config, QObject *parent) : BaseController(parent), m_config(config)
 {
     m_current = nullptr;
     m_visible = false;
@@ -44,6 +46,12 @@ RecordsController::RecordsController(QObject *parent) : BaseController(parent)
     m_timer->setInterval(1000);
     m_timer->setTimerType(Qt::VeryCoarseTimer);
     connect(m_timer, &QTimer::timeout, this, &RecordsController::updateDuration);
+
+    if (m_config->repetitionClickSound() > 0) {
+        updateRepetitionClickSound(m_config->repetitionClickSound());
+    }
+
+    connect(m_config, &Configuration::repetitionClickSoundChanged, this, &RecordsController::updateRepetitionClickSound);
 
     init();
 }
@@ -607,6 +615,10 @@ void RecordsController::increaseRepetitions()
         return;
     }
 
+    if (m_config->repetitionClickSound() > 0) {
+        m_repetitionClickSound.play();
+    }
+
     int reps = m_current->repetitions() + 1;
 
     if (reps <= m_current->activity()->maxRepeats()) {
@@ -681,5 +693,16 @@ void RecordsController::startStopTimer()
 #endif
         m_timer->stop();
         }
+    }
+}
+
+
+/*!
+ * \brief Updates the URL of the local sound file, after is been changed.
+ */
+void RecordsController::updateRepetitionClickSound(int clickSound)
+{
+    if (clickSound > 0) {
+        m_repetitionClickSound.setSource(QUrl::fromLocalFile(QStringLiteral(REPETITION_CLICKSOUND_BASE_URL).append(QString::number(clickSound)).append(QStringLiteral(".wav"))));
     }
 }

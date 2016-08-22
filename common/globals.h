@@ -27,5 +27,7 @@
 #define VER_MIN 1
 #define VER_PAT 0
 
+#define REPETITION_CLICKSOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/sound"
+
 #endif // GLOBALS
 

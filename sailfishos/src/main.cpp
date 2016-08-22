@@ -80,10 +80,11 @@ int main(int argc, char *argv[])
     QQuickView *view = new QQuickView();
 #endif
 
+    Gibrievida::Configuration config;
+
     Gibrievida::CategoriesController catsController;
     Gibrievida::ActivitiesController actsController;
-    Gibrievida::RecordsController recsController;
-    Gibrievida::Configuration config;
+    Gibrievida::RecordsController recsController(&config);
     Gibrievida::Helpers *helpers = new Gibrievida::Helpers(&config);
 
     view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
