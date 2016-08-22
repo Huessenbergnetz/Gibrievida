@@ -43,7 +43,7 @@ RecordsModel::RecordsModel(QObject *parent) : DBModel(parent)
     m_activityId = 0;
     m_categoryId = 0;
     m_order = QStringLiteral("DESC");
-    m_orderBy = QStringLiteral("start");
+    m_orderBy = QStringLiteral("r.start");
 }
 
 
@@ -135,6 +135,12 @@ void RecordsModel::update()
         queryString.append(QLatin1String(" AND a.category = ?"));
     } else if (m_activityId > 0) {
         queryString.append(QLatin1String(" AND r.activity = ?"));
+    }
+
+    if (m_orderBy == QLatin1String("r.repetitions")) {
+        queryString.append(QLatin1String(" AND r.repetitions > 0"));
+    } else if (m_orderBy == QLatin1String("r.distance")) {
+        queryString.append(QLatin1String(" AND r.distance > 0.0"));
     }
 
     queryString.append(QLatin1String(" ORDER BY ")).append(m_orderBy).append(QLatin1String(" ")).append(m_order);
@@ -413,10 +419,13 @@ QString RecordsModel::getOrder() const { return m_order; }
  */
 void RecordsModel::setOrder(const QString &order)
 {
-    m_order = order;
+    if (m_order != order) {
+        m_order = order;
 #ifdef QT_DEBUG
-    qDebug() << " Set order to" << m_order;
+        qDebug() << " Set order to" << m_order;
 #endif
+        emit orderChanged(getOrder());
+    }
 }
 
 
@@ -442,10 +451,13 @@ QString RecordsModel::getOrderBy() const { return m_orderBy; }
  */
 void RecordsModel::setOrderBy(const QString &orderBy)
 {
-    m_orderBy = orderBy;
+    if (m_orderBy != orderBy) {
+        m_orderBy = orderBy;
 #ifdef QT_DEBUG
-    qDebug() << " Set orderBy to" << m_orderBy;
+        qDebug() << " Set orderBy to" << m_orderBy;
 #endif
+        emit orderByChanged(getOrderBy());
+    }
 }
 
 

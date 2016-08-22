@@ -37,10 +37,17 @@ Page {
         recordsModel.update()
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Active && !canNavigateForward) {
+            pageStack.pushAttached(Qt.resolvedUrl("AttachedFilters.qml"), {recModel: recordsModel})
+        }
+    }
+
     SilicaListView {
         id: recordsListView
         anchors.fill: parent
         spacing: Theme.paddingSmall
+        clip: true
 
 
         PullDownMenu {

@@ -43,8 +43,8 @@ class RecordsModel : public DBModel
     Q_PROPERTY(Gibrievida::ActivitiesController *activitiesController READ getActivitiesController WRITE setActivitiesController)
     Q_PROPERTY(int activityId READ getActivityId WRITE setActivityId)
     Q_PROPERTY(int categoryId READ getCategoryId WRITE setCategoryId)
-    Q_PROPERTY(QString order READ getOrder WRITE setOrder)
-    Q_PROPERTY(QString orderBy READ getOrderBy WRITE setOrderBy)
+    Q_PROPERTY(QString order READ getOrder WRITE setOrder NOTIFY orderChanged)
+    Q_PROPERTY(QString orderBy READ getOrderBy WRITE setOrderBy NOTIFY orderByChanged)
 public:
     explicit RecordsModel(QObject *parent = nullptr);
     ~RecordsModel();
@@ -86,6 +86,10 @@ public slots:
     void removedByActivity(int activity, int category);
     void removedByCategory(int categoryId);
     void removedAll();
+
+signals:
+    void orderChanged(const QString &order);
+    void orderByChanged(const QString &orderBy);
 
 private:
     QList<Record*> m_records;
