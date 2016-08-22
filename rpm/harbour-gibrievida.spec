@@ -13,7 +13,7 @@ Name:       harbour-gibrievida
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Gibrievida
-Version:    0.1
+Version:    0.1.0
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -27,6 +27,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(Qt5Sql)
+BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  desktop-file-utils
 
 %description
@@ -57,6 +58,7 @@ rm -rf %{buildroot}
 %qmake5_install
 
 # >> install post
+rm -rf %{buildroot}%{_datadir}/%{name}/qml/btcomponents/.git
 # << install post
 
 desktop-file-install --delete-original       \
