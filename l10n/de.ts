@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>About</name>
     <message>
@@ -105,7 +107,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
+        <translation>
+            <numerusform>%n Aufzeichnung</numerusform>
+            <numerusform>%n Aufzeichnungen</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -169,7 +174,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
+        <translation>
+            <numerusform>%n Aktivität</numerusform>
+            <numerusform>%n Aktivitäten</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
@@ -322,6 +330,71 @@
     </message>
 </context>
 <context>
+    <name>Backups</name>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="31"/>
+        <source>Remove all</source>
+        <translation>Entferne alle</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="33"/>
+        <source>Deleting all</source>
+        <translation>Lösche alle</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="37"/>
+        <source>Create</source>
+        <translation>Erstellen</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="43"/>
+        <source>Database backups</source>
+        <translation>Datenbanksicherung</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="61"/>
+        <source>Deleting</source>
+        <translation>Lösche</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="65"/>
+        <source>Restoring</source>
+        <translation>Stelle wieder her</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="79"/>
+        <source>d. MMMM yyyy</source>
+        <extracomment>backup list entry date, for format options visit http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method</extracomment>
+        <translation>d. MMMM yyyy</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="89"/>
+        <source>hh:mmap</source>
+        <extracomment>backup list entry time, for format options visit http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method</extracomment>
+        <translation>hh:mm</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="107"/>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="113"/>
+        <source>Restore</source>
+        <translation>Wiederherstellen</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="123"/>
+        <source>No backups</source>
+        <translation>Keine Sicherungen</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Backups.qml" line="124"/>
+        <source>Use the pull down menu to add new backups</source>
+        <translation>Ziehen Sie das Menü herunter, um eine neue Sicherung zu erstellen</translation>
+    </message>
+</context>
+<context>
     <name>Categories</name>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="31"/>
@@ -351,7 +424,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
+        <translation>
+            <numerusform>%n Aktivität</numerusform>
+            <numerusform>%n Aktivitäten</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -630,62 +706,67 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
 <context>
     <name>Help</name>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="37"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="38"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="42"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="43"/>
         <source>Legend</source>
         <translation>Legende</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="60"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="61"/>
         <source>Number of a repetitions saved for a record, for example the number of push-ups you performed. In the activity list this icon indicates that the activity support repetitions.</source>
         <translation>Anzahl der Wiederholungen die für diese Aufzeichnung gespeichert sind, bspw. Anzahl an Liegestützen. In der Aktivitätenliste zeigt dieses Symbol an, dass die Aktivität Wiederholungen unterstützt.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="82"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="83"/>
         <source>Distance you moved while creating the record. In the activity list this icon indicates that the activity support distance saving.</source>
         <translation>Entfernung die Sie während der Aufzeichnung zurückgelegt haben. In der Aktivitätenliste zeigt dieses Symbol an, dass die Aktivität die Entfernungmessung unterstützt.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="102"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="103"/>
         <source>Duration of the recorded activity.</source>
         <translation>Dauer der aufgezeichneten Aktivität.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="108"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="109"/>
         <source>Concept</source>
         <translation>Konzept</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="115"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="116"/>
         <source>Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
         <translation>Gibrievida möchte Ihnen dabei helfen, Ihre sportlichen oder täglichen Aktivitäten (oder für was Sie es auch sonst nutzen möchten) aufzuzeichnen. Es basiert auf Kategorie, Aktivitäten und Aufzeichnungen. Kategorien gruppieren Aktivitäten thematisch, bspw. Sport. Eine Aktivität ist wie eine Vorlage für eine Aufzeichnung. Eine Aufzeichnung selbst ist wiederum ein Datensatz, der aus einer Aktivität, der Start- und Endzeit, der Dauer, sowie optional Wiederholungen, Entfernung oder Notizen besteht.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="118"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="119"/>
         <source>Workflow</source>
         <translation>Ablauf</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="125"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="126"/>
         <source>At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a minimum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.</source>
         <translation>Als erstes benötigen Sie eine Kategorie. Dieser Kategorie können Sie Ihre erste Aktivität zuweisen. Nachdem Sie ihre erste Aktivität angelegt haben, können Sie mit der Aufzeichnung beginnen. Erstellen Sie bspw. die Kategorie Sport und fügen Sie ihr die Aktivität Liegestütz hinzu. In der Aktivität stellen Sie dann Werte für die minimale und maximale Wiederholung ein, die größer als null sind, um die Wiederholungszählung zu aktivieren. Nun sind Sie bereit, Ihre täglichen Liegestützen aufzuzeichnen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="133"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="134"/>
         <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
         <translation>Wenn Sie eine Aktivität aufzeichnen, die weder über Wiederholungen noch über Distanzmessung verfügt, können Sie die Anwenung komplett schließen, während Sie Ihrer Tätigkeit nachgehen. Die gestartete Aktivität wird in der Datenbank gespeichert und beim nächsten Start der Anwendung wieder geladen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="136"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="142"/>
+        <source>When deleting categories or activities, all connected data will be deleted, too.</source>
+        <translation>Beim Löschen von Kategorien oder Aktivitäten werden alle damit verbundenen Daten ebenfalls gelöscht.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="145"/>
         <source>Current limitations</source>
         <translation>Aktuelle Einschränkungen</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="143"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="152"/>
         <source>The distance has to be entered manually after finishing an activity. Automatic distance measurement via GPS is planned for a later version.</source>
         <translation>Die Entfernung muss nach Abschluss einer Aktivität manuell eingegeben werden. Automatische Entfernungsmessung über GPS ist für eine spätere Version geplant.</translation>
     </message>
@@ -981,7 +1062,10 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
+        <translation>
+            <numerusform>%n Aufzeichnung</numerusform>
+            <numerusform>%n Aufzeichnungen</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
@@ -1016,7 +1100,10 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
         <source>%n second(s)</source>
-        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunden</numerusform></translation>
+        <translation>
+            <numerusform>%n Sekunde</numerusform>
+            <numerusform>%n Sekunden</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
@@ -1103,74 +1190,79 @@ remorse popup text</extracomment>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="37"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="31"/>
+        <source>Database backups</source>
+        <translation>Datenbanksicherungen</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="44"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="44"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="51"/>
         <source>Measurement system</source>
         <translation>Einheitensystem</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="46"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="53"/>
         <source>Metric</source>
         <translation>Metrisch</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="47"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="54"/>
         <source>Imperial US</source>
         <translation>Imperial US</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="48"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="55"/>
         <source>Imperial UK</source>
         <translation>Imperial UK</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="51"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="58"/>
         <source>Distances are stored internally in metres. If you choose a different measurement system, the application will convert the data on the fly.</source>
         <translation>Entfernungen werden intern metrisch gespeichert. Wenn Sie ein anderen Einheitensystem wählen konvertiert die Anwendung die Daten bei der Anzeige.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="58"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="65"/>
         <source>Repetition click sound</source>
         <translation>Wiederholungsklickton</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="60"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="67"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="89"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="64"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="86"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="71"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="93"/>
         <source>Sound %1</source>
         <translation>Ton %1</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="73"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>
         <source>The sound will be played if you click on a button or area to increase the repetition count of an acitivity.</source>
         <translation>Der Ton wird abgespielt, sobald Sie auf einen Knopf oder eine Fläche drücken, um die Wiederholungsanzahl zu erhöhen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="87"/>
         <source>Finishing sound</source>
-        <translation type="unfinished"/>
+        <translation>Abschlusston</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="95"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="102"/>
         <source>The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.</source>
-        <translation type="unfinished"/>
+        <translation>Der Ton wird abgespielt falls eine Aufnahme duch ein Sensorereignis, bspw. duch den Näherungssensor, abgeschlossen wird, während die Anwendung für den Nutzer nicht sichtbar ist.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="104"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="111"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="105"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="112"/>
         <source>To change the language, you have to restart the application.</source>
         <translation>Um die Sprache zu ändern, muss die Anwendung neu gestartet werden.</translation>
     </message>

@@ -58,11 +58,11 @@ Page {
             ListView.onAdd: AddAnimation { target: backupListItem }
 
             function remove() {
-                remorseAction("Deleting", function () {backupModel.remove(index)})
+                remorseAction(qsTr("Deleting"), function () {backupModel.remove(index)})
             }
 
             function restore() {
-                remorseAction("Restoring", function() {backupModel.restore(index)})
+                remorseAction(qsTr("Restoring"), function() {backupModel.restore(index)})
             }
 
             Column {
