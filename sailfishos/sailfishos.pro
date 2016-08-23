@@ -15,7 +15,7 @@ TARGET = harbour-gibrievida
 CONFIG += sailfishapp
 CONFIG += c++11
 
-QT += sql network multimedia sensors positioning
+QT += sql multimedia sensors positioning
 
 contributors.path = /usr/share/harbour-gibrievida/icons/contributors
 contributors.files = images/contributors/*.png
