@@ -73,6 +73,28 @@ Page {
                 description: qsTr("The sound will be played if you click on a button or area to increase the repetition count of an acitivity.")
             }
 
+            ComboBox {
+                id: finishingSoundChoser
+                width: parent.width
+                currentIndex: config.finishingSound
+                label: qsTr("Finishing sound")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Disabled") }
+                    Repeater {
+                        model: 4
+                        MenuItem {
+                            text: qsTr("Sound %1").arg(model.index + 1)
+                            onClicked: {
+                                clickSoundPlayer.source = "/usr/share/harbour-gibrievida/sounds/finish" + (model.index + 1) + ".oga"
+                                clickSoundPlayer.play()
+                            }
+                        }
+                    }
+                }
+                onCurrentIndexChanged: config.finishingSound = currentIndex
+                description: qsTr("The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.")
+            }
+
             Audio {
                 id: clickSoundPlayer
             }

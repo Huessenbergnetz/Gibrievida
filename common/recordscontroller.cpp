@@ -344,6 +344,15 @@ void RecordsController::finish()
     setCurrent(nullptr);
 
     startStopTimer();
+
+    if (!this->isVisible() && m_config->finishingSound() > 0) {
+
+        m_finishSoundPlayer = new QMediaPlayer(this);
+        m_finishSoundPlayer->setMedia(QUrl::fromLocalFile(QStringLiteral(FINISHING_SOUND_BASE_URL).append(QString::number(m_config->finishingSound())).append(QStringLiteral(".oga"))));
+        m_finishSoundPlayer->setVolume(100);
+        connect(m_finishSoundPlayer, &QMediaPlayer::mediaStatusChanged, this, &RecordsController::finishSoundStatusChanged);
+        m_finishSoundPlayer->play();
+    }
 }
 
 
@@ -869,5 +878,16 @@ void RecordsController::detectFinishOnCovering()
         m_finishOnCoveringTimer->start();
     } else if (!m_proximitySensor->reading()->close() && m_finishOnCoveringTimer->isActive()) {
         m_finishOnCoveringTimer->stop();
+    }
+}
+
+
+
+void RecordsController::finishSoundStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::EndOfMedia) {
+        m_finishSoundPlayer->stop();
+        m_finishSoundPlayer->deleteLater();
+        m_finishSoundPlayer = nullptr;
     }
 }

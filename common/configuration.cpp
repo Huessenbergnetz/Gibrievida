@@ -29,6 +29,7 @@ Configuration::Configuration(QObject *parent) : QSettings(parent)
     m_distanceMeasurement = (QLocale::MeasurementSystem)value(QStringLiteral("distanceMeasurement"), 0).toInt();
     m_repetitionClickSound = value(QStringLiteral("repetitionClickSound"), 0).toInt();
     m_language = value(QStringLiteral("language"), QStringLiteral("")).toString();
+    m_finishingSound = value(QStringLiteral("finishingSound"), 0).toInt();
 }
 
 
@@ -147,6 +148,44 @@ void Configuration::setLanguage(const QString &nLanguage)
         setValue(QStringLiteral("language"), m_language);
 
         emit languageChanged(language());
+    }
+}
+
+
+
+/*!
+ * \property Configuration::finishingSound
+ * \brief Index of the sound effect file to play if a record has been finished.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>finishingSound() const</TD></TR><TR><TD>void</TD><TD>setFinishingSound(int nFinishingSound)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>finishingSoundChanged(int finishingSound)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::finishingSoundChanged(int finishingSound)
+ * \brief Part of the \link Configuration::finishingSound finishingSound \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::finishingSound finishingSound \endlink property.
+ */
+int Configuration::finishingSound() const { return m_finishingSound; }
+
+/*!
+ * \brief Part of the \link Configuration::finishingSound finishingSound \endlink property.
+ */
+void Configuration::setFinishingSound(int nFinishingSound)
+{
+    if (nFinishingSound != m_finishingSound) {
+        m_finishingSound = nFinishingSound;
+#ifdef QT_DEBUG
+        qDebug() << "Changed finishingSound to" << m_finishingSound;
+#endif
+        setValue(QStringLiteral("finishingSound"), m_finishingSound);
+
+        emit finishingSoundChanged(finishingSound());
     }
 }
 

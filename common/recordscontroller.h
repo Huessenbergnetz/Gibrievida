@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QSoundEffect>
+#include <QMediaPlayer>
 #include "basecontroller.h"
 
 class QTimer;
@@ -29,6 +30,7 @@ class QProximitySensor;
 class QAccelerometer;
 class QRotationSensor;
 class QOrientationSensor;
+class QMediaPlayer;
 
 namespace Gibrievida {
 
@@ -109,6 +111,7 @@ private slots:
     void detectUpDownTop();
     void detectUpDownFace();
     void detectFinishOnCovering();
+    void finishSoundStatusChanged(QMediaPlayer::MediaStatus status);
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -134,6 +137,7 @@ private:
     QAccelerometer *m_accelSensor;
     QRotationSensor *m_rotationSensor;
     QOrientationSensor *m_orientationSensor;
+    QMediaPlayer *m_finishSoundPlayer;
 };
 
 }
