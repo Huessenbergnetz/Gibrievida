@@ -6,7 +6,7 @@ using namespace Gibrievida;
 
 LanguageModel::LanguageModel(QObject *parent) : QAbstractListModel(parent)
 {
-    m_supportedLangs = QStringList({QStringLiteral("de"), QStringLiteral("en")});
+    m_supportedLangs = QStringList({QStringLiteral("de"), QStringLiteral("en"), QStringLiteral("nl")});
     init();
 }
 
