@@ -29,6 +29,7 @@ class CategoriesController;
 class RecordsController;
 class Category;
 class Activity;
+class Record;
 
 /*!
  * \brief Model containing a set of Activity objects.
@@ -76,6 +77,7 @@ public slots:
     void recordRemoved(int record, int activity, int category);
     void recordsRemovedByActivity(int activity, int category);
     void recordsRemovedByCategory(int category);
+    void recordFinished(Record *r);
 
 private:
     QList<Activity*> m_activities;

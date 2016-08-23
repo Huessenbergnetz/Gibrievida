@@ -22,6 +22,7 @@
 #include "recordscontroller.h"
 #include "category.h"
 #include "activity.h"
+#include "record.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #ifdef QT_DEBUG
@@ -360,12 +361,14 @@ void ActivitiesModel::setRecordsController(RecordsController *controller)
             disconnect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
             disconnect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
             disconnect(m_recsController, &RecordsController::removedByCategory, this, &ActivitiesModel::recordsRemovedByCategory);
+            disconnect(m_recsController, &RecordsController::finished, this, &ActivitiesModel::recordFinished);
         }
         m_recsController = controller;
         if (m_recsController) {
             connect(m_recsController, &RecordsController::removed, this, &ActivitiesModel::recordRemoved);
             connect(m_recsController, &RecordsController::removedByActivity, this, &ActivitiesModel::recordsRemovedByActivity);
             connect(m_recsController, &RecordsController::removedByCategory, this, &ActivitiesModel::recordsRemovedByCategory);
+            connect(m_recsController, &RecordsController::finished, this, &ActivitiesModel::recordFinished);
         }
     }
 }
@@ -434,4 +437,25 @@ void ActivitiesModel::recordsRemovedByCategory(int category)
             m_activities.at(i)->setRecords(0);
         }
     }
+}
+
+
+/*!
+ * \brief Updates the record count after a record has been finished.
+ */
+void ActivitiesModel::recordFinished(Record *r)
+{
+    if (m_activities.isEmpty()) {
+        return;
+    }
+
+    int idx = find(r->activity()->databaseId());
+
+    if (idx < 0) {
+        return;
+    }
+
+    Activity *a = m_activities.at(idx);
+
+    a->setRecords(a->records() + 1);
 }
