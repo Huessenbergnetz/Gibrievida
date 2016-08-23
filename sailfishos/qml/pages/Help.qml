@@ -125,6 +125,14 @@ Page {
                 text: qsTr("At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a minimum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.")
             }
 
+            Text {
+                font.pixelSize: Theme.fontSizeSmall
+                anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
+                wrapMode: Text.WordWrap
+                color: Theme.primaryColor
+                text: qsTr("If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.")
+            }
+
             SectionHeader { text: qsTr("Current limitations") }
 
             Text {

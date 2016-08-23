@@ -44,5 +44,13 @@
             <numerusform>%n records</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>%n second(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 </TS>

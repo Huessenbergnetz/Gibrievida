@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>About</name>
     <message>
@@ -105,7 +107,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
+        <translation>
+            <numerusform>%n Aufzeichnung</numerusform>
+            <numerusform>%n Aufzeichnungen</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -169,7 +174,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
+        <translation>
+            <numerusform>%n Aktivität</numerusform>
+            <numerusform>%n Aktivitäten</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
@@ -351,7 +359,10 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
+        <translation>
+            <numerusform>%n Aktivität</numerusform>
+            <numerusform>%n Aktivitäten</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -675,12 +686,17 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
         <translation>Als erstes benötigen Sie eine Kategorie. Dieser Kategorie können Sie Ihre erste Aktivität zuweisen. Nachdem Sie ihre erste Aktivität angelegt haben, können Sie mit der Aufzeichnung beginnen. Erstellen Sie bspw. die Kategorie Sport und fügen Sie ihr die Aktivität Liegestütz hinzu. In der Aktivität stellen Sie dann Werte für die minimale und maximale Wiederholung ein, die größer als null sind, um die Wiederholungszählung zu aktivieren. Nun sind Sie bereit, Ihre täglichen Liegestützen aufzuzeichnen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="128"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="133"/>
+        <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
+        <translation>Wenn Sie eine Aktivität aufzeichnen, die weder über Wiederholungen noch über Distanzmessung verfügt, können Sie die Anwenung komplett schließen, während Sie Ihrer Tätigkeit nachgehen. Die gestartete Aktivität wird in der Datenbank gespeichert und beim nächsten Start der Anwendung wieder geladen.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="136"/>
         <source>Current limitations</source>
         <translation>Aktuelle Einschränkungen</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="135"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="143"/>
         <source>The distance has to be entered manually after finishing an activity. Automatic distance measurement via GPS is planned for a later version.</source>
         <translation>Die Entfernung muss nach Abschluss einer Aktivität manuell eingegeben werden. Automatische Entfernungsmessung über GPS ist für eine spätere Version geplant.</translation>
     </message>
@@ -976,7 +992,10 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
+        <translation>
+            <numerusform>%n Aufzeichnung</numerusform>
+            <numerusform>%n Aufzeichnungen</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
@@ -1008,9 +1027,32 @@ remorse popup text</extracomment>
         <source>yards</source>
         <translation>Yards</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>%n second(s)</source>
+        <translation>
+            <numerusform>%n Sekunde</numerusform>
+            <numerusform>%n Sekunden</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="242"/>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="243"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>Disabled</source>
+        <translation>Deaktiviert</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="245"/>
+        <source>Finish on covering</source>
+        <translation>Beenden durch Verdecken</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="255"/>
+        <source>You can finish this recording by covering the proximity sensor of your device. Lay it on it&apos;s front or put it in your pocket to finish a recording.</source>
+        <translation>Sie können Ihre Aufzeichnung abschließen, indem Sie den Näherungssensor Ihres Geräts verdecken. Legen Sie das Gerät einfach auf die Frontseite oder stecken Sie es in Ihre Tasche.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="262"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="263"/>
         <source>Note</source>
         <translation>Notiz</translation>
     </message>

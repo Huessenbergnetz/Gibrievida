@@ -235,6 +235,26 @@ Dialog {
                 EnterKey.onClicked: distanceField.focus = false
             }
 
+            Slider {
+                id: finishByProximitySlider
+                width: parent.width
+                visible: !record
+                minimumValue: 0.0; maximumValue: 5.0
+                stepSize: 1.0
+                valueText: value > 0 ? qsTr("%n second(s)", "", value) : qsTr("Disabled")
+                label: qsTr("Finish on covering")
+            }
+
+            Text {
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin }
+                visible: !record
+                opacity: finishByProximitySlider.value > 0 ? 1.0 : 0.4
+                color: Theme.secondaryColor
+                wrapMode: Text.Wrap
+                font.pixelSize: Theme.fontSizeExtraSmall
+                text: qsTr("You can finish this recording by covering the proximity sensor of your device. Lay it on it's front or put it in your pocket to finish a recording.")
+            }
+
             TextArea {
                 id: noteText
                 width: parent.width
@@ -266,7 +286,7 @@ Dialog {
             record.note = noteText.text
             records.update(record, oldActivityId)
         } else {
-            records.add(activityButton.chosenActivity, noteText.text)
+            records.add(activityButton.chosenActivity, noteText.text, finishByProximitySlider.value)
         }
     }
 

@@ -683,12 +683,17 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="128"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="133"/>
+        <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="136"/>
         <source>Current limitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="135"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="143"/>
         <source>The distance has to be entered manually after finishing an activity. Automatic distance measurement via GPS is planned for a later version.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1018,9 +1023,31 @@ remorse popup text</extracomment>
         <source>yards</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>%n second(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="242"/>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="243"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="245"/>
+        <source>Finish on covering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="255"/>
+        <source>You can finish this recording by covering the proximity sensor of your device. Lay it on it&apos;s front or put it in your pocket to finish a recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="262"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="263"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,7 +4,7 @@
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="27"/>
         <source>Gibrievida is an activity tracker.</source>
-        <translation type="unfinished"/>
+        <translation>Gibrievida is een activiteitstracker.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="30"/>
@@ -105,7 +105,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n opname</numerusform><numerusform>%n opnames</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -169,7 +169,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n activiteit</numerusform><numerusform>%n activiteiten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
@@ -351,7 +351,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n activiteit</numerusform><numerusform>%n activiteiten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -672,15 +672,20 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="125"/>
         <source>At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a minimum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.</source>
+        <translation>Eerst heb je een categorie nodig. In die categorie kan je je eerste activiteit toevoegen. Wanneer je dat hebt gedaan kan je beginnen opnemen. Maak bijvoorbeeld een categorie Sport en een activiteit Pompen aan. In de activiteit stel je een minimum en maximum aantal herhalingen in groter dan nul om tellen van herhalingen te activeren. Nu ben je klaar om je dagelijks Pompen op te nemen.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="133"/>
+        <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="128"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="136"/>
         <source>Current limitations</source>
         <translation>Huidige beperkingen</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Help.qml" line="135"/>
+        <location filename="../sailfishos/qml/pages/Help.qml" line="143"/>
         <source>The distance has to be entered manually after finishing an activity. Automatic distance measurement via GPS is planned for a later version.</source>
         <translation>De afstand moet na een activiteit te voltooien handmatig ingegeven worden. Automatisch meten van de afstand via GPS is gepland voor een latere versie.</translation>
     </message>
@@ -976,7 +981,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n opname</numerusform><numerusform>%n opnames</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
@@ -1008,9 +1013,29 @@ remorse popup text</extracomment>
         <source>yards</source>
         <translation>yard</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>%n second(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+    </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="242"/>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="243"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="245"/>
+        <source>Finish on covering</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="255"/>
+        <source>You can finish this recording by covering the proximity sensor of your device. Lay it on it&apos;s front or put it in your pocket to finish a recording.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="262"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="263"/>
         <source>Note</source>
         <translation>Opmerking</translation>
     </message>

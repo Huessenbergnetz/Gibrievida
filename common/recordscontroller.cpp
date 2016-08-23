@@ -54,6 +54,8 @@ RecordsController::RecordsController(Configuration *config, QObject *parent) : B
     m_sensorTimer = nullptr;
     m_rotationSensor = nullptr;
     m_orientationSensor = nullptr;
+    m_finishOnCoveringTimer = nullptr;
+    m_finishOnCovering = 0;
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
@@ -147,6 +149,8 @@ void RecordsController::cancel()
 
     removeSensor();
 
+    m_finishOnCovering = 0;
+
     if (m_current && m_current->isValid()) {
         Record *r = current();
         int id = r->databaseId();
@@ -184,7 +188,7 @@ void RecordsController::cancel()
  *
  * You should call prepare() before you call this. Setting a note is optional.
  */
-int RecordsController::add(Activity *activity, const QString &note)
+int RecordsController::add(Activity *activity, const QString &note, int finishOnCovering)
 {
 #ifdef QT_DEBUG
     qDebug("Adding a new record.");
@@ -247,6 +251,7 @@ int RecordsController::add(Activity *activity, const QString &note)
 
     if (r->isValid()) {
         setCurrent(r);
+        m_finishOnCovering = finishOnCovering;
         setSensor();
         return r->databaseId();
     } else {
@@ -272,6 +277,11 @@ void RecordsController::finish()
 #endif
 
     removeSensor();
+
+    if (m_finishOnCovering > 0 && current()->activity()->sensorType() == 1) {
+        decreaseRepetitions();
+        m_finishOnCovering = 0;
+    }
 
     if (!m_current) {
         qWarning("No current recording set. Returning.");
@@ -732,11 +742,23 @@ void RecordsController::updateRepetitionClickSound(int clickSound)
  */
 void RecordsController::setSensor()
 {
-    if (current()->activity()->sensorType() == 1) {
+    if (m_finishOnCovering > 0 && !m_finishOnCoveringTimer) {
+        m_finishOnCoveringTimer = new QTimer(this);
+        m_finishOnCoveringTimer->setTimerType(Qt::VeryCoarseTimer);
+        m_finishOnCoveringTimer->setInterval(m_finishOnCovering * 1000);
+        connect(m_finishOnCoveringTimer, &QTimer::timeout, this, &RecordsController::finish);
+    }
+
+    if (current()->activity()->sensorType() == 1 || m_finishOnCovering > 0) {
         if (!m_proximitySensor) {
             m_proximitySensor = new QProximitySensor(this);
             m_proximitySensor->setAlwaysOn(true);
-            connect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
+            if (current()->activity()->sensorType()) {
+                connect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
+            }
+            if (m_finishOnCovering > 0) {
+                connect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::detectFinishOnCovering);
+            }
             m_proximitySensor->start();
         }
     }
@@ -832,5 +854,20 @@ void RecordsController::removeSensor()
     if (m_sensorTimer) {
         delete m_sensorTimer;
         m_sensorTimer = nullptr;
+    }
+
+    if (m_finishOnCoveringTimer) {
+        delete m_finishOnCoveringTimer;
+        m_finishOnCoveringTimer = nullptr;
+    }
+}
+
+
+void RecordsController::detectFinishOnCovering()
+{
+    if (m_proximitySensor->reading()->close() && !m_finishOnCoveringTimer->isActive()) {
+        m_finishOnCoveringTimer->start();
+    } else if (!m_proximitySensor->reading()->close() && m_finishOnCoveringTimer->isActive()) {
+        m_finishOnCoveringTimer->stop();
     }
 }

@@ -56,8 +56,7 @@ public:
 
     Q_INVOKABLE void prepare();
     Q_INVOKABLE void cancel();
-    Q_INVOKABLE int add(Gibrievida::Activity *activity, const QString &note = QString());
-    Q_INVOKABLE void finish();
+    Q_INVOKABLE int add(Gibrievida::Activity *activity, const QString &note = QString(), int finishOnCovering = 0);
     Q_INVOKABLE void update(Gibrievida::Record *r, int oldActivityId);
     Q_INVOKABLE void remove(Gibrievida::Record *r);
     Q_INVOKABLE void removeByActivity(Gibrievida::Activity *a);
@@ -71,6 +70,9 @@ public:
 
     Q_INVOKABLE void increaseRepetitions();
     Q_INVOKABLE void decreaseRepetitions();
+
+public slots:
+    void finish();
 
 signals:
     /*!
@@ -106,6 +108,7 @@ private slots:
     void proximityUpdate();
     void detectUpDownTop();
     void detectUpDownFace();
+    void detectFinishOnCovering();
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -119,9 +122,11 @@ private:
 
     Record *m_current;
     bool m_visible;
+    int m_finishOnCovering;
 
     QTimer *m_timer;
     QTimer *m_sensorTimer;
+    QTimer *m_finishOnCoveringTimer;
     Configuration *m_config;
 
     QSoundEffect m_repetitionClickSound;
