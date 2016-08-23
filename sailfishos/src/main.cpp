@@ -47,6 +47,7 @@
 #include "../common/helpers.h"
 #include "../common/configuration.h"
 #include "../common/languagemodel.h"
+#include "../common/backupmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
     qmlRegisterType<Gibrievida::LanguageModel>("harbour.gibrievida", 1, 0, "LanguageModel");
+    qmlRegisterType<Gibrievida::BackupModel>("harbour.gibrievida", 1, 0, "BackupModel");
 
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();

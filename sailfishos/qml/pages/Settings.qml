@@ -26,6 +26,13 @@ Page {
     id: settingsPage
 
     SilicaFlickable {
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Database backups")
+                onClicked: pageStack.push(Qt.resolvedUrl("Backups.qml"))
+            }
+        }
+
         anchors.fill: parent
         contentHeight: settingsCol.height
 

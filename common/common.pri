@@ -19,7 +19,8 @@ HEADERS += \
     $$PWD/category.h \
     $$PWD/activity.h \
     $$PWD/record.h \
-    $$PWD/languagemodel.h
+    $$PWD/languagemodel.h \
+    $$PWD/backupmodel.h
 
 SOURCES += \
     $$PWD/dbmanager.cpp \
@@ -39,4 +40,5 @@ SOURCES += \
     $$PWD/category.cpp \
     $$PWD/activity.cpp \
     $$PWD/record.cpp \
-    $$PWD/languagemodel.cpp
+    $$PWD/languagemodel.cpp \
+    $$PWD/backupmodel.cpp
