@@ -112,7 +112,7 @@ Page {
                 anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
-                text: qsTr("Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activitiy is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.")
+                text: qsTr("Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.")
             }
 
             SectionHeader { text: qsTr("Workflow") }
@@ -122,7 +122,7 @@ Page {
                 anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
-                text: qsTr("At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a mininum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.")
+                text: qsTr("At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a minimum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.")
             }
 
             SectionHeader { text: qsTr("Current limitations") }

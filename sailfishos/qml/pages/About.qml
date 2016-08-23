@@ -24,7 +24,7 @@ AboutPage {
 
     appTitle: "Gibrievida"
     appVersion: Qt.application.version
-    appDescription: qsTr("Gibrievida is an actvity tracker.")
+    appDescription: qsTr("Gibrievida is an activity tracker.")
     appHomepage: "http://gibrievida.buschmann23.de"
     appCopyright: "© 2016, Buschtrommel"
     appLicense: qsTr("Licensed under the <a href='http://www.gnu.org/licenses/gpl-3.0.en.html'>GNU GPL v3</a>")
