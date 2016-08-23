@@ -50,7 +50,7 @@ ActivitiesController::~ActivitiesController()
  *
  * Emits the added() signal and returns the database id > -1 if successful.
  */
-int ActivitiesController::add(const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance, int sensorType)
+int ActivitiesController::add(const QString &name, Category *c, int minRepeats, int maxRepeats, bool useDistance, int sensorType, int sensorDelay)
 {
     if (!connectDb()) {
         return -1;
@@ -60,7 +60,7 @@ int ActivitiesController::add(const QString &name, Category *c, int minRepeats, 
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("INSERT INTO activities (name, category, minrepeats, maxrepeats, distance, sensor) VALUES (?, ?, ?, ?, ?, ?)"))) {
+    if (!q.prepare(QStringLiteral("INSERT INTO activities (name, category, minrepeats, maxrepeats, distance, sensor, sensorDelay) VALUES (?, ?, ?, ?, ?, ?, ?)"))) {
         delete cat;
         return -1;
     }
@@ -71,6 +71,7 @@ int ActivitiesController::add(const QString &name, Category *c, int minRepeats, 
     q.addBindValue(maxRepeats);
     q.addBindValue(useDistance);
     q.addBindValue(sensorType);
+    q.addBindValue(sensorDelay);
 
     if (!q.exec()) {
         delete cat;
@@ -79,7 +80,7 @@ int ActivitiesController::add(const QString &name, Category *c, int minRepeats, 
 
     int id = q.lastInsertId().toInt();
 
-    emit added(id, name, cat, minRepeats, maxRepeats, useDistance, sensorType);
+    emit added(id, name, cat, minRepeats, maxRepeats, useDistance, sensorType, sensorDelay);
 
     return id;
 
@@ -105,7 +106,7 @@ bool ActivitiesController::update(Activity *a, int oldCategoryId)
 
     QSqlQuery q(m_db);
 
-    if (!q.prepare(QStringLiteral("UPDATE activities SET name = ?, category = ?, minRepeats = ?, maxRepeats = ?, distance = ?, sensor = ? WHERE id = ?"))) {
+    if (!q.prepare(QStringLiteral("UPDATE activities SET name = ?, category = ?, minRepeats = ?, maxRepeats = ?, distance = ?, sensor = ?, sensorDelay = ? WHERE id = ?"))) {
         return false;
     }
 
@@ -115,6 +116,7 @@ bool ActivitiesController::update(Activity *a, int oldCategoryId)
     q.addBindValue(a->maxRepeats());
     q.addBindValue(a->useDistance());
     q.addBindValue(a->sensorType());
+    q.addBindValue(a->sensorDelay());
     q.addBindValue(a->databaseId());
 
     if (!q.exec()) {

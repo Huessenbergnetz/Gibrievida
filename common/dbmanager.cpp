@@ -242,6 +242,10 @@ bool DBManager::updateToSchemaV2()
         return false;
     }
 
+    if (!q.exec(QStringLiteral("ALTER TABLE activities ADD COLUMN sensorDelay INTEGER DEFAULT 0"))) {
+        fatalError("Failed to add column sensorDelay to table activities", q.lastError());
+    }
+
     if (!m_db.commit()) {
         fatalError("Failed to commit database transaction", m_db.lastError());
         return false;

@@ -38,6 +38,7 @@ Activity::Activity(QObject *parent) :
     m_records = 0;
     m_category = nullptr;
     m_sensorType = 0;
+    m_sensorDelay = 0;
 
 #ifdef QT_DEBUG
     qDebug() << "Constructed a new empty" << this;
@@ -47,13 +48,13 @@ Activity::Activity(QObject *parent) :
 /*!
  * \overload
  */
-Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, int sensorType, QObject *parent) :
-    QObject(parent), m_databaseId(databaseId), m_name(name), m_minRepeats(minRepeats), m_maxRepeats(maxRepeats), m_useDistance(useDistance), m_records(records), m_sensorType(sensorType)
+Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxRepeats, bool useDistance, int records, int sensorType, int sensorDelay, QObject *parent) :
+    QObject(parent), m_databaseId(databaseId), m_name(name), m_minRepeats(minRepeats), m_maxRepeats(maxRepeats), m_useDistance(useDistance), m_records(records), m_sensorType(sensorType), m_sensorDelay(sensorDelay)
 {
     m_useRepeats = (minRepeats > 0 && maxRepeats > 0);
 
 #ifdef QT_DEBUG
-    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Name:" << name << "MinRepeats:" << minRepeats << "MaxRepeats:" << maxRepeats << "Use Repeats:" << m_useRepeats << "Use Distance:" << useDistance << "Records:" << records;
+    qDebug() << "Constructed a new" << this << "ID:" << databaseId << "Name:" << name << "MinRepeats:" << minRepeats << "MaxRepeats:" << maxRepeats << "Use Repeats:" << m_useRepeats << "Use Distance:" << useDistance << "Records:" << records << "Sensor Type:" << sensorType << "Sensor Delay:" << sensorDelay;
 #endif
 }
 
@@ -64,7 +65,7 @@ Activity::Activity(int databaseId, const QString &name, int minRepeats, int maxR
  * This will create a deep copy. Copying every member data from the \c other Activity to the new Activity.
  */
 Activity::Activity(Activity *other, QObject *parent) :
-    QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records()), m_sensorType(other->sensorType())
+    QObject(parent), m_databaseId(other->databaseId()), m_name(other->name()), m_minRepeats(other->minRepeats()), m_maxRepeats(other->maxRepeats()), m_useDistance(other->useDistance()), m_records(other->records()), m_sensorType(other->sensorType()), m_sensorDelay(other->sensorDelay())
 {
     m_useRepeats = (other->minRepeats() > 0 && other->maxRepeats() > 0);
 
@@ -416,6 +417,45 @@ void Activity::setSensorType(int nSensorType)
         emit sensorTypeChanged(sensorType());
     }
 }
+
+
+
+
+/*!
+ * \property Activity::sensorDelay
+ * \brief Delay of reading sensor data in miliseconds.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>sensorDelay() const</TD></TR><TR><TD>void</TD><TD>setSensorDelay(int nSensorDelay)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>sensorDelayChanged(int sensorDelay)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Activity::sensorDelayChanged(int sensorDelay)
+ * \brief Part of the \link Activity::sensorDelay sensorDelay \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Activity::sensorDelay sensorDelay \endlink property.
+ */
+int Activity::sensorDelay() const { return m_sensorDelay; }
+
+/*!
+ * \brief Part of the \link Activity::sensorDelay sensorDelay \endlink property.
+ */
+void Activity::setSensorDelay(int nSensorDelay)
+{
+    if (nSensorDelay != m_sensorDelay) {
+        m_sensorDelay = nSensorDelay;
+#ifdef QT_DEBUG
+        qDebug() << "Changed sensorDelay to" << m_sensorDelay;
+#endif
+        emit sensorDelayChanged(sensorDelay());
+    }
+}
+
+
 
 
 

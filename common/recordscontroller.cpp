@@ -28,6 +28,12 @@
 #include "globals.h"
 #include <QProximitySensor>
 #include <QProximityReading>
+#include <QAccelerometer>
+#include <QAccelerometerReading>
+#include <QRotationSensor>
+#include <QRotationReading>
+#include <QOrientationSensor>
+#include <QOrientationReading>
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -44,6 +50,10 @@ RecordsController::RecordsController(Configuration *config, QObject *parent) : B
     m_current = nullptr;
     m_visible = false;
     m_proximitySensor = nullptr;
+    m_accelSensor = nullptr;
+    m_sensorTimer = nullptr;
+    m_rotationSensor = nullptr;
+    m_orientationSensor = nullptr;
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
@@ -579,7 +589,7 @@ void RecordsController::init()
 
     QSqlQuery q(m_db);
 
-    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
+    if (!q.exec(QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.repetitions, r.distance, a.minrepeats, a.maxrepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor, a.sensorDelay FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end = 0 LIMIT 1"))) {
         setCurrent(nullptr);
         return;
     }
@@ -588,7 +598,7 @@ void RecordsController::init()
         QDateTime startTime = QDateTime::fromTime_t(q.value(6).toUInt());
         Record *r = new Record(q.value(0).toInt(), startTime, QDateTime::fromTime_t(0), startTime.secsTo(QDateTime::currentDateTimeUtc()), q.value(7).toInt(), q.value(8).toDouble(), q.value(12).toString(), q.value(13).toFloat(), q.value(14).toFloat(), q.value(15).toFloat());
 
-        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, q.value(16).toInt(), r);
+        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(9).toInt(), q.value(10).toInt(), q.value(11).toBool(), 0, q.value(16).toInt(), q.value(17).toInt(), r);
 
         Category *c = new Category(q.value(3).toInt(), q.value(4).toString(), q.value(5).toString(), 0, a);
 
@@ -730,6 +740,34 @@ void RecordsController::setSensor()
             m_proximitySensor->start();
         }
     }
+
+    if (current()->activity()->sensorType() == 2 || current()->activity()->sensorType() == 3) {
+
+        if (!m_sensorTimer) {
+            m_sensorTimer = new QTimer(this);
+            m_sensorTimer->setTimerType(Qt::CoarseTimer);
+            if (current()->activity()->sensorDelay() > 0) {
+                m_sensorTimer->setInterval(current()->activity()->sensorDelay());
+            } else {
+                m_sensorTimer->setInterval(2500);
+            }
+            m_sensorTimer->setSingleShot(true);
+        }
+
+        if (!m_accelSensor) {
+            m_accelSensor = new QAccelerometer(this);
+            m_accelSensor->setAlwaysOn(true);
+            if (current()->activity()->sensorType() == 2) {
+                connect(m_accelSensor, &QSensor::readingChanged, this, &RecordsController::detectUpDownTop);
+            } else if (current()->activity()->sensorType() == 3) {
+                connect(m_accelSensor, &QSensor::readingChanged, this, &RecordsController::detectUpDownFace);
+            }
+            m_accelSensor->setDataRate(10);
+        }
+
+        m_sensorTimer->start();
+        m_accelSensor->start();
+    }
 }
 
 
@@ -744,6 +782,27 @@ void RecordsController::proximityUpdate()
 }
 
 
+
+void RecordsController::detectUpDownTop()
+{
+    if (!m_sensorTimer->isActive() && m_accelSensor->reading()->y() > 9.9f) {
+        qDebug() << m_accelSensor->reading()->y();
+        increaseRepetitions();
+        m_sensorTimer->start();
+    }
+}
+
+
+void RecordsController::detectUpDownFace()
+{
+    if (!m_sensorTimer->isActive() && m_accelSensor->reading()->z() > 9.9f) {
+        qDebug() << m_accelSensor->reading()->z();
+        increaseRepetitions();
+        m_sensorTimer->start();
+    }
+}
+
+
 /*!
  * \brief Removes the current sensor and its connections.
  */
@@ -754,5 +813,24 @@ void RecordsController::removeSensor()
         disconnect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
         delete m_proximitySensor;
         m_proximitySensor = nullptr;
+    }
+
+    if (m_accelSensor) {
+        m_accelSensor->stop();
+        disconnect(m_accelSensor, &QSensor::readingChanged, this, &RecordsController::detectUpDownTop);
+        disconnect(m_accelSensor, &QSensor::readingChanged, this, &RecordsController::detectUpDownFace);
+        delete m_accelSensor;
+        m_accelSensor = nullptr;
+    }
+
+    if (m_rotationSensor) {
+        m_rotationSensor->stop();
+        delete m_rotationSensor;
+        m_rotationSensor = nullptr;
+    }
+
+    if (m_sensorTimer) {
+        delete m_sensorTimer;
+        m_sensorTimer = nullptr;
     }
 }

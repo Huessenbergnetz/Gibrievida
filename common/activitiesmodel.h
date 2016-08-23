@@ -66,7 +66,7 @@ public:
     RecordsController *getRecordsController() const;
 
 public slots:
-    void add(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool distance, int sensorType);
+    void add(int databaseId, const QString &name, Category *c, int minRepeats, int maxRepeats, bool distance, int sensorType, int sensorDelay);
     void remove(int databaseId, int category);
     void removeAll();
 

@@ -129,7 +129,7 @@ void RecordsModel::update()
         return;
     }
 
-    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
+    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor, a.sensorDelay FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
     if (m_categoryId > 0) {
         queryString.append(QLatin1String(" AND a.category = ?"));
@@ -179,7 +179,7 @@ void RecordsModel::update()
                                this
                                );
 
-        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(11).toInt(), q.value(12).toInt(), q.value(13).toBool(), 0, q.value(17).toInt(), r);
+        Activity *a = new Activity(q.value(1).toInt(), q.value(2).toString(), q.value(11).toInt(), q.value(12).toInt(), q.value(13).toBool(), 0, q.value(17).toInt(), q.value(18).toInt(), r);
 
         Category *c = new Category(q.value(3).toInt(), q.value(4).toString(), q.value(5).toString(), 0, a);
 

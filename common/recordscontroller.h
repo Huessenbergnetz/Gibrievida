@@ -26,6 +26,9 @@
 
 class QTimer;
 class QProximitySensor;
+class QAccelerometer;
+class QRotationSensor;
+class QOrientationSensor;
 
 namespace Gibrievida {
 
@@ -101,6 +104,8 @@ private slots:
     void updateDuration();
     void updateRepetitionClickSound(int clickSound);
     void proximityUpdate();
+    void detectUpDownTop();
+    void detectUpDownFace();
 
 private:
     Q_DISABLE_COPY(RecordsController)
@@ -116,10 +121,14 @@ private:
     bool m_visible;
 
     QTimer *m_timer;
+    QTimer *m_sensorTimer;
     Configuration *m_config;
 
     QSoundEffect m_repetitionClickSound;
     QProximitySensor *m_proximitySensor;
+    QAccelerometer *m_accelSensor;
+    QRotationSensor *m_rotationSensor;
+    QOrientationSensor *m_orientationSensor;
 };
 
 }

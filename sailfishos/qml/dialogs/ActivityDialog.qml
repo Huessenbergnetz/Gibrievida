@@ -51,7 +51,7 @@ Dialog {
         Column {
             id: catDialogCol
             width: parent.width
-            spacing: Theme.paddingLarge
+            spacing: Theme.paddingSmall
 
             DialogHeader {
                 dialog: catDialog
@@ -166,23 +166,15 @@ Dialog {
                 }
             }
 
-            TextSwitch {
-                id: distanceSwitch
+            SectionHeader {
                 text: qsTr("Distance tracking")
-                checked: activity ? activity.useDistance : false
-                description: qsTr("There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.")
             }
 
-            ComboBox {
-                id: sensorChoser
-                currentIndex: activity ? activity.sensorType : 0
-                width: parent.width
-                label: qsTr("Use sensor")
-                menu: ContextMenu {
-                    MenuItem { text: qsTr("No sensor") }
-                    MenuItem { text: qsTr("Proximity") }
-                }
-                description: qsTr("The selected sensor will be used to increase repetitions.")
+            TextSwitch {
+                id: distanceSwitch
+                text: qsTr("Enable distance tracking")
+                checked: activity ? activity.useDistance : false
+                description: qsTr("There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.")
             }
 
             SectionHeader {
@@ -218,12 +210,69 @@ Dialog {
                     width: (parent.width - parent.spacing)/2
                     label: qsTr("Maximum"); placeholderText: label
                     text: activity ? activity.maxRepeats : "0"
-                    EnterKey.iconSource: catDialog.canAccept ? "image://theme/icon-m-enter-accept" : "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: catDialog.canAccept ? catDialog.accept() : maxRepeatsField.focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: maxRepeatsField.focus = false
                     inputMethodHints: Qt.ImhDigitsOnly
                     validator: IntValidator { bottom: 0 }
                     enabled: parseInt(minRepeatsField.text) > 0
                 }
+            }
+
+            SectionHeader {
+                text: qsTr("Repetitions sensor")
+            }
+
+            ComboBox {
+                id: sensorChoser
+                currentIndex: activity ? activity.sensorType : 0
+                width: parent.width
+                label: qsTr("Use sensor")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("No sensor") }
+                    MenuItem { text: qsTr("Proximity") }
+                    MenuItem { text: qsTr("Up and down (upright)") }
+                    MenuItem { text: qsTr("Up and down (lying)") }
+                }
+                description: qsTr("The selected sensor will be used to increase repetitions.")
+                onCurrentIndexChanged: setSensorChoserDescription()
+                function setSensorChoserDescription() {
+                    switch (sensorChoser.currentIndex) {
+                    case 1:
+                        sensorChoser.description = qsTr("Use the proximity sensor to increase repetitions by moving near to your device. Can be used for push-ups for example.")
+                        break;
+                    case 2:
+                        sensorChoser.description = qsTr("Move up and down while holding your device upright (portrait mode) to increase repetitions. Can be used for squats for example.")
+                        break;
+                    case 3:
+                        sensorChoser.description = qsTr("Move up and down while holding your device with front or back to the ground to increase repetitions. Can be used for squats for example.")
+                        break;
+                    default:
+                        sensorChoser.description = qsTr("The selected sensor will be used to increase repetitions.")
+                        break;
+                    }
+                }
+            }
+
+            TextField {
+                id: sensorDelayField
+                enabled: sensorChoser.currentIndex === 2
+                width: parent.width
+                label: qsTr("Sensor delay in milliseconds"); placeholderText: label
+                text: activity ? activity.sensorDelay : "0"
+                validator: IntValidator { bottom: 0 }
+                inputMethodHints: Qt.ImhDigitsOnly
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                EnterKey.onClicked: sensorDelayField.focus = false
+            }
+
+            Text {
+                height: text.length ? (implicitHeight + Theme.paddingLarge) : 0
+                opacity: sensorDelayField.enabled ? 1.0 : 0.4
+                anchors { left: parent.left; right: parent.right; leftMargin: Theme.horizontalPageMargin; rightMargin: Theme.horizontalPageMargin }
+                font.pixelSize: Theme.fontSizeExtraSmall
+                wrapMode: Text.Wrap
+                color: Theme.secondaryColor
+                text: qsTr("The sensor delay in milliseconds defines how often the sensor will be checked to increase the repetitions. You should choose a value that fits to the speed you repeat the activitiy. Maybe you have to test some values to find the perfect fitting delay. For example, try 1800 as a value for squats together with up and down sensor.")
             }
         }
     }
@@ -238,9 +287,10 @@ Dialog {
             activity.category.name = categoryButton.chosenCategory.name
             activity.category.color = categoryButton.chosenCategory.color
             activity.sensorType = sensorChoser.currentIndex
+            activity.sensorDelay = parseInt(sensorDelayField.text)
             activities.update(activity, oldCategoryId)
         } else {
-            activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked, sensorChoser.currentIndex)
+            activities.add(nameField.text, categoryButton.chosenCategory, parseInt(minRepeatsField.text), parseInt(maxRepeatsField.text), distanceSwitch.checked, sensorChoser.currentIndex, parseInt(sensorDelayField.text))
         }
     }
 }
