@@ -32,6 +32,7 @@ Page {
         Column {
             id: helpPageCol
             width: parent.width
+            spacing: Theme.paddingSmall
 
             PageHeader {
                 title: qsTr("Help")
@@ -131,6 +132,14 @@ Page {
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
                 text: qsTr("If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.")
+            }
+
+            Text {
+                font.pixelSize: Theme.fontSizeSmall
+                anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
+                wrapMode: Text.WordWrap
+                color: Theme.primaryColor
+                text: qsTr("When deleting categories or activities, all connected data will be deleted, too.")
             }
 
             SectionHeader { text: qsTr("Current limitations") }
