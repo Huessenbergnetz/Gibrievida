@@ -1151,11 +1151,13 @@ remorse popup text</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="60"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="64"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="86"/>
         <source>Sound %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1165,12 +1167,22 @@ remorse popup text</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>
+        <source>Finishing sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="95"/>
+        <source>The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="104"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="83"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="105"/>
         <source>To change the language, you have to restart the application.</source>
         <translation type="unfinished"></translation>
     </message>

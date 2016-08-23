@@ -677,7 +677,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="133"/>
         <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
-        <translation type="unfinished"/>
+        <translation>Als je een activiteit volgt die noch herhalingen noch afstandsmeting heeft kan je de toepassing volledig sluiten terwijl je je ding doet. De begonnen activiteit zal worden opgeslagen in de database en zal geladen worden wanneer je de toepassing opnieuw opstart.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="136"/>
@@ -1016,22 +1016,22 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
         <source>%n second(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n seconde</numerusform><numerusform>%n seconden</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Uitgeschakeld</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="245"/>
         <source>Finish on covering</source>
-        <translation type="unfinished"/>
+        <translation>Voltooien bij bedekken</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="255"/>
         <source>You can finish this recording by covering the proximity sensor of your device. Lay it on it&apos;s front or put it in your pocket to finish a recording.</source>
-        <translation type="unfinished"/>
+        <translation>Je kan deze opname voltooien door de nabijheidssensor van je apparaat te bedekken. Leg het op z&apos;n voorkant of steek hem in je zak om een opname te voltooien.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="262"/>
@@ -1139,11 +1139,13 @@ remorse popup text</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="60"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
         <source>Disabled</source>
         <translation>Uitgeschakeld</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="64"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="86"/>
         <source>Sound %1</source>
         <translation>Sound %1</translation>
     </message>
@@ -1153,12 +1155,22 @@ remorse popup text</extracomment>
         <translation>Het geluid zal worden afgespeeld als je op een knop of ruimte tikt om te herhalingsteller van een activiteit te verhogen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>
+        <source>Finishing sound</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="95"/>
+        <source>The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="104"/>
         <source>Language</source>
         <translation>Taal</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="83"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="105"/>
         <source>To change the language, you have to restart the application.</source>
         <translation>Herstart de toepassing om de taal te wijzigen.</translation>
     </message>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -107,10 +105,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -174,10 +169,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
@@ -359,10 +351,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -992,10 +981,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
@@ -1030,10 +1016,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
         <source>%n second(s)</source>
-        <translation>
-            <numerusform>%n Sekunde</numerusform>
-            <numerusform>%n Sekunden</numerusform>
-        </translation>
+        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunden</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
@@ -1156,11 +1139,13 @@ remorse popup text</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="60"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="64"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="86"/>
         <source>Sound %1</source>
         <translation>Ton %1</translation>
     </message>
@@ -1170,12 +1155,22 @@ remorse popup text</extracomment>
         <translation>Der Ton wird abgespielt, sobald Sie auf einen Knopf oder eine Fläche drücken, um die Wiederholungsanzahl zu erhöhen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="82"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>
+        <source>Finishing sound</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="95"/>
+        <source>The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="104"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="83"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="105"/>
         <source>To change the language, you have to restart the application.</source>
         <translation>Um die Sprache zu ändern, muss die Anwendung neu gestartet werden.</translation>
     </message>
