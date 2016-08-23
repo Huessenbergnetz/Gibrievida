@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
 <context>
     <name>About</name>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="27"/>
-        <source>Gibrievida is an actvitiy tracker.</source>
+        <source>Gibrievida is an activity tracker.</source>
         <translation>Gibrievida ist eine Aktivitätenverwaltung.</translation>
     </message>
     <message>
@@ -107,15 +105,12 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
         <source>Start new record</source>
-        <translation>Neue Aufzeichnung starten</translation>
+        <translation>Neue Aufnahme starten</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="172"/>
@@ -174,58 +169,101 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="171"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
         <source>Distance tracking</source>
         <translation>Entfernungsmessung</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="173"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="175"/>
+        <source>Enable distance tracking</source>
+        <translation>Distanzmessung aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="177"/>
         <source>There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.</source>
         <translation>Die zurückgelegte Entfernung wir momentan nicht automatisch gemessen. Sie können die Entfernung manuell nach Abschluss der Aktivität eingeben.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="180"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="222"/>
+        <source>Repetitions sensor</source>
+        <translation>Wiederholungserkennung</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="229"/>
         <source>Use sensor</source>
         <translation>Nutze Sensor</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="182"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="231"/>
         <source>No sensor</source>
         <translation>Kein Sensor</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="183"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="232"/>
         <source>Proximity</source>
         <translation>Nährung</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="185"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="233"/>
+        <source>Up and down (upright)</source>
+        <translation>Hoch und Runter (hochkant)</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="234"/>
+        <source>Up and down (lying)</source>
+        <translation>Hoch und Runter (liegend)</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="236"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="250"/>
         <source>The selected sensor will be used to increase repetitions.</source>
         <translation>Der gewählte Sensor wird genutzt, im die Wiederholungen zu erhöhen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="189"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="241"/>
+        <source>Use the proximity sensor to increase repetitions by moving near to your device. Can be used for push-ups for example.</source>
+        <translation>Nutzen Sie den Annäherungssensor um die Wiederholungen zu erhöhen, indem Sie sich dem Gerät nähern. Kann bspw. für Liegestütz genutzt werden.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="244"/>
+        <source>Move up and down while holding your device upright (portrait mode) to increase repetitions. Can be used for squats for example.</source>
+        <translation>Bewegen Sie sich hoch und runter, während Sie das Gerät hochkant (im Porträtmodus) halten, um die Wiederholungen zu erhöhen. Kann bspw. für Kniebeugen genutzt werden.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="247"/>
+        <source>Move up and down while holding your device with front or back to the ground to increase repetitions. Can be used for squats for example.</source>
+        <translation>Bewegen Sie sich hoch und runter, während Sie das Gerät mit der Front oder dem Rückteil zum Boden halten, um die Wiederholungen zu erhöhen. Kann bspw. für Kniebeugen genutzt werden.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="260"/>
+        <source>Sensor delay in milliseconds</source>
+        <translation>Sensorverzögerung in Millisekunden</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="275"/>
+        <source>The sensor delay in milliseconds defines how often the sensor will be checked to increase the repetitions. You should choose a value that fits to the speed you repeat the activitiy. Maybe you have to test some values to find the perfect fitting delay. For example, try 1800 as a value for squats together with up and down sensor.</source>
+        <translation>Die Sensorverzögerung in Millisekunden gibt an, wie oft der Sensor geprüft wird, um die Wiederholungen zu erhöhen. Sie sollten einen Wert wählen, der zu Ihrer Geschwindigkeit passt. Eventuell müssen Sie es ein paar mal probieren, bis Sie den perfekten Wert gefunden haben. Versuchen Sie für Kniebeugen zum Beispiel einen Wert von 1800 zusammen mit dem Hoch-und-Runter-Sensor.</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="181"/>
         <source>Repetition</source>
         <translation>Wiederholung</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="196"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="188"/>
         <source>To activate repetitions for this activity, enter minimum and maximum repetitions greater than 0.</source>
         <translation>Um Wiederholungen für diese Aktivität zu aktivieren, geben Sie minimale und maximale Wiederholungen größer 0 ein.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="208"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="200"/>
         <source>Minimum</source>
         <translation>Minimal</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="219"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="211"/>
         <source>Maximum</source>
         <translation>Maximal</translation>
     </message>
@@ -313,10 +351,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -626,7 +661,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="115"/>
-        <source>Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activitiy is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
+        <source>Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
         <translation>Gibrievida möchte Ihnen dabei helfen, Ihre sportlichen oder täglichen Aktivitäten (oder für was Sie es auch sonst nutzen möchten) aufzuzeichnen. Es basiert auf Kategorie, Aktivitäten und Aufzeichnungen. Kategorien gruppieren Aktivitäten thematisch, bspw. Sport. Eine Aktivität ist wie eine Vorlage für eine Aufzeichnung. Eine Aufzeichnung selbst ist wiederum ein Datensatz, der aus einer Aktivität, der Start- und Endzeit, der Dauer, sowie optional Wiederholungen, Entfernung oder Notizen besteht.</translation>
     </message>
     <message>
@@ -636,7 +671,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="125"/>
-        <source>At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a mininum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.</source>
+        <source>At first you need a category. In that category you can add your first activity. After you have your first activity you can start recording. For example, create a category Sport and an activity Push-Ups. In the activity you set a minimum and maximum repetitions count greater than zero to activate repetitions count. Now you are ready to record your daily Push-Ups.</source>
         <translation>Als erstes benötigen Sie eine Kategorie. Dieser Kategorie können Sie Ihre erste Aktivität zuweisen. Nachdem Sie ihre erste Aktivität angelegt haben, können Sie mit der Aufzeichnung beginnen. Erstellen Sie bspw. die Kategorie Sport und fügen Sie ihr die Aktivität Liegestütz hinzu. In der Aktivität stellen Sie dann Werte für die minimale und maximale Wiederholung ein, die größer als null sind, um die Wiederholungszählung zu aktivieren. Nun sind Sie bereit, Ihre täglichen Liegestützen aufzuzeichnen.</translation>
     </message>
     <message>
@@ -941,10 +976,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
