@@ -113,7 +113,7 @@ Page {
                 anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
-                text: qsTr("Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.")
+                text: qsTr("Gibrievida wants to help you to record your sportive or daily activities (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.")
             }
 
             SectionHeader { text: qsTr("Workflow") }
