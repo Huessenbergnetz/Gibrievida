@@ -4,8 +4,8 @@ OTHER_FILES += \
     rpm/sailfishos.spec
 
 DISTFILES += \
-    rpm/harbour-gibrievida.changes.in \
-    rpm/harbour-gibrievida.yaml
+    rpm/harbour-gibrievida.yaml \
+    rpm/sailfishos.changes
 
 SUBDIRS += \
     sailfishos

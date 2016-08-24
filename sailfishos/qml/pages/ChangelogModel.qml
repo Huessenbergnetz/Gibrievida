@@ -28,6 +28,20 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
+        version: "0.2.0"
+        date: 1472024163000
+        entries: [
+            ListElement { type: 0; issue: "8"; description: "simple database backup by copying SQLite file to backup file" },
+            ListElement { type: 0; issue: "7"; description: "optional finishing sound if app is not visible to user" },
+            ListElement { type: 0; issue: "6"; description: "optional finish your recording by using the proximity sensor" },
+            ListElement { type: 0; issue: "2"; description: "use the acceloremeter to add new repetitions" },
+            ListElement { type: 0; issue: "5"; description: "start a new recording directly from the activities list" },
+            ListElement { type: 0; issue: "4"; description: "use the proximity sensor to add new repetitions" },
+            ListElement { type: 2; issue: "10"; description: "update activities list on finishing a recording" }
+        ]
+    }
+
+    ListElement {
         version: "0.1.0"
         date: 1471868364000
         entries: [
