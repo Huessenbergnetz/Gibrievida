@@ -19,6 +19,7 @@
 #include "dbmodel.h"
 #include <QStandardPaths>
 #include <QSqlError>
+#include <QSqlQuery>
 #ifdef QT_DEBUG
 #include <QtDebug>
 #endif
@@ -109,6 +110,8 @@ bool DBModel::connectDb()
         m_db.setDatabaseName(dbPath);
 
         if (m_db.open()) {
+            QSqlQuery q(m_db);
+            q.exec(QStringLiteral("PRAGMA foreign_keys = ON"));
             return true;
         } else {
             return false;
@@ -117,6 +120,8 @@ bool DBModel::connectDb()
     } else if (!m_db.isOpen()) {
 
         if (m_db.open()) {
+            QSqlQuery q(m_db);
+            q.exec(QStringLiteral("PRAGMA foreign_keys = ON"));
             return true;
         } else {
             return false;

@@ -18,6 +18,7 @@
 
 #include "basecontroller.h"
 #include <QStandardPaths>
+#include <QSqlQuery>
 #include "globals.h"
 
 using namespace Gibrievida;
@@ -66,6 +67,8 @@ bool BaseController::connectDb()
         m_db.setDatabaseName(dbPath);
 
         if (m_db.open()) {
+            QSqlQuery q(m_db);
+            q.exec(QStringLiteral("PRAGMA foreign_keys = ON"));
             return true;
         } else {
             return false;
@@ -74,6 +77,8 @@ bool BaseController::connectDb()
     } else if (!m_db.isOpen()) {
 
         if (m_db.open()) {
+            QSqlQuery q(m_db);
+            q.exec(QStringLiteral("PRAGMA foreign_keys = ON"));
             return true;
         } else {
             return false;

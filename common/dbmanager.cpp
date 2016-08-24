@@ -97,6 +97,11 @@ bool DBManager::createDatabase()
 
     QSqlQuery q(m_db);
 
+    if (!q.exec(QStringLiteral("PRAGMA foreign_keys = ON"))) {
+        fatalError("Failed to activate foreign keys support", q.lastError());
+        return false;
+    }
+
     if (!m_db.transaction()) {
         fatalError("Failed to create database transaction", q.lastError());
         return false;
