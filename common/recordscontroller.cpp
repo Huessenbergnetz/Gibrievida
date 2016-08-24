@@ -278,6 +278,8 @@ void RecordsController::finish()
 
     removeSensor();
 
+    m_timer->stop();
+
     if (m_finishOnCovering > 0 && current()->activity()->sensorType() == 1) {
         decreaseRepetitions();
         m_finishOnCovering = 0;
@@ -308,6 +310,8 @@ void RecordsController::finish()
     if (m_current->distance() > 0.0) {
         avgSpeed = m_current->distance()/(double)duration;
     }
+
+    m_timer->stop();
 
     QSqlQuery q(m_db);
 
@@ -813,7 +817,9 @@ void RecordsController::proximityUpdate()
 }
 
 
-
+/*!
+ * \brief Reads the data from the acceleration sensor and tries to detect an up and down movement.
+ */
 void RecordsController::detectUpDownTop()
 {
     if (!m_sensorTimer->isActive() && m_accelSensor->reading()->y() > 9.9f) {
@@ -823,7 +829,9 @@ void RecordsController::detectUpDownTop()
     }
 }
 
-
+/*!
+ * \brief Reads the data from the acceleration sensor and tries to detect an up and down movement.
+ */
 void RecordsController::detectUpDownFace()
 {
     if (!m_sensorTimer->isActive() && m_accelSensor->reading()->z() > 9.9f) {
@@ -871,7 +879,11 @@ void RecordsController::removeSensor()
     }
 }
 
-
+/*!
+ * \brief Reads the data from the proximity sensor and tries to detect, if the recording should be finished.
+ *
+ * This will start a timer that runs a specified time, unless the user moves away from the device in time.
+ */
 void RecordsController::detectFinishOnCovering()
 {
     if (m_proximitySensor->reading()->close() && !m_finishOnCoveringTimer->isActive()) {
@@ -882,7 +894,9 @@ void RecordsController::detectFinishOnCovering()
 }
 
 
-
+/*!
+ * \brief Removes the mediaplayer object after the finishing sound has been played.
+ */
 void RecordsController::finishSoundStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::EndOfMedia) {
