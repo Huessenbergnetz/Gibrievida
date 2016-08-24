@@ -8,6 +8,9 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Wed Aug 24 2016 Matthias Fehring <kontakt@buschmann23.de> 0.2.1-1
+- fixed: subsequent entries are not deleted when deleting categories or activities
+
 * Wed Aug 24 2016 Matthias Fehring <kontakt@buschmann23.de> 0.2.0-1
 - new: simple database backup by copying SQLite file to backup file
 - new: optional finishing sound if app is not visible to user

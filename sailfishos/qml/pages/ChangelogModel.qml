@@ -28,6 +28,14 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
+        version: "0.2.1"
+        date: 1472040309000
+        entries: [
+            ListElement { type: 2; issue: "11"; description: "subsequent entries are not deleted when deleting categories or activities" }
+        ]
+    }
+
+    ListElement {
         version: "0.2.0"
         date: 1472024163000
         entries: [
