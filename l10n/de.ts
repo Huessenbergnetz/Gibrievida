@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -107,10 +105,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -174,10 +169,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
@@ -424,10 +416,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -747,8 +736,8 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="116"/>
-        <source>Gibrievida wants to help you to record your sportive or daily activites (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
-        <translation>Gibrievida möchte Ihnen dabei helfen, Ihre sportlichen oder täglichen Aktivitäten (oder für was Sie es auch sonst nutzen möchten) aufzuzeichnen. Es basiert auf Kategorie, Aktivitäten und Aufzeichnungen. Kategorien gruppieren Aktivitäten thematisch, bspw. Sport. Eine Aktivität ist wie eine Vorlage für eine Aufzeichnung. Eine Aufzeichnung selbst ist wiederum ein Datensatz, der aus einer Aktivität, der Start- und Endzeit, der Dauer, sowie optional Wiederholungen, Entfernung oder Notizen besteht.</translation>
+        <source>Gibrievida wants to help you to record your sportive or daily activities (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
+        <translation>Gibrievida möchte Ihnen dabei helfen, Ihre sportlichen oder täglichen Aktivitäten (oder für was Sie es auch sonst nutzen möchten) aufzuzeichnen. Es basiert auf Kategorien, Aktivitäten und Aufzeichnungen. Kategorien gruppieren Aktivitäten thematisch, bspw. Sport. Eine Aktivität ist wie eine Vorlage für eine Aufzeichnung. Eine Aufzeichnung selbst ist wiederum ein Datensatz, der aus einer Aktivität, der Start- und Endzeit, der Dauer, sowie optional Wiederholungen, Entfernung oder Notizen besteht.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="119"/>
@@ -1072,10 +1061,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
@@ -1110,10 +1096,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
         <source>%n second(s)</source>
-        <translation>
-            <numerusform>%n Sekunde</numerusform>
-            <numerusform>%n Sekunden</numerusform>
-        </translation>
+        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunden</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
