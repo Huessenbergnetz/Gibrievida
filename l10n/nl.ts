@@ -326,64 +326,64 @@
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="31"/>
         <source>Remove all</source>
-        <translation type="unfinished"/>
+        <translation>Alles verwijderen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="33"/>
         <source>Deleting all</source>
-        <translation type="unfinished"/>
+        <translation>Alles aan het verwijderen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="37"/>
         <source>Create</source>
-        <translation type="unfinished"/>
+        <translation>Aanmaken</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="43"/>
         <source>Database backups</source>
-        <translation type="unfinished"/>
+        <translation>Database-reservekopieën</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="61"/>
         <source>Deleting</source>
-        <translation type="unfinished"/>
+        <translation>Aan het verwijderen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="65"/>
         <source>Restoring</source>
-        <translation type="unfinished"/>
+        <translation>Aan het herstellen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="79"/>
         <source>d. MMMM yyyy</source>
         <extracomment>backup list entry date, for format options visit http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method</extracomment>
-        <translation type="unfinished"/>
+        <translation>d MMMM yyyy</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="89"/>
         <source>hh:mmap</source>
         <extracomment>backup list entry time, for format options visit http://doc.qt.io/qt-5/qml-qtqml-qt.html#formatDateTime-method</extracomment>
-        <translation type="unfinished"/>
+        <translation>hh.mm</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="107"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="113"/>
         <source>Restore</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="123"/>
         <source>No backups</source>
-        <translation type="unfinished"/>
+        <translation>Geen reservekopieën</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Backups.qml" line="124"/>
         <source>Use the pull down menu to add new backups</source>
-        <translation type="unfinished"/>
+        <translation>Gebruik het uittrekmenu om nieuwe reservekopieën toe te voegen</translation>
     </message>
 </context>
 <context>
@@ -518,6 +518,16 @@
         <source>Author</source>
         <translation>Auteur</translation>
     </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="34"/>
+        <source>Dutch translation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="35"/>
+        <source>Thanks to</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>DateTimeButton</name>
@@ -629,7 +639,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
         <location filename="../common/helpers.cpp" line="114"/>
         <location filename="../common/helpers.cpp" line="117"/>
         <source>hh:mmap</source>
-        <translation>hh.mmap</translation>
+        <translation>hh.mm</translation>
     </message>
     <message>
         <location filename="../common/helpers.cpp" line="117"/>
@@ -641,13 +651,13 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
         <location filename="../common/helpers.cpp" line="124"/>
         <source>dddd, hh:mmap</source>
         <extracomment>date and time foramt, see http://doc.qt.io/qt-5/qdatetime.html#toString</extracomment>
-        <translation>dddd, hh.mmap</translation>
+        <translation>dddd, hh.mm</translation>
     </message>
     <message>
         <location filename="../common/helpers.cpp" line="127"/>
         <source>dd.MM.yy hh:mmap</source>
         <extracomment>date and time foramt, see http://doc.qt.io/qt-5/qdatetime.html#toString</extracomment>
-        <translation>dd-MM-yy hh.mmap</translation>
+        <translation>dd-MM-yy hh.mm</translation>
     </message>
     <message>
         <location filename="../common/helpers.cpp" line="145"/>
@@ -747,7 +757,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="142"/>
         <source>When deleting categories or activities, all connected data will be deleted, too.</source>
-        <translation type="unfinished"/>
+        <translation>Wanneer je categorieën of activiteiten verwijdert zullen alle daaraan verbonden gegevens ook verwijderd worden.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="145"/>
@@ -1175,7 +1185,7 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="31"/>
         <source>Database backups</source>
-        <translation type="unfinished"/>
+        <translation>Database-reservekopieën</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="44"/>
@@ -1222,7 +1232,7 @@ remorse popup text</extracomment>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="71"/>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="93"/>
         <source>Sound %1</source>
-        <translation>Sound %1</translation>
+        <translation>Geluid %1</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="80"/>

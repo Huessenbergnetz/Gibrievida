@@ -529,6 +529,16 @@
         <source>Author</source>
         <translation>Autor</translation>
     </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="34"/>
+        <source>Dutch translation</source>
+        <translation>Niederländische Übersetzung</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="35"/>
+        <source>Thanks to</source>
+        <translation>Danke an</translation>
+    </message>
 </context>
 <context>
     <name>DateTimeButton</name>
