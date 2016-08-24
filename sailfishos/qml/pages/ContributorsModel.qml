@@ -28,5 +28,11 @@ ListModel {
         twitter: "buschmann23"
         github: "buschmann23"
     }
+
+    ListElement {
+        name: "Nathan Follens"
+        role: QT_TR_NOOP("Dutch translation")
+        section: QT_TR_NOOP("Thanks to")
+    }
 }
 
