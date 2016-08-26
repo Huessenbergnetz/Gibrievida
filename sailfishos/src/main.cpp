@@ -118,8 +118,8 @@ int main(int argc, char *argv[])
     if (lang == QLatin1String("")) {
         lang = QLocale::system().name();
     }
-    QTranslator *translator = new QTranslator;
 #ifndef CLAZY
+    QTranslator *translator = new QTranslator;
     if (translator->load(lang, SailfishApp::pathTo(QStringLiteral("l10n")).toString(QUrl::RemoveScheme))) {
         app->installTranslator(translator);
     }
