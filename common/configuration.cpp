@@ -30,6 +30,8 @@ Configuration::Configuration(QObject *parent) : QSettings(parent)
     m_repetitionClickSound = value(QStringLiteral("repetitionClickSound"), 0).toInt();
     m_language = value(QStringLiteral("language"), QStringLiteral("")).toString();
     m_finishingSound = value(QStringLiteral("finishingSound"), 0).toInt();
+    m_startSound = value(QStringLiteral("startSound"), 0).toInt();
+    m_signalLostSound = value(QStringLiteral("signalLostSound"), 0).toInt();
 }
 
 
@@ -189,3 +191,78 @@ void Configuration::setFinishingSound(int nFinishingSound)
     }
 }
 
+
+/*!
+ * \property Configuration::startSound
+ * \brief Index of the sound effect file to play if a distance measurement has been started.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>startSound() const</TD></TR><TR><TD>void</TD><TD>setStartSound(int nStartSound)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>startSoundChanged(int startSound)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::startSoundChanged(int startSound)
+ * \brief Part of the \link Configuration::startSound startSound \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::startSound startSound \endlink property.
+ */
+int Configuration::startSound() const { return m_startSound; }
+
+/*!
+ * \brief Part of the \link Configuration::startSound startSound \endlink property.
+ */
+void Configuration::setStartSound(int nStartSound)
+{
+    if (nStartSound != m_startSound) {
+        m_startSound = nStartSound;
+#ifdef QT_DEBUG
+        qDebug() << "Changed startSound to" << m_startSound;
+#endif
+        setValue(QStringLiteral("startSound"), m_startSound);
+
+        emit startSoundChanged(startSound());
+    }
+}
+
+
+
+
+/*!
+ * \property Configuration::signalLostSound
+ * \brief Index of the sound effect file to play if the GPS signal has been lost.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>int</TD><TD>signalLostSound() const</TD></TR><TR><TD>void</TD><TD>setSignalLostSound(int nSignalLostSound)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>signalLostSoundChanged(int signalLostSound)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void Configuration::signalLostSoundChanged(int signalLostSound)
+ * \brief Part of the \link Configuration::signalLostSound signalLostSound \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link Configuration::signalLostSound signalLostSound \endlink property.
+ */
+int Configuration::signalLostSound() const { return m_signalLostSound; }
+
+/*!
+ * \brief Part of the \link Configuration::signalLostSound signalLostSound \endlink property.
+ */
+void Configuration::setSignalLostSound(int nSignalLostSound)
+{
+    if (nSignalLostSound != m_signalLostSound) {
+        m_signalLostSound = nSignalLostSound;
+#ifdef QT_DEBUG
+        qDebug() << "Changed signalLostSound to" << m_signalLostSound;
+#endif
+        setValue(QStringLiteral("signalLostSound"), m_signalLostSound);
+
+        emit signalLostSoundChanged(signalLostSound());
+    }
+}

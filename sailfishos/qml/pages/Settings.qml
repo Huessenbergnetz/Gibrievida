@@ -26,6 +26,7 @@ Page {
     id: settingsPage
 
     SilicaFlickable {
+        id: settingsFlick
         PullDownMenu {
             MenuItem {
                 text: qsTr("Database backups")
@@ -35,6 +36,11 @@ Page {
 
         anchors.fill: parent
         contentHeight: settingsCol.height
+
+        VerticalScrollDecorator {
+            page: settingsPage
+            flickable: settingsFlick
+        }
 
         Column {
             id: settingsCol
@@ -100,6 +106,50 @@ Page {
                 }
                 onCurrentIndexChanged: config.finishingSound = currentIndex
                 description: qsTr("The sound will be played if a recording has been finished by using a sensor, like the proximity sensor, and the application ist not visible to the user.")
+            }
+
+            ComboBox {
+                id: startSoundChoser
+                width: parent.width
+                currentIndex: config.startSound
+                label: qsTr("Start sound")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Disabled") }
+                    Repeater {
+                        model: 4
+                        MenuItem {
+                            text: qsTr("Sound %1").arg(model.index + 1)
+                            onClicked: {
+                                clickSoundPlayer.source = "/usr/share/harbour-gibrievida/sounds/start" + (model.index + 1) + ".oga"
+                                clickSoundPlayer.play()
+                            }
+                        }
+                    }
+                }
+                onCurrentIndexChanged: config.startSound = currentIndex
+                description: qsTr("The start sound will be played when a valid initial position has been found via GPS/GLONASS to start a record with distance measurement.")
+            }
+
+            ComboBox {
+                id: signalLostSoundChoser
+                width: parent.width
+                currentIndex: config.signalLostSound
+                label: qsTr("Signal lost sound")
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Disabled") }
+                    Repeater {
+                        model: 3
+                        MenuItem {
+                            text: qsTr("Sound %1").arg(model.index + 1)
+                            onClicked: {
+                                clickSoundPlayer.source = "/usr/share/harbour-gibrievida/sounds/signallost" + (model.index + 1) + ".oga"
+                                clickSoundPlayer.play()
+                            }
+                        }
+                    }
+                }
+                onCurrentIndexChanged: config.signalLostSound = currentIndex
+                description: qsTr("The sound will be played if you are recording an activity with distance measurement and there was no valid and accurate position available for more than three minutes. The application will still continue tracking and will also try find a new position. So, this is an informational warning sound.")
             }
 
             Audio {

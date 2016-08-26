@@ -30,6 +30,8 @@
 
 #define REPETITION_CLICKSOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/sound"
 #define FINISHING_SOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/finish"
+#define START_SOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/start"
+#define SIGNALLOST_SOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/signallost"
 
 #endif // GLOBALS
 

@@ -36,6 +36,8 @@ class Configuration : public QSettings
     Q_PROPERTY(int repetitionClickSound READ repetitionClickSound WRITE setRepetitionClickSound NOTIFY repetitionClickSoundChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(int finishingSound READ finishingSound WRITE setFinishingSound NOTIFY finishingSoundChanged)
+    Q_PROPERTY(int startSound READ startSound WRITE setStartSound NOTIFY startSoundChanged)
+    Q_PROPERTY(int signalLostSound READ signalLostSound WRITE setSignalLostSound NOTIFY signalLostSoundChanged)
     Q_ENUMS(QLocale::MeasurementSystem)
 public:
     explicit Configuration(QObject *parent = nullptr);
@@ -53,11 +55,19 @@ public:
     int finishingSound() const;
     void setFinishingSound(int nFinishingSound);
 
+    int startSound() const;
+    void setStartSound(int nStartSound);
+
+    int signalLostSound() const;
+    void setSignalLostSound(int nSignalLostSound);
+
 signals:
     void distanceMeasurementChanged(QLocale::MeasurementSystem distanceMeasurement);
     void repetitionClickSoundChanged(int repetitionClickSound);
     void languageChanged(const QString &language);
     void finishingSoundChanged(int finishingSound);
+    void startSoundChanged(int startSound);
+    void signalLostSoundChanged(int signalLostSound);
 
 private:
     Q_DISABLE_COPY(Configuration)
@@ -65,6 +75,8 @@ private:
     int m_repetitionClickSound;
     QString m_language;
     int m_finishingSound;
+    int m_startSound;
+    int m_signalLostSound;
 };
 
 }
