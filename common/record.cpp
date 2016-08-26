@@ -632,3 +632,13 @@ void Record::remove()
 {
     emit startRemoving();
 }
+
+
+
+/*!
+ * \brief Adds \c dist to current distance.
+ */
+void Record::addDistance(double dist)
+{
+    setDistance(distance() + dist);
+}

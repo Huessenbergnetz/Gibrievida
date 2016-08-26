@@ -86,6 +86,9 @@ public:
     Q_INVOKABLE void updateDistance(double nDistance);
     Q_INVOKABLE void remove();
 
+public slots:
+    void addDistance(double dist);
+
 
 signals:
     void databaseIdChanged(int databaseId);
