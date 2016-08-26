@@ -118,6 +118,8 @@ Dialog {
                             contentWidth: parent.width
                             clip: true
 
+                            VerticalScrollDecorator { flickable: list; page: actChoser }
+
                             delegate: ListItem {
                                 id: listItem
                                 width: ListView.view.width
