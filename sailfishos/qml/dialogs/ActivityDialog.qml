@@ -120,6 +120,8 @@ Dialog {
                             contentWidth: parent.width
                             clip: true
 
+                            VerticalScrollDecorator { flickable: list; page: catChoser }
+
                             delegate: ListItem {
                                 id: listItem
                                 width: parent.width
@@ -174,7 +176,7 @@ Dialog {
                 id: distanceSwitch
                 text: qsTr("Enable distance tracking")
                 checked: activity ? activity.useDistance : false
-                description: qsTr("There is currently no automatic distance tracking. Distance can be entered manually after finishing a record.")
+                description: qsTr("Distance tracking is done by GPS/GLONASS. The recording will start when the application has found a valid and accurate position.")
             }
 
             SectionHeader {
