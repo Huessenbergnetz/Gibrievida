@@ -171,6 +171,20 @@ Page {
             }
 
             IconSectionHeader {
+                icon: "image://theme/icon-s-alarm"
+                text: qsTr("Maximum speed")
+                visible: record && record.activity.useDistance
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: record ? helpers.toSpeedString(record.maxSpeed) : ""
+                visible: record && record.activity.useDistance
+            }
+
+            IconSectionHeader {
                 icon: "image://theme/icon-s-edit"
                 text: qsTr("Note")
                 visible: record ? record.note != "" : false
@@ -183,6 +197,69 @@ Page {
                 text: record ? record.note : ""
                 visible: record ? record.note != "" : false
             }
+
+            IconSectionHeader {
+                icon: "image://theme/icon-m-gps"
+                text: qsTr("Satellites in use/view")
+                visible: records.distanceMeasurement
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: records.distanceMeasurement ? records.distanceMeasurement.satellitesInUse + "/" + records.distanceMeasurement.satellitesInView : ""
+                visible: records.distanceMeasurement
+            }
+
+            IconSectionHeader {
+                icon: "image://theme/icon-s-timer"
+                text: qsTr("Last position update")
+                visible: records.distanceMeasurement
+            }
+
+            Text {
+                width: parent.width
+                color: records.distanceMeasurement && records.distanceMeasurement.lastUpdate >= 300 ? "#ff4d4d" : Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                visible: records.distanceMeasurement
+                text: records.distanceMeasurement ? records.distanceMeasurement.lastUpdate < 0 ? qsTr("Never")
+                                                  : records.distanceMeasurement.lastUpdate === 0
+                                                    ? qsTr("Now")
+                                                    : qsTr("%1 ago").arg(helpers.createDurationString(records.distanceMeasurement.lastUpdate))
+                                                    : ""
+            }
+
+            IconSectionHeader {
+                icon: "image://theme/icon-s-group-chat"
+                text: qsTr("Position accuracy")
+                visible: records.distanceMeasurement
+            }
+
+            Text {
+                width: parent.width
+                color: Theme.primaryColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: records.distanceMeasurement ? helpers.toDistanceString(records.distanceMeasurement.accuracy) : ""
+                visible: records.distanceMeasurement
+            }
+        }
+
+        Item {
+            id: satelliteConnection
+            anchors { left: parent.left; right: parent.right; top: singleRecordCol.bottom }
+            height: visible ? Theme.itemSizeHuge : 0
+            visible: records.distanceMeasurement && !records.distanceMeasurement.initialPositionAvailable
+
+            Label {
+                anchors.centerIn: parent
+                width: parent.width - (2 * Theme.horizontalPageMargin)
+                text: records.distanceMeasurement ? qsTr("Waiting for initial position") : ""
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeLarge
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         BackgroundItem {
@@ -190,7 +267,7 @@ Page {
             anchors { left: parent.left; right: parent.right; top: singleRecordCol.bottom }
             visible: record && record.active && record.activity.useRepeats
             contentHeight: increaseRepArea.height
-            height: Screen.height - singleRecordCol.height
+            height: Screen.height - singleRecordCol.height - satelliteConnection.height
 
             onClicked: records.increaseRepetitions()
 

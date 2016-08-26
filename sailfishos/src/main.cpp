@@ -22,6 +22,8 @@
 
 #ifdef QT_DEBUG
 #include <QtDebug>
+#include <QFile>
+#include <QTextStream>
 #endif
 
 #include <QtQml>
@@ -48,6 +50,45 @@
 #include "../common/configuration.h"
 #include "../common/languagemodel.h"
 #include "../common/backupmodel.h"
+#include "../common/distancemeasurement.h"
+
+
+#ifdef QT_DEBUG
+void gibrievidaMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QByteArray localMsg = msg.toLocal8Bit();
+
+    QByteArray time = QDateTime::currentDateTime().toString(QStringLiteral("HH:mm:ss:zzz")).toLocal8Bit();
+    QRegularExpression re(QStringLiteral("(\\w*)::"));
+    QByteArray className = re.match(QString(context.function)).captured(1).toLocal8Bit();
+    QString txt;
+
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(stderr, "%s: %s: Debug: %s\n", time.constData(), className.constData(), localMsg.constData());
+        txt = QStringLiteral("%1: %2: Debug: %3").arg(time, className, msg);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "%s: %s: Warning: %s\n", time.constData(), className.constData(), localMsg.constData());
+        txt = QStringLiteral("%1: %2: Warning: %3").arg(time, className, msg);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        txt = QStringLiteral("Critical: %1 (%2:%3, %4)").arg(msg, context.file, QString::number(context.line), context.function);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        txt = QStringLiteral("Fatal: %1 (%2:%3, %4)").arg(msg, context.file, QString::number(context.line), context.function);
+        abort();
+    }
+
+    QFile logFile(QDir::homePath().append(QStringLiteral("/gibrievida.log")));
+    logFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&logFile);
+    ts << txt << endl;
+}
+#endif
+
 
 int main(int argc, char *argv[])
 {
@@ -60,6 +101,11 @@ int main(int argc, char *argv[])
     app->setApplicationName(QStringLiteral(APP_NAME));
     app->setApplicationDisplayName(QStringLiteral("Gibrievida"));
     app->setApplicationVersion(QStringLiteral(VERSION_STRING));
+
+#ifdef QT_DEBUG
+    QFile::remove(QDir::homePath().append(QStringLiteral("/gibrievida.log")));
+    qInstallMessageHandler(gibrievidaMessageHandler);
+#endif
 
     Gibrievida::DBManager *dbm = new Gibrievida::DBManager();
     QObject::connect(dbm, &QThread::finished, dbm, &QObject::deleteLater);
@@ -89,11 +135,13 @@ int main(int argc, char *argv[])
     qmlRegisterType<Gibrievida::ActivitiesFilterModel>("harbour.gibrievida", 1, 0, "ActivitiesModel");
 
     qmlRegisterType<Gibrievida::Record>("harbour.gibrievida", 1, 0, "Record");
-    qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created"));
+    qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created."));
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
     qmlRegisterType<Gibrievida::LanguageModel>("harbour.gibrievida", 1, 0, "LanguageModel");
     qmlRegisterType<Gibrievida::BackupModel>("harbour.gibrievida", 1, 0, "BackupModel");
+
+    qmlRegisterUncreatableType<Gibrievida::DistanceMeasurement>("harbour.gibrievida", 1, 0, "DistanceMeasurement", QStringLiteral("DistanceMeasurement can not be created."));
 
 #ifndef CLAZY
     QQuickView *view = SailfishApp::createView();

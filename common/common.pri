@@ -20,7 +20,8 @@ HEADERS += \
     $$PWD/activity.h \
     $$PWD/record.h \
     $$PWD/languagemodel.h \
-    $$PWD/backupmodel.h
+    $$PWD/backupmodel.h \
+    $$PWD/distancemeasurement.h
 
 SOURCES += \
     $$PWD/dbmanager.cpp \
@@ -41,4 +42,5 @@ SOURCES += \
     $$PWD/activity.cpp \
     $$PWD/record.cpp \
     $$PWD/languagemodel.cpp \
-    $$PWD/backupmodel.cpp
+    $$PWD/backupmodel.cpp \
+    $$PWD/distancemeasurement.cpp

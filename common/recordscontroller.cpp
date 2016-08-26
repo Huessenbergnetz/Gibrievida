@@ -26,6 +26,7 @@
 #include "category.h"
 #include "configuration.h"
 #include "globals.h"
+#include "distancemeasurement.h"
 #include <QProximitySensor>
 #include <QProximityReading>
 #include <QAccelerometer>
@@ -56,6 +57,8 @@ RecordsController::RecordsController(Configuration *config, QObject *parent) : B
     m_orientationSensor = nullptr;
     m_finishOnCoveringTimer = nullptr;
     m_finishOnCovering = 0;
+    m_distanceMeasurement = nullptr;
+    m_soundPlayer = nullptr;
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
@@ -178,6 +181,8 @@ void RecordsController::cancel()
         setCurrent(nullptr);
         delete r;
     }
+
+    setDistanceMeasurement(nullptr);
 
     startStopTimer();
 }
@@ -350,12 +355,14 @@ void RecordsController::finish()
     startStopTimer();
 
     if (!this->isVisible() && m_config->finishingSound() > 0) {
-
-        m_finishSoundPlayer = new QMediaPlayer(this);
-        m_finishSoundPlayer->setMedia(QUrl::fromLocalFile(QStringLiteral(FINISHING_SOUND_BASE_URL).append(QString::number(m_config->finishingSound())).append(QStringLiteral(".oga"))));
-        m_finishSoundPlayer->setVolume(100);
-        connect(m_finishSoundPlayer, &QMediaPlayer::mediaStatusChanged, this, &RecordsController::finishSoundStatusChanged);
-        m_finishSoundPlayer->play();
+        playSound(QStringLiteral(FINISHING_SOUND_BASE_URL).append(QString::number(m_config->finishingSound())).append(QStringLiteral(".oga")));
+//        if (!m_soundPlayer) {
+//            m_soundPlayer = new QMediaPlayer(this);
+//            m_soundPlayer->setVolume(100);
+//            connect(m_soundPlayer, &QMediaPlayer::mediaStatusChanged, this, &RecordsController::soundPlayerStatusChanged);
+//        }
+//        m_soundPlayer->setMedia(QUrl::fromLocalFile(QStringLiteral(FINISHING_SOUND_BASE_URL).append(QString::number(m_config->finishingSound())).append(QStringLiteral(".oga"))));
+//        m_soundPlayer->play();
     }
 }
 
@@ -706,6 +713,10 @@ void RecordsController::updateDuration()
         return;
     }
 
+    if (m_current && m_distanceMeasurement && !m_distanceMeasurement->isInitialPositionAvailable()) {
+        return;
+    }
+
     m_current->setDuration(m_current->start().secsTo(QDateTime::currentDateTimeUtc()));
 
 }
@@ -755,6 +766,10 @@ void RecordsController::updateRepetitionClickSound(int clickSound)
  */
 void RecordsController::setSensor()
 {
+    if (!current()) {
+        return;
+    }
+
     if (m_finishOnCovering > 0 && !m_finishOnCoveringTimer) {
         m_finishOnCoveringTimer = new QTimer(this);
         m_finishOnCoveringTimer->setTimerType(Qt::VeryCoarseTimer);
@@ -762,11 +777,19 @@ void RecordsController::setSensor()
         connect(m_finishOnCoveringTimer, &QTimer::timeout, this, &RecordsController::finish);
     }
 
+    if (current()->activity()->useDistance()) {
+        DistanceMeasurement *dm = new DistanceMeasurement(5000, this);
+        connect(dm, &DistanceMeasurement::gotDistance, current(), &Record::addDistance);
+        connect(dm, &DistanceMeasurement::gotSpeed, this, &RecordsController::updateMaxSpeed);
+        connect(dm, &DistanceMeasurement::initialPositionAvailableChanged, this, &RecordsController::initialPositionAvailable);
+        setDistanceMeasurement(dm);
+    }
+
     if (current()->activity()->sensorType() == 1 || m_finishOnCovering > 0) {
         if (!m_proximitySensor) {
             m_proximitySensor = new QProximitySensor(this);
             m_proximitySensor->setAlwaysOn(true);
-            if (current()->activity()->sensorType()) {
+            if (current()->activity()->sensorType() == 1) {
                 connect(m_proximitySensor, &QSensor::readingChanged, this, &RecordsController::proximityUpdate);
             }
             if (m_finishOnCovering > 0) {
@@ -877,6 +900,8 @@ void RecordsController::removeSensor()
         delete m_finishOnCoveringTimer;
         m_finishOnCoveringTimer = nullptr;
     }
+
+    setDistanceMeasurement(nullptr);
 }
 
 /*!
@@ -895,13 +920,117 @@ void RecordsController::detectFinishOnCovering()
 
 
 /*!
- * \brief Removes the mediaplayer object after the finishing sound has been played.
+ * \brief Removes the mediaplayer object after the sound has been played.
  */
-void RecordsController::finishSoundStatusChanged(QMediaPlayer::MediaStatus status)
+void RecordsController::soundPlayerStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::EndOfMedia) {
-        m_finishSoundPlayer->stop();
-        m_finishSoundPlayer->deleteLater();
-        m_finishSoundPlayer = nullptr;
+        m_soundPlayer->stop();
+        m_soundPlayer->deleteLater();
+        m_soundPlayer = nullptr;
+    }
+}
+
+
+
+
+
+/*!
+ * \property RecordsController::distanceMeasurement
+ * \brief Pointer to a DistanceMeasurement object.
+ *
+ * \par Access functions:
+ * <TABLE><TR><TD>DistanceMeasurement*</TD><TD>distanceMeasurement() const</TD></TR><TR><TD>void</TD><TD>setDistanceMeasurement(DistanceMeasurement *nDistanceMeasurement)</TD></TR></TABLE>
+ * \par Notifier signal:
+ * <TABLE><TR><TD>void</TD><TD>distanceMeasurementChanged(DistanceMeasurement *distanceMeasurement)</TD></TR></TABLE>
+ */
+
+/*!
+ * \fn void RecordsController::distanceMeasurementChanged(DistanceMeasurement *distanceMeasurement)
+ * \brief Part of the \link RecordsController::distanceMeasurement distanceMeasurement \endlink property.
+ */
+
+/*!
+ * \brief Part of the \link RecordsController::distanceMeasurement distanceMeasurement \endlink property.
+ */
+DistanceMeasurement *RecordsController::distanceMeasurement() const { return m_distanceMeasurement; }
+
+/*!
+ * \brief Part of the \link RecordsController::distanceMeasurement distanceMeasurement \endlink property.
+ */
+void RecordsController::setDistanceMeasurement(DistanceMeasurement *nDistanceMeasurement)
+{
+    if (nDistanceMeasurement != m_distanceMeasurement) {
+
+        DistanceMeasurement *old = m_distanceMeasurement;
+
+        m_distanceMeasurement = nDistanceMeasurement;
+#ifdef QT_DEBUG
+        qDebug() << "Changed distanceMeasurement to" << m_distanceMeasurement;
+#endif
+        emit distanceMeasurementChanged(distanceMeasurement());
+
+        if (old) {
+            delete old;
+        }
+    }
+}
+
+
+/*!
+ * \brief Updates the maximum speed value of the current record.
+ */
+void RecordsController::updateMaxSpeed(qreal speed)
+{
+    if (current() && current()->isValid() && current()->maxSpeed() < speed) {
+        current()->setMaxSpeed(speed);
+    }
+}
+
+
+
+void RecordsController::initialPositionAvailable(bool available)
+{
+    if (available && current()) {
+        current()->setStart(QDateTime::currentDateTime());
+
+        if (m_config->startSound() > 0) {
+            playSound(QStringLiteral(START_SOUND_BASE_URL).append(QString::number(m_config->startSound())).append(QLatin1String(".oga")));
+        }
+
+        if (connectDb()) {
+            QSqlQuery q(m_db);
+
+            if (q.prepare(QStringLiteral("UPDATE records SET start = ? WHERE id = ?"))) {
+
+                q.addBindValue(current()->start().toTime_t());
+                q.addBindValue(current()->databaseId());
+
+                q.exec();
+            }
+
+        }
+    }
+}
+
+
+
+void RecordsController::playSound(const QString &soundFile)
+{
+    if (!m_soundPlayer) {
+        m_soundPlayer = new QMediaPlayer(this);
+        m_soundPlayer->setVolume(100);
+        connect(m_soundPlayer, &QMediaPlayer::mediaStatusChanged, this, &RecordsController::soundPlayerStatusChanged);
+    }
+    m_soundPlayer->setMedia(QUrl::fromLocalFile(soundFile));
+    m_soundPlayer->play();
+}
+
+
+
+void RecordsController::positionSignalLost()
+{
+    if (m_config->signalLostSound() > 0) {
+        playSound(QStringLiteral(SIGNALLOST_SOUND_BASE_URL).append(QString::number(m_config->signalLostSound())).append(QLatin1String(".oga")));
     }
 }

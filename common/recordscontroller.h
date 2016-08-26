@@ -38,6 +38,7 @@ class Record;
 class Activity;
 class Category;
 class Configuration;
+class DistanceMeasurement;
 
 /*!
  * \brief Controller class to manage Record objects.
@@ -52,6 +53,7 @@ class RecordsController : public BaseController
     Q_OBJECT
     Q_PROPERTY(Gibrievida::Record *current READ current WRITE setCurrent NOTIFY currentChanged)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
+    Q_PROPERTY(Gibrievida::DistanceMeasurement *distanceMeasurement READ distanceMeasurement NOTIFY distanceMeasurementChanged)
 public:
     explicit RecordsController(Configuration *config, QObject *parent = nullptr);
     ~RecordsController();
@@ -67,6 +69,7 @@ public:
 
     Record *current() const;
     bool isVisible() const;
+    DistanceMeasurement *distanceMeasurement() const;
 
     void setVisible(bool visible);
 
@@ -103,6 +106,7 @@ signals:
     void removedAll();
 
     void currentChanged(Record *current);
+    void distanceMeasurementChanged(DistanceMeasurement *distanceMeasurement);
 
 private slots:
     void updateDuration();
@@ -111,21 +115,27 @@ private slots:
     void detectUpDownTop();
     void detectUpDownFace();
     void detectFinishOnCovering();
-    void finishSoundStatusChanged(QMediaPlayer::MediaStatus status);
+    void soundPlayerStatusChanged(QMediaPlayer::MediaStatus status);
+    void updateMaxSpeed(qreal speed);
+    void initialPositionAvailable(bool available);
+    void positionSignalLost();
 
 private:
     Q_DISABLE_COPY(RecordsController)
 
     void setCurrent(Record *nCurrent);
+    void setDistanceMeasurement(DistanceMeasurement *nDistanceMeasurement);
 
     void init();
     void startStopTimer();
     void setSensor();
     void removeSensor();
+    void playSound(const QString &soundFile);
 
     Record *m_current;
     bool m_visible;
     int m_finishOnCovering;
+    DistanceMeasurement *m_distanceMeasurement;
 
     QTimer *m_timer;
     QTimer *m_sensorTimer;
@@ -137,7 +147,7 @@ private:
     QAccelerometer *m_accelSensor;
     QRotationSensor *m_rotationSensor;
     QOrientationSensor *m_orientationSensor;
-    QMediaPlayer *m_finishSoundPlayer;
+    QMediaPlayer *m_soundPlayer;
 };
 
 }
