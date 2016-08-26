@@ -142,14 +142,14 @@ Page {
                 text: qsTr("When deleting categories or activities, all connected data will be deleted, too.")
             }
 
-            SectionHeader { text: qsTr("Current limitations") }
+            SectionHeader { text: qsTr("Distance measurement") }
 
             Text {
                 font.pixelSize: Theme.fontSizeSmall
                 anchors { left: parent.left; leftMargin: Theme.horizontalPageMargin; right: parent.right; rightMargin: Theme.horizontalPageMargin }
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
-                text: qsTr("The distance has to be entered manually after finishing an activity. Automatic distance measurement via GPS is planned for a later version.")
+                text: qsTr("By default, GPS/GLONASS is used to track your distance if you record an activity with distance measurement activated. The recording will only start if the application can find a valid initial position.")
             }
         }
     }
