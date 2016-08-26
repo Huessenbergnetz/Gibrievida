@@ -15,7 +15,7 @@
 <context>
     <name>ActivityDialog</name>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="152"/>
         <source>%n activitie(s)</source>
         <translation>
             <numerusform>%n activity</numerusform>
@@ -37,7 +37,7 @@
 <context>
     <name>RecordDialog</name>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="172"/>
         <source>%n record(s)</source>
         <translation>
             <numerusform>%n record</numerusform>
@@ -45,7 +45,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="246"/>
         <source>%n second(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
