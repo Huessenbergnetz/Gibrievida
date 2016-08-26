@@ -48,5 +48,12 @@ AboutPage {
     bugUrl: "https://github.com/Buschtrommel/Gibrievida/issues"
     translateUrl: "https://www.transifex.com/buschtrommel/gibrievida"
 
+    licensesModel: ListModel {
+        ListElement { text: QT_TR_NOOP("<a href='https://freesound.org/people/juskiddink/sounds/74920/'>Start sound 1</a> by juskiddink is licensed under <a href='https://creativecommons.org/licenses/by/3.0/'>Creative Commons Attribution 3.0 Unported</a>.") }
+        ListElement { text: QT_TR_NOOP("<a href='https://freesound.org/people/Vendarro/sounds/329912/'>Start sound 2</a> by Vendarro is <a href='https://creativecommons.org/publicdomain/zero/1.0/'>public domain</a>.") }
+        ListElement { text: QT_TR_NOOP("<a href='https://freesound.org/people/tec%20studios/sounds/99625/'>Start sound 3</a> by tect studios is <a href='https://creativecommons.org/publicdomain/zero/1.0/'>public domain</a>.") }
+        ListElement { text: QT_TR_NOOP("<a href='https://freesound.org/people/Michel%20Hollicardo/sounds/52593/'>Start sound 4</a> by Michel Hollicardo is licensed under the <a href='https://creativecommons.org/licenses/sampling+/1.0/'>Sampling+ License</a>.") }
+        ListElement { text: QT_TR_NOOP("<a href='http://kde.org'>All other sounds</a> by KDE project are licensed under <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU General Public License 2.0</a>.") }
+    }
 }
 
