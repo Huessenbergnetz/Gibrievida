@@ -170,7 +170,7 @@ Page {
                             Text {
                                 id: distText
                                 anchors { left: distIcon.right; leftMargin: Theme.paddingSmall; top: parent.top }
-                                text: records.current ? records.current.distance : ""
+                                text: records.current ? helpers.toDistanceString(records.current.distance) : ""
                                 font.pixelSize: Theme.fontSizeExtraSmall
                                 color: curRec.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                             }
