@@ -29,6 +29,7 @@ Item {
     Image {
         id: icon
         anchors { left: parent.left }
+        width: Theme.iconSizeSmall; height: Theme.iconSizeSmall
     }
 
     Label {
