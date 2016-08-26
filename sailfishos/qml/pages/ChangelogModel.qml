@@ -28,6 +28,16 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
+        version: "0.3.0"
+        date: 1472207571000
+        entries: [
+            ListElement { type: 0; issue: "1"; description: "implement distance measurement via GPS/GLONASS" },
+            ListElement { type: 0; issue: ""; description: "Swedish translation by Åke Engelbrektson" },
+            ListElement { type: 1; issue: ""; description: "translation updates" }
+        ]
+    }
+
+    ListElement {
         version: "0.2.1"
         date: 1472040309000
         entries: [

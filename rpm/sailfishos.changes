@@ -8,6 +8,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Fri Aug 26 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.0-1
+- new: implement distance measurement via GPS/GLONASS
+- new: Swedish translation by Åke Engelbrektson
+- improved: translation updates
+
 * Wed Aug 24 2016 Matthias Fehring <kontakt@buschmann23.de> 0.2.1-1
 - fixed: subsequent entries are not deleted when deleting categories or activities
 
