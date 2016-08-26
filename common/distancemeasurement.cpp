@@ -123,6 +123,7 @@ void DistanceMeasurement::positionUpdated(const QGeoPositionInfo &update)
 #ifdef QT_DEBUG
         qDebug() << "Current distance to low";
 #endif
+        setLastUpdate(m_lastUsedPosition.timestamp().secsTo(QDateTime::currentDateTime()));
         return;
     }
 
@@ -138,6 +139,8 @@ void DistanceMeasurement::positionUpdated(const QGeoPositionInfo &update)
 #endif
 
     m_lastUsedPosition = update;
+
+    setLastUpdate(m_lastUsedPosition.timestamp().secsTo(QDateTime::currentDateTime()));
 
     m_signalLostTimer->start();
 
