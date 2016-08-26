@@ -30,6 +30,13 @@ ListModel {
     }
 
     ListElement {
+        name: "Åke Engelbrektson"
+        role: QT_TR_NOOP("Swedish translation")
+        section: QT_TR_NOOP("Thanks to")
+        website: "https://svenskasprakfiler.se"
+    }
+
+    ListElement {
         name: "Nathan Follens"
         role: QT_TR_NOOP("Dutch translation")
         section: QT_TR_NOOP("Thanks to")
