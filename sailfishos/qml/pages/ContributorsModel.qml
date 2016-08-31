@@ -37,9 +37,23 @@ ListModel {
     }
 
     ListElement {
+        name: "Francesco Vaccaro (ghostofasmile)"
+        role: QT_TR_NOOP("Italian translation")
+        section: QT_TR_NOOP("Thanks to")
+    }
+
+    ListElement {
         name: "Nathan Follens"
         role: QT_TR_NOOP("Dutch translation")
         section: QT_TR_NOOP("Thanks to")
+    }
+
+    ListElement {
+        name: "Stefano (palikao)"
+        role: QT_TR_NOOP("Italian translation")
+        section: QT_TR_NOOP("Thanks to")
+        image: "palikao.png"
+        tmo: "64054"
     }
 }
 
