@@ -8,6 +8,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Thu Sep  1 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.1-1
+- new: Italian translation by ghostofasmile and palikao
+- improved: translation updates
+
 * Fri Aug 26 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.0-1
 - new: implement distance measurement via GPS/GLONASS
 - new: Swedish translation by Åke Engelbrektson

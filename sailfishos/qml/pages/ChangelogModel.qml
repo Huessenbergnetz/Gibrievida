@@ -28,6 +28,15 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
+        version: "0.3.1"
+        date: 1472721541000
+        entries: [
+            ListElement { type: 0; issue: ""; description: "Italian translation by ghostofasmile and palikao" },
+            ListElement { type: 1; issue: ""; description: "translation updates" }
+        ]
+    }
+
+    ListElement {
         version: "0.3.0"
         date: 1472207571000
         entries: [
