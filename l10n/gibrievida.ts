@@ -529,13 +529,19 @@
 <context>
     <name>ContributorsDelegate</name>
     <message>
-        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="132"/>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="138"/>
         <source>Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="157"/>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="163"/>
         <source>Sina Weibo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="169"/>
+        <source>TMO</source>
+        <extracomment>abbreviation for talk.maemo.org</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -558,12 +564,20 @@
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="41"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="53"/>
+        <source>Italian translation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="47"/>
         <source>Dutch translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="35"/>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="42"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="48"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="54"/>
         <source>Thanks to</source>
         <translation type="unfinished"></translation>
     </message>

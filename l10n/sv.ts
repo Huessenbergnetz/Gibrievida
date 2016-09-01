@@ -24,27 +24,27 @@
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="52"/>
         <source>&lt;a href=&apos;https://freesound.org/people/juskiddink/sounds/74920/&apos;&gt;Start sound 1&lt;/a&gt; by juskiddink is licensed under &lt;a href=&apos;https://creativecommons.org/licenses/by/3.0/&apos;&gt;Creative Commons Attribution 3.0 Unported&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&apos;https://freesound.org/people/juskiddink/sounds/74920/&apos;&gt;Startljud 1&lt;/a&gt; av juskiddink är licensierat under &lt;a href=&apos;https://creativecommons.org/licenses/by/3.0/&apos;&gt;Creative Commons Attribution 3.0 Unported&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="53"/>
         <source>&lt;a href=&apos;https://freesound.org/people/Vendarro/sounds/329912/&apos;&gt;Start sound 2&lt;/a&gt; by Vendarro is &lt;a href=&apos;https://creativecommons.org/publicdomain/zero/1.0/&apos;&gt;public domain&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&apos;https://freesound.org/people/Vendarro/sounds/329912/&apos;&gt;Startljud 2&lt;/a&gt; av Vendarro är &lt;a href=&apos;https://creativecommons.org/publicdomain/zero/1.0/&apos;&gt;public domain&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="54"/>
         <source>&lt;a href=&apos;https://freesound.org/people/tec%20studios/sounds/99625/&apos;&gt;Start sound 3&lt;/a&gt; by tect studios is &lt;a href=&apos;https://creativecommons.org/publicdomain/zero/1.0/&apos;&gt;public domain&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&apos;https://freesound.org/people/tec%20studios/sounds/99625/&apos;&gt;Startljud 3&lt;/a&gt; av tect studios är &lt;a href=&apos;https://creativecommons.org/publicdomain/zero/1.0/&apos;&gt;public domain&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="55"/>
         <source>&lt;a href=&apos;https://freesound.org/people/Michel%20Hollicardo/sounds/52593/&apos;&gt;Start sound 4&lt;/a&gt; by Michel Hollicardo is licensed under the &lt;a href=&apos;https://creativecommons.org/licenses/sampling+/1.0/&apos;&gt;Sampling+ License&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&apos;https://freesound.org/people/Michel%20Hollicardo/sounds/52593/&apos;&gt;Startljud 4&lt;/a&gt; av Michel Hollicardo är licensierat under &lt;a href=&apos;https://creativecommons.org/licenses/sampling+/1.0/&apos;&gt;Sampling+ License&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/About.qml" line="56"/>
         <source>&lt;a href=&apos;http://kde.org&apos;&gt;All other sounds&lt;/a&gt; by KDE project are licensed under &lt;a href=&apos;http://www.gnu.org/licenses/gpl-2.0.html&apos;&gt;GNU General Public License 2.0&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&apos;http://kde.org&apos;&gt;Alla andra ljud&lt;/a&gt; av KDE-projektet är licensierade under &lt;a href=&apos;http://www.gnu.org/licenses/gpl-2.0.html&apos;&gt;GNU General Public License 2.0&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -192,103 +192,103 @@
         <translation>Sök</translation>
     </message>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="150"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="152"/>
         <source>%n activitie(s)</source>
         <translation><numerusform>%n aktivitet</numerusform><numerusform>%n aktiviteter</numerusform></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="170"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="172"/>
         <source>Distance tracking</source>
         <translation>Distansuppföljning</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="175"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="177"/>
         <source>Enable distance tracking</source>
         <translation>Aktivera distansuppföljning</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="222"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="224"/>
         <source>Repetitions sensor</source>
         <translation>Repetitionssensor</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="229"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="231"/>
         <source>Use sensor</source>
         <translation>Använd sensor</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="231"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="233"/>
         <source>No sensor</source>
         <translation>Ingen sensor</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="232"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="234"/>
         <source>Proximity</source>
         <translation>Närområde</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="233"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="235"/>
         <source>Up and down (upright)</source>
         <translation>Upp och ner (stående)</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="234"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="236"/>
         <source>Up and down (lying)</source>
         <translation>Upp och ner (liggande)</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="236"/>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="250"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="238"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="252"/>
         <source>The selected sensor will be used to increase repetitions.</source>
         <translation>Den valda sensorn kommer att användas för att räkna repetitioner.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="241"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="243"/>
         <source>Use the proximity sensor to increase repetitions by moving near to your device. Can be used for push-ups for example.</source>
         <translation>Använd närområdessensorn till att räkna repetitioner genom att röra dig nära din enhet. Kan t.ex användas vid armhävning.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="244"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="246"/>
         <source>Move up and down while holding your device upright (portrait mode) to increase repetitions. Can be used for squats for example.</source>
         <translation>Rör dig upp och ner medan du håller enheten upprätt (stående läge), för att räkna repetitioner. Kan t.ex. användas vid knäböjning.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="247"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="249"/>
         <source>Move up and down while holding your device with front or back to the ground to increase repetitions. Can be used for squats for example.</source>
         <translation>Rör dig upp och ner medan du håller enheten med fram- eller baksida ner mot marken, för att räkna repetitioner. Kan t.ex. användas vid knäböjningar.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="260"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="262"/>
         <source>Sensor delay in milliseconds</source>
         <translation>Sensorsfördröjning i millisekunder</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="275"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="277"/>
         <source>The sensor delay in milliseconds defines how often the sensor will be checked to increase the repetitions. You should choose a value that fits to the speed you repeat the activitiy. Maybe you have to test some values to find the perfect fitting delay. For example, try 1800 as a value for squats together with up and down sensor.</source>
         <translation>Sensorsfördröjning i millisekunder definierar hur ofta sensorn skall läsas av för att lägga till repetitioner. Du bör välja ett värde som passar den hastighet som du utför repetitionerna med. Du kanske måste testa några olika värden för att hitta den perfekta fördröjningen. Prova t.ex. 1800 för knäböjningar tillsammans med upp- och neravkänning.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="181"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="183"/>
         <source>Repetition</source>
         <translation>Repetition</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="177"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="179"/>
         <source>Distance tracking is done by GPS/GLONASS. The recording will start when the application has found a valid and accurate position.</source>
-        <translation type="unfinished"/>
+        <translation>Distansmätning görs av GPS/GLONASS. Loggningen startar när programmet har hittat en giltig korrekt position.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="188"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="190"/>
         <source>To activate repetitions for this activity, enter minimum and maximum repetitions greater than 0.</source>
         <translation>Ange minsta (högre än 0) och högsta antal repetitioner, för att aktivera repetitionsuppföljning i den här aktiviteten.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="200"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="202"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="211"/>
+        <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="213"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
@@ -521,14 +521,20 @@
 <context>
     <name>ContributorsDelegate</name>
     <message>
-        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="132"/>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="138"/>
         <source>Website</source>
         <translation>Webbsida</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="157"/>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="163"/>
         <source>Sina Weibo</source>
         <translation>Sina Weibo</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/btcomponents/ContributorsDelegate.qml" line="169"/>
+        <source>TMO</source>
+        <extracomment>abbreviation for talk.maemo.org</extracomment>
+        <translation>TMO</translation>
     </message>
 </context>
 <context>
@@ -546,16 +552,24 @@
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="34"/>
         <source>Swedish translation</source>
-        <translation type="unfinished"/>
+        <translation>Svensk översättning</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="41"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="53"/>
+        <source>Italian translation</source>
+        <translation>Italiensk översättning</translation>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="47"/>
         <source>Dutch translation</source>
         <translation>Nederländsk översättning</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="35"/>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="42"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="48"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="54"/>
         <source>Thanks to</source>
         <translation>Tack till</translation>
     </message>
@@ -793,12 +807,12 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="145"/>
         <source>Distance measurement</source>
-        <translation type="unfinished"/>
+        <translation>Distansmätning</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="152"/>
         <source>By default, GPS/GLONASS is used to track your distance if you record an activity with distance measurement activated. The recording will only start if the application can find a valid initial position.</source>
-        <translation type="unfinished"/>
+        <translation>Som standard används GPS/GLONASS för att mäta distanser om du loggar en aktivitet med distansmätning aktiverad. Loggningen startar endast om appen kan  hitta en giltig startposition.</translation>
     </message>
 </context>
 <context>
@@ -1053,7 +1067,7 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="175"/>
         <source>Maximum speed</source>
-        <translation type="unfinished"/>
+        <translation>Maximal hastighet</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="189"/>
@@ -1063,37 +1077,37 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="203"/>
         <source>Satellites in use/view</source>
-        <translation type="unfinished"/>
+        <translation>Satelliter som används/syns</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="217"/>
         <source>Last position update</source>
-        <translation type="unfinished"/>
+        <translation>Senaste positionsuppdatering</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="226"/>
         <source>Never</source>
-        <translation type="unfinished"/>
+        <translation>Aldrig</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="228"/>
         <source>Now</source>
-        <translation type="unfinished"/>
+        <translation>Nu</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="229"/>
         <source>%1 ago</source>
-        <translation type="unfinished"/>
+        <translation>%1 sedan</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="235"/>
         <source>Position accuracy</source>
-        <translation type="unfinished"/>
+        <translation>Positionsnoggrannhet</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="257"/>
         <source>Waiting for initial position</source>
-        <translation type="unfinished"/>
+        <translation>Väntar på startposition</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="278"/>
@@ -1130,63 +1144,63 @@ remorse popup text</extracomment>
         <translation>Sök</translation>
     </message>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="170"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="172"/>
         <source>%n record(s)</source>
         <translation><numerusform>%n loggning</numerusform><numerusform>%n loggningar</numerusform></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="202"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="204"/>
         <source>Start time</source>
         <translation>Starttid</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="210"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="212"/>
         <source>Duration</source>
         <translation>Varaktighet</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="218"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="220"/>
         <source>Repetitions</source>
         <translation>Repetitioner</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="230"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="232"/>
         <source>Distance in %1</source>
         <translation>Distans i %1</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="230"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="232"/>
         <source>metres</source>
         <translation>meter</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="230"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="232"/>
         <source>yards</source>
         <translation>yards</translation>
     </message>
     <message numerus="yes">
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="246"/>
         <source>%n second(s)</source>
         <translation><numerusform>%n sekund</numerusform><numerusform>%n sekunder</numerusform></translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="244"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="246"/>
         <source>Disabled</source>
         <translation>Inaktiverad</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="245"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="247"/>
         <source>Finish on covering</source>
         <translation>Avsluta vid övertäckning</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="255"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="257"/>
         <source>You can finish this recording by covering the proximity sensor of your device. Lay it on it&apos;s front or put it in your pocket to finish a recording.</source>
         <translation>Du kan avsluta denna loggning genom att täcka över närområdessensorn på din enhet. Lägg den med fronten neråt, eller i din ficka för att avsluta loggningen.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="262"/>
-        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="263"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="264"/>
+        <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="265"/>
         <source>Note</source>
         <translation>Notis</translation>
     </message>
@@ -1296,16 +1310,16 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="73"/>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="95"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="116"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="136"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="117"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="139"/>
         <source>Disabled</source>
         <translation>Inaktiverat</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="77"/>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="99"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="120"/>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="140"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="121"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="143"/>
         <source>Sound %1</source>
         <translation>Ljud %1</translation>
     </message>
@@ -1325,32 +1339,32 @@ remorse popup text</extracomment>
         <translation>Ljudet spelas upp när en loggning avslutas med hjälp av en sensor, som närområdessensorn, och appen inte är synlig för användaren.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="114"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="115"/>
         <source>Start sound</source>
-        <translation type="unfinished"/>
+        <translation>Startljud</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="128"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="130"/>
         <source>The start sound will be played when a valid initial position has been found via GPS/GLONASS to start a record with distance measurement.</source>
-        <translation type="unfinished"/>
+        <translation>Startljudet spelas upp när en giltig startposition har hittats via GPS/GLONASS, för att starta en loggning med distansmätning.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="134"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="137"/>
         <source>Signal lost sound</source>
-        <translation type="unfinished"/>
+        <translation>Ljud för signalavbrott</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="148"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="152"/>
         <source>The sound will be played if you are recording an activity with distance measurement and there was no valid and accurate position available for more than three minutes. The application will still continue tracking and will also try find a new position. So, this is an informational warning sound.</source>
-        <translation type="unfinished"/>
+        <translation>Ljudet spelas upp om du loggar en aktivitet med distansmätning och det inte finns någon giltig och korrekt positionsangivelse tillgänglig i mer än tre minuter. Appen fortsätter ändå att mäta och försöker också hitta en ny positionsangivelse, så detta är en informativ varningssignal.</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="157"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="161"/>
         <source>Language</source>
         <translation>Språk</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/Settings.qml" line="158"/>
+        <location filename="../sailfishos/qml/pages/Settings.qml" line="162"/>
         <source>To change the language, you have to restart the application.</source>
         <translation>Du måste starta om appen, för att byta språk.</translation>
     </message>
