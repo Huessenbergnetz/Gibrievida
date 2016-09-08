@@ -199,12 +199,12 @@
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="172"/>
         <source>Distance tracking</source>
-        <translation>Tracciamento distanza</translation>
+        <translation>Misurazione distanza</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="177"/>
         <source>Enable distance tracking</source>
-        <translation>Attiva tracciamento distanza</translation>
+        <translation>Attiva misurazione distanza</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="224"/>
@@ -265,7 +265,7 @@
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="277"/>
         <source>The sensor delay in milliseconds defines how often the sensor will be checked to increase the repetitions. You should choose a value that fits to the speed you repeat the activitiy. Maybe you have to test some values to find the perfect fitting delay. For example, try 1800 as a value for squats together with up and down sensor.</source>
-        <translation>Il ritardo del sensore definisce ogni quanti millisecondi esso verrà controllato per aumentare le ripetizioni. Dovresti scegliere un valore simile alla velocità con la quale effettui l&apos;attività. Potresti testare alcuni valori per trovare il migliore, per esempio 1800 per gli squat con rilevamento verticale.</translation>
+        <translation>Il ritardo del sensore definisce ogni quanti millisecondi esso verrà controllato per aumentare le ripetizioni. Dovresti scegliere un valore simile alla velocità con la quale effettui l&apos;attività. Potresti testare alcuni valori per trovare il migliore, per esempio 1800 per gli squat con sensore &apos;Su e giù (verticale)&apos;.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="183"/>
@@ -275,12 +275,12 @@
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="179"/>
         <source>Distance tracking is done by GPS/GLONASS. The recording will start when the application has found a valid and accurate position.</source>
-        <translation>Il tracciamento della distanza sfrutta il GPS/GLONASS. La registrazione inizierà all&apos;aggancio di un segnale valido e accurato.</translation>
+        <translation>La misurazione della distanza sfrutta il GPS/GLONASS. La registrazione inizierà all&apos;aggancio di un segnale valido.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="190"/>
         <source>To activate repetitions for this activity, enter minimum and maximum repetitions greater than 0.</source>
-        <translation>Per attivare le ripetizioni per questa attività, inserisci il minimo e il massimo di ripetizioni (maggiore di 0).</translation>
+        <translation>Per attivare le ripetizioni per questa attività, inserisci il numero minimo e il massimo di ripetizioni (maggiore di 0).</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="202"/>
@@ -782,7 +782,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="116"/>
         <source>Gibrievida wants to help you to record your sportive or daily activities (or whatever you want to use it for). It is based on categories, activities and records. Categories group activities by topic, like sport. An activity is like a template for a record. The record itself is a set of data composed of an activity together with starting and end time, duration and optional repetitions, distance or notes.</source>
-        <translation>Gibrievida ti assiste nelle tue attività sportive e quotidiane (o qualsiasi altra cosa tu voglia). Si basa su categorie, attività e registrazioni. Le categorie raggruppano le attività per argomento, ad esempio sport. Un&apos;attività è un modello per una registrazione. Una registrazione è un insieme di dati di un&apos;attività, insieme all&apos;ora di inizio e fine, la durata e opzionalmente ripetizioni, distanza e note.</translation>
+        <translation>Gibrievida ti assiste nelle tue attività sportive e quotidiane (o qualsiasi altra cosa tu voglia). Si basa su categorie, attività e registrazioni. Le categorie raggruppano le attività per argomento, ad esempio sport. Un&apos;attività è un modello per una registrazione. Una registrazione è un insieme di dati di un&apos;attività, comprensivo di ora di inizio e fine, durata e opzionalmente ripetizioni, distanza e note.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="119"/>
@@ -797,7 +797,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="134"/>
         <source>If you track an activity that has neither repetitions nor distance measurement, you can close the application completely while doing your stuff. The started activity will be stored to the database and will be loaded when you start the application again.</source>
-        <translation>Se tieni traccia di un&apos;attività che non misura nè ripetizioni nè distanza, puoi chiudere l&apos;applicazione completamente mentre fai altro. L&apos;attività iniziata sarà salvata nel database e sarà caricata al riavvio dell&apos;applicazione. </translation>
+        <translation>Se tieni traccia di un&apos;attività che non misura né ripetizioni né distanza, puoi chiudere l&apos;app completamente mentre fai altro. L&apos;attività in corso sarà ricaricata al riavvio dell&apos;app. </translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="142"/>
@@ -812,7 +812,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Help.qml" line="152"/>
         <source>By default, GPS/GLONASS is used to track your distance if you record an activity with distance measurement activated. The recording will only start if the application can find a valid initial position.</source>
-        <translation>Di default, il GPS/GLONASS è usato per tracciare la distanza se registri un&apos;attività con la misurazione della distanza attivata. La registrazione inizierà solo a segnale agganciato.</translation>
+        <translation>Il GPS/GLONASS è usato per misurare la distanza se registri un&apos;attività con la misurazione della distanza attivata. La registrazione inizierà solo a segnale agganciato.</translation>
     </message>
 </context>
 <context>
@@ -1107,7 +1107,7 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="257"/>
         <source>Waiting for initial position</source>
-        <translation>Verifica posizione iniziale</translation>
+        <translation>Ricerca segnale valido</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Record.qml" line="278"/>
@@ -1356,7 +1356,7 @@ remorse popup text</extracomment>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="152"/>
         <source>The sound will be played if you are recording an activity with distance measurement and there was no valid and accurate position available for more than three minutes. The application will still continue tracking and will also try find a new position. So, this is an informational warning sound.</source>
-        <translation>Il suono verrà riprodotto se durante un&apos;attività con misurazione della distanza la posizione non viene rilevata per più di tre minuti. L&apos;applicazione continuerà ancora il tracciamento e troverà anche una nuova posizione, quindi questo è solo un suono di avviso.</translation>
+        <translation>Il suono verrà riprodotto se durante un&apos;attività con misurazione della distanza la posizione non viene rilevata per più di tre minuti. L&apos;app continuerà ancora il tracciamento e troverà anche una nuova posizione, quindi questo è solo un suono di avviso.</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Settings.qml" line="161"/>
