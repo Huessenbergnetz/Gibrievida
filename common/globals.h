@@ -21,11 +21,11 @@
 
 #define APP_NAME "harbour-gibrievida"
 
-#define VERSION_STRING "0.3.1"
-#define VERSION 31
+#define VERSION_STRING "0.3.2"
+#define VERSION 32
 #define VER_MAJ 0
 #define VER_MIN 3
-#define VER_PAT 1
+#define VER_PAT 2
 #define DB_SCHEMA_VERSION 2
 
 #define REPETITION_CLICKSOUND_BASE_URL "/usr/share/harbour-gibrievida/sounds/sound"

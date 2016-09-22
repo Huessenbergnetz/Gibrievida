@@ -13,7 +13,7 @@ Name:       harbour-gibrievida
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Gibrievida
-Version:    0.3.1
+Version:    0.3.2
 Release:    1
 Group:      Applications/Databases
 License:    GPL-3.0
@@ -32,7 +32,7 @@ BuildRequires:  pkgconfig(Qt5Positioning)
 BuildRequires:  desktop-file-utils
 
 %description
-Gibrievida helps you tracking your sportiv or daily activities.
+Gibrievida helps you tracking your sportive or daily activities.
 
 
 %prep
