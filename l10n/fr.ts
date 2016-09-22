@@ -562,20 +562,26 @@ L&apos;enregistrement débutera quand l&apos;application aura trouvé une positi
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="41"/>
-        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="53"/>
+        <source>French translation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="49"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="61"/>
         <source>Italian translation</source>
         <translation>Traduction Italienne</translation>
     </message>
     <message>
-        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="47"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="55"/>
         <source>Dutch translation</source>
         <translation>Traduction Danoise</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="35"/>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="42"/>
-        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="48"/>
-        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="54"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="50"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="56"/>
+        <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="62"/>
         <source>Thanks to</source>
         <translation>Remerciements</translation>
     </message>
@@ -748,7 +754,7 @@ s is the abbreviation for second. Used in duration time display.</extracomment>
 <context>
     <name>Gibrievida::LanguageModel</name>
     <message>
-        <location filename="../common/languagemodel.cpp" line="108"/>
+        <location filename="../common/languagemodel.cpp" line="109"/>
         <source>Default</source>
         <translation>Défaut</translation>
     </message>
