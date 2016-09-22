@@ -37,6 +37,14 @@ ListModel {
     }
 
     ListElement {
+        name: "Jean Clovis"
+        role: QT_TR_NOOP("French translation")
+        section: QT_TR_NOOP("Thanks to")
+        image: "jean-clovis.png"
+        github: "jean-clovis"
+    }
+
+    ListElement {
         name: "Francesco Vaccaro (ghostofasmile)"
         role: QT_TR_NOOP("Italian translation")
         section: QT_TR_NOOP("Thanks to")
