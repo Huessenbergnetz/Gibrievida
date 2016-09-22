@@ -129,7 +129,7 @@ void RecordsModel::update()
         return;
     }
 
-    QString queryString("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor, a.sensorDelay FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
+    QString queryString = QStringLiteral("SELECT r.id, r.activity, a.name, a.category, c.name, c.color, r.start, r.end, r.duration, r.repetitions, r.distance, a.minRepeats, a.maxRepeats, a.distance, r.note, r.tpr, r.maxSpeed, r.avgSpeed, a.sensor, a.sensorDelay FROM records r JOIN activities a ON a.id = r.activity JOIN categories c ON c.id = a.category WHERE r.end > 0");
 
     if (m_categoryId > 0) {
         queryString.append(QLatin1String(" AND a.category = ?"));

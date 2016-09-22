@@ -29,7 +29,7 @@ using namespace Gibrievida;
  * A pointer to a Configuration object has to be set in order to calculate values based
  * on the currently set measurement system.
  */
-Helpers::Helpers(Configuration *config, QLocale locale, QObject *parent) : QObject(parent), m_c(config), m_l(locale)
+Helpers::Helpers(Configuration *config, const QLocale &locale, QObject *parent) : QObject(parent), m_c(config), m_l(locale)
 {
 
 }

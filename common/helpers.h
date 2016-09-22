@@ -33,7 +33,7 @@ class Helpers : public QObject
 {
     Q_OBJECT
 public:
-    explicit Helpers(Configuration *config, QLocale locale = QLocale(), QObject *parent = nullptr);
+    explicit Helpers(Configuration *config, const QLocale &locale = QLocale(), QObject *parent = nullptr);
     ~Helpers();
 
     Q_INVOKABLE QString createDurationString(uint duration);

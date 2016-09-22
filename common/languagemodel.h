@@ -69,7 +69,7 @@ private:
      */
     void init();
 
-    QStringList m_supportedLangs;
+    const QStringList m_supportedLangs;
 };
 
 }

@@ -165,7 +165,7 @@ bool CategoriesController::removeAll()
  */
 QString CategoriesController::createRandomColor()
 {
-    QString randColor(QLatin1String("#"));
+    QString randColor = QStringLiteral("#");
 
     for (int i = 0; i < 6; ++i) {
         int randNumber = qrand() % 16;

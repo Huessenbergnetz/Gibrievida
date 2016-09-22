@@ -17,7 +17,7 @@ Version:    0.3.1
 Release:    1
 Group:      Applications/Databases
 License:    GPL-3.0
-URL:        http://gibrievida.buschmann23.de
+URL:        http://www.buschmann23.de
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-gibrievida.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9

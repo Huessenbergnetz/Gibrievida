@@ -4,9 +4,10 @@
 
 using namespace Gibrievida;
 
-LanguageModel::LanguageModel(QObject *parent) : QAbstractListModel(parent)
+LanguageModel::LanguageModel(QObject *parent) :
+    QAbstractListModel(parent), m_supportedLangs({QStringLiteral("de"), QStringLiteral("en"), QStringLiteral("fr"), QStringLiteral("it"), QStringLiteral("nl"), QStringLiteral("sv")})
 {
-    m_supportedLangs = QStringList({QStringLiteral("de"), QStringLiteral("en"), QStringLiteral("fr"), QStringLiteral("it"), QStringLiteral("nl"), QStringLiteral("sv")});
+//    m_supportedLangs = QStringList({QStringLiteral("de"), QStringLiteral("en"), QStringLiteral("fr"), QStringLiteral("it"), QStringLiteral("nl"), QStringLiteral("sv")});
     init();
 }
 
