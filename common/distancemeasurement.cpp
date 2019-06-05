@@ -3,7 +3,7 @@
 #include <QGeoSatelliteInfo>
 #include <QGeoPositionInfoSource>
 #include <QGeoPositionInfo>
-#include <math.h>
+#include <cmath>
 #include <QTimer>
 
 #ifdef QT_DEBUG
@@ -86,7 +86,7 @@ void DistanceMeasurement::positionUpdated(const QGeoPositionInfo &update)
 
     qreal accuracy = update.attribute(QGeoPositionInfo::HorizontalAccuracy);
 
-    if (isnan(accuracy)) {
+    if (std::isnan(accuracy)) {
         return;
     }
 
