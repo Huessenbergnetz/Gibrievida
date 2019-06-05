@@ -34,7 +34,8 @@ include(../common/common.pri)
 
 SOURCES += \
     src/main.cpp \
-    src/licensesmodel.cpp
+    src/licensesmodel.cpp \
+    src/languagesmodel.cpp
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml
@@ -69,4 +70,5 @@ DISTFILES += \
 include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)
 
 HEADERS += \
-    src/licensesmodel.h
+    src/licensesmodel.h \
+    src/languagesmodel.h

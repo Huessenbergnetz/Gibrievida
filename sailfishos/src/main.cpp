@@ -38,6 +38,7 @@
 #include "hbnsc.h"
 #include "hbnsciconprovider.h"
 #include "licensesmodel.h"
+#include "languagesmodel.h"
 
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
@@ -52,7 +53,6 @@
 #include "../common/recordsmodel.h"
 #include "../common/helpers.h"
 #include "../common/configuration.h"
-#include "../common/languagemodel.h"
 #include "../common/backupmodel.h"
 #include "../common/distancemeasurement.h"
 
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Gibrievida::RecordsController>("harbour.gibrievida", 1, 0, "RecordsController", QStringLiteral("RecordsController can not be created."));
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
-    qmlRegisterType<Gibrievida::LanguageModel>("harbour.gibrievida", 1, 0, "LanguageModel");
+    qmlRegisterType<Gibrievida::LanguagesModel>("harbour.gibrievida", 1, 0, "LanguageModel");
     qmlRegisterType<Gibrievida::LicensesModel>("harbour.gibrievida", 1, 0, "LicensesModel");
     qmlRegisterType<Gibrievida::BackupModel>("harbour.gibrievida", 1, 0, "BackupModel");
 
