@@ -557,7 +557,7 @@
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="41"/>
         <source>French translation</source>
-        <translation type="unfinished"/>
+        <translation>Fransk översättning</translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/ContributorsModel.qml" line="49"/>

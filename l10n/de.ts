@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" sourcelanguage="en" version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -132,10 +130,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Activities.qml" line="135"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Activities.qml" line="163"/>
@@ -199,10 +194,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="152"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/ActivityDialog.qml" line="172"/>
@@ -449,10 +441,7 @@
     <message numerus="yes">
         <location filename="../sailfishos/qml/pages/Categories.qml" line="118"/>
         <source>%n activitie(s)</source>
-        <translation>
-            <numerusform>%n Aktivität</numerusform>
-            <numerusform>%n Aktivitäten</numerusform>
-        </translation>
+        <translation><numerusform>%n Aktivität</numerusform><numerusform>%n Aktivitäten</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/pages/Categories.qml" line="128"/>
@@ -1163,10 +1152,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="172"/>
         <source>%n record(s)</source>
-        <translation>
-            <numerusform>%n Aufzeichnung</numerusform>
-            <numerusform>%n Aufzeichnungen</numerusform>
-        </translation>
+        <translation><numerusform>%n Aufzeichnung</numerusform><numerusform>%n Aufzeichnungen</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="204"/>
@@ -1201,10 +1187,7 @@ remorse popup text</extracomment>
     <message numerus="yes">
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="246"/>
         <source>%n second(s)</source>
-        <translation>
-            <numerusform>%n Sekunde</numerusform>
-            <numerusform>%n Sekunden</numerusform>
-        </translation>
+        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunden</numerusform></translation>
     </message>
     <message>
         <location filename="../sailfishos/qml/dialogs/RecordDialog.qml" line="246"/>
