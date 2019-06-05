@@ -23,10 +23,12 @@ using namespace Gibrievida;
 
 LanguagesModel::LanguagesModel(QObject *parent) :
     Hbnsc::LanguageModel({QStringLiteral("de"),
-                         QStringLiteral("en"),
+                         QStringLiteral("en_GB"),
+                         QStringLiteral("en_US"),
                          QStringLiteral("fr"),
                          QStringLiteral("it"),
                          QStringLiteral("nl"),
+                         QStringLiteral("nl_BE"),
                          QStringLiteral("sv")}, parent)
 {
 
