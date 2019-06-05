@@ -35,6 +35,9 @@
 #include <sailfishapp.h>
 #endif
 
+#include "hbnsc.h"
+#include "hbnsciconprovider.h"
+
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
 #include "../common/category.h"
@@ -93,9 +96,9 @@ void gibrievidaMessageHandler(QtMsgType type, const QMessageLogContext &context,
 int main(int argc, char *argv[])
 {
 #ifndef CLAZY
-    QGuiApplication* app = SailfishApp::application(argc, argv);
+    std::unique_ptr<QGuiApplication> app(SailfishApp::application(argc, argv));
 #else
-    QGuiApplication* app = new QGuiApplication(argc, argv);
+    auto app = std::make_unique<QGuiApplication>(argc, argv);
 #endif
 
     app->setApplicationName(QStringLiteral(APP_NAME));
@@ -112,18 +115,20 @@ int main(int argc, char *argv[])
     dbm->start(QThread::LowPriority);
 
     Gibrievida::Configuration config;
-
-
-    QString lang = config.language();
-    if (lang == QLatin1String("")) {
-        lang = QLocale::system().name();
+    if (!config.language().isEmpty()) {
+        QLocale::setDefault(QLocale(config.language()));
     }
+
 #ifndef CLAZY
-    QTranslator *translator = new QTranslator;
-    if (translator->load(lang, SailfishApp::pathTo(QStringLiteral("l10n")).toString(QUrl::RemoveScheme))) {
-        app->installTranslator(translator);
+    {
+        QLocale loc;
+        auto translator = new QTranslator(app.get());
+        if (translator->load(loc.name(), SailfishApp::pathTo(QStringLiteral("l10n")).toString(QUrl::RemoveScheme))) {
+            app->installTranslator(translator);
+        }
     }
 #endif
+    Hbnsc::loadTranslations();
 
 
     qmlRegisterType<Gibrievida::Category>("harbour.gibrievida", 1, 0, "Category");
@@ -144,15 +149,17 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Gibrievida::DistanceMeasurement>("harbour.gibrievida", 1, 0, "DistanceMeasurement", QStringLiteral("DistanceMeasurement can not be created."));
 
 #ifndef CLAZY
-    QQuickView *view = SailfishApp::createView();
+    std::unique_ptr<QQuickView> view(SailfishApp::createView());
 #else
-    QQuickView *view = new QQuickView();
+    auto view = std::make_unique<QQuickView>();
 #endif
+
+    auto hbnscIconProv = Hbnsc::HbnscIconProvider::createProvider(view->engine());
 
     Gibrievida::CategoriesController catsController;
     Gibrievida::ActivitiesController actsController;
     Gibrievida::RecordsController recsController(&config);
-    Gibrievida::Helpers *helpers = new Gibrievida::Helpers(&config);
+    Gibrievida::Helpers *helpers = new Gibrievida::Helpers(&config, QLocale(), app.get());
 
     view->rootContext()->setContextProperty(QStringLiteral("categories"), &catsController);
     view->rootContext()->setContextProperty(QStringLiteral("activities"), &actsController);
@@ -161,7 +168,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("config"), &config);
 
 #ifndef CLAZY
-    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-gibrievida.qml")));
+    view->setSource(SailfishApp::pathToMainQml());
 #endif
 
     view->show();

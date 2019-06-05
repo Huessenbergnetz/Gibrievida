@@ -14,6 +14,7 @@ TARGET = harbour-gibrievida
 
 CONFIG += sailfishapp
 CONFIG += c++11
+CONFIG += c++14
 
 QT += sql multimedia sensors positioning
 
@@ -57,11 +58,6 @@ DISTFILES += \
     qml/common/DateTimeButton.qml \
     qml/common/DurationButton.qml \
     qml/pages/Settings.qml \
-    qml/btcomponents/AboutPage.qml \
-    qml/btcomponents/Changelog.qml \
-    qml/btcomponents/ChangelogDelegate.qml \
-    qml/btcomponents/Contributors.qml \
-    qml/btcomponents/ContributorsDelegate.qml \
     qml/pages/About.qml \
     qml/pages/ContributorsModel.qml \
     qml/pages/ChangelogModel.qml \
@@ -69,3 +65,4 @@ DISTFILES += \
     qml/pages/Help.qml \
     qml/pages/Backups.qml
 
+include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)

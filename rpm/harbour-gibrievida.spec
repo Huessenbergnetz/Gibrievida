@@ -29,6 +29,7 @@ BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5Sensors)
 BuildRequires:  pkgconfig(Qt5Positioning)
+BuildRequires:  pkgconfig(sailfishsilica)
 BuildRequires:  desktop-file-utils
 
 %description
