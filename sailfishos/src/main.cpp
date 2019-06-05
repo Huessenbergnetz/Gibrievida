@@ -37,6 +37,7 @@
 
 #include "hbnsc.h"
 #include "hbnsciconprovider.h"
+#include "licensesmodel.h"
 
 #include "../common/globals.h"
 #include "../common/dbmanager.h"
@@ -144,6 +145,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Gibrievida::RecordsModel>("harbour.gibrievida", 1, 0, "RecordsModel");
 
     qmlRegisterType<Gibrievida::LanguageModel>("harbour.gibrievida", 1, 0, "LanguageModel");
+    qmlRegisterType<Gibrievida::LicensesModel>("harbour.gibrievida", 1, 0, "LicensesModel");
     qmlRegisterType<Gibrievida::BackupModel>("harbour.gibrievida", 1, 0, "BackupModel");
 
     qmlRegisterUncreatableType<Gibrievida::DistanceMeasurement>("harbour.gibrievida", 1, 0, "DistanceMeasurement", QStringLiteral("DistanceMeasurement can not be created."));

@@ -33,7 +33,8 @@ INSTALLS += langfiles
 include(../common/common.pri)
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/licensesmodel.cpp
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml
@@ -66,3 +67,6 @@ DISTFILES += \
     qml/pages/Backups.qml
 
 include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)
+
+HEADERS += \
+    src/licensesmodel.h
