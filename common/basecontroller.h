@@ -1,6 +1,7 @@
 /*
     Gibrievida - An activity tracker
-    Copyright (C) 2016 Buschtrommel/Matthias Fehring http://gibrievida.buschmann23.de
+    Copyright (C) 2016-2019 Hüssenbergnetz/Matthias Fehring
+    https://github.com/Huessenbergnetz/Gibrievida
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
