@@ -1,11 +1,11 @@
 TEMPLATE = subdirs
 
 OTHER_FILES += \
-    rpm/sailfishos.spec
+    rpm/harbour-gibrievida.spec
 
 DISTFILES += \
     rpm/harbour-gibrievida.yaml \
-    rpm/sailfishos.changes
+    rpm/harbour-gibrievida.changes
 
 SUBDIRS += \
     sailfishos

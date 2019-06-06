@@ -8,23 +8,23 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Thu Sep 22 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.2-1
+* Thu Sep 22 2016 Matthias Fehring <> 0.3.2-1
 - new: French translation by Jean Clovis
 - improved: translation updates
 
-* Thu Sep  1 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.1-1
+* Thu Sep  1 2016 Matthias Fehring <> 0.3.1-1
 - new: Italian translation by ghostofasmile and palikao
 - improved: translation updates
 
-* Fri Aug 26 2016 Matthias Fehring <kontakt@buschmann23.de> 0.3.0-1
+* Fri Aug 26 2016 Matthias Fehring <> 0.3.0-1
 - new: implement distance measurement via GPS/GLONASS
 - new: Swedish translation by Åke Engelbrektson
 - improved: translation updates
 
-* Wed Aug 24 2016 Matthias Fehring <kontakt@buschmann23.de> 0.2.1-1
+* Wed Aug 24 2016 Matthias Fehring <> 0.2.1-1
 - fixed: subsequent entries are not deleted when deleting categories or activities
 
-* Wed Aug 24 2016 Matthias Fehring <kontakt@buschmann23.de> 0.2.0-1
+* Wed Aug 24 2016 Matthias Fehring <> 0.2.0-1
 - new: simple database backup by copying SQLite file to backup file
 - new: optional finishing sound if app is not visible to user
 - new: optional finish your recording by using the proximity sensor
@@ -33,7 +33,7 @@
 - new: use the proximity sensor to add new repetitions
 - fixed: update activities list on finishing a recording
 
-* Mon Aug 22 2016 Matthias Fehring <kontakt@buschmann23.de> 0.1.0-1
+* Mon Aug 22 2016 Matthias Fehring <> 0.1.0-1
 - First released version
 
 

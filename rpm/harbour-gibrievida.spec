@@ -6,6 +6,7 @@
 Name:       harbour-gibrievida
 
 # >> macros
+%define __provides_exclude_from ^%{_datadir}/%{name}/de/huessenbergnetz/hbnsc/.*$
 # << macros
 
 %{!?qtc_qmake:%define qtc_qmake %qmake}
@@ -60,7 +61,6 @@ rm -rf %{buildroot}
 %qmake5_install
 
 # >> install post
-rm -rf %{buildroot}%{_datadir}/%{name}/qml/btcomponents/.git
 # << install post
 
 desktop-file-install --delete-original       \

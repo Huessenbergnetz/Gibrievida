@@ -37,9 +37,6 @@ SOURCES += \
     src/licensesmodel.cpp \
     src/languagesmodel.cpp
 
-OTHER_FILES += \
-    qml/cover/CoverPage.qml
-
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 150x150 172x172
 
 DISTFILES += \
@@ -65,7 +62,8 @@ DISTFILES += \
     qml/pages/ChangelogModel.qml \
     qml/pages/AttachedFilters.qml \
     qml/pages/Help.qml \
-    qml/pages/Backups.qml
+    qml/pages/Backups.qml \
+    qml/cover/CoverPage.qml
 
 include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)
 
