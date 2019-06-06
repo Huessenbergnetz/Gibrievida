@@ -169,6 +169,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("records"), &recsController);
     view->rootContext()->setContextProperty(QStringLiteral("helpers"), helpers);
     view->rootContext()->setContextProperty(QStringLiteral("config"), &config);
+    view->rootContext()->setContextProperty(QStringLiteral("coverIcon"), Hbnsc::getLauncherIcon({86,108,128,150,172}));
 
 #ifndef CLAZY
     view->setSource(SailfishApp::pathToMainQml());
