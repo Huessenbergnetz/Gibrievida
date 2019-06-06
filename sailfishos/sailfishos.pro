@@ -20,6 +20,10 @@ QT += sql multimedia sensors positioning
 
 DEFINES += GIBRIEVIDA_VERSION=\"\\\"$${VERSION}\\\"\"
 
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 contributors.path = /usr/share/harbour-gibrievida/icons/contributors
 contributors.files = images/contributors/*.png
 INSTALLS += contributors
