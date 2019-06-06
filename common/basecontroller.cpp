@@ -20,6 +20,8 @@
 #include "basecontroller.h"
 #include <QStandardPaths>
 #include <QSqlQuery>
+#include <QStringBuilder>
+#include <QCoreApplication>
 #include "globals.h"
 
 using namespace Gibrievida;
@@ -55,14 +57,13 @@ bool BaseController::connectDb()
 
     if (!m_db.isValid()) {
 
-        QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+        const QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
 
         if (dirs.isEmpty()) {
             return false;
         }
 
-        QString dbPath = dirs.first();
-        dbPath.append(QLatin1String("/")).append(QLatin1String(APP_NAME)).append(QStringLiteral("/database.sqlite"));
+        const QString dbPath = dirs.first() % QLatin1Char('/') % QCoreApplication::instance()->applicationName() % QStringLiteral("/database.sqlite");
 
         m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
         m_db.setDatabaseName(dbPath);

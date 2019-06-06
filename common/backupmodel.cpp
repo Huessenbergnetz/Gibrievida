@@ -30,6 +30,8 @@
 #include <QStringList>
 #include <QFileInfoList>
 #include <QFileInfo>
+#include <QCoreApplication>
+#include <QStringBuilder>
 
 using namespace Gibrievida;
 
@@ -46,12 +48,10 @@ BackupModel::BackupModel(QObject *parent) : QAbstractListModel(parent)
 
     m_inOperation = false;
 
-    QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    const QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
 
     if (!dirs.isEmpty()) {
-        QString dbpath = dirs.first();
-        dbpath.append(QLatin1String("/")).append(QLatin1String(APP_NAME));
-
+        const QString dbpath = dirs.first() % QLatin1Char('/') % QCoreApplication::instance()->applicationName();
         m_dbdir.setPath(dbpath);
     }
 

@@ -27,8 +27,12 @@
 #include <QSqlError>
 #include <QStringList>
 #include <QDir>
+#include <QCoreApplication>
+#include <QStringBuilder>
 
 #include "globals.h"
+
+#define DB_SCHEMA_VERSION 2
 
 using namespace Gibrievida;
 
@@ -56,14 +60,13 @@ DBManager::~DBManager()
  */
 void DBManager::run()
 {
-    QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    const QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
 
     if (dirs.isEmpty()) {
         return;
     }
 
-    QString dbpath = dirs.first();
-    dbpath.append(QLatin1String("/")).append(QLatin1String(APP_NAME));
+    QString dbpath = dirs.first() % QLatin1Char('/') % QCoreApplication::instance()->applicationName();
 
     QDir dbdir(dbpath);
     if (!dbdir.exists()) {

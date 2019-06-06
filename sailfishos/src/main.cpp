@@ -103,9 +103,9 @@ int main(int argc, char *argv[])
     auto app = std::make_unique<QGuiApplication>(argc, argv);
 #endif
 
-    app->setApplicationName(QStringLiteral(APP_NAME));
+    app->setApplicationName(QStringLiteral("harbour-gibrievida"));
     app->setApplicationDisplayName(QStringLiteral("Gibrievida"));
-    app->setApplicationVersion(QStringLiteral(VERSION_STRING));
+    app->setApplicationVersion(QStringLiteral(GIBRIEVIDA_VERSION));
 
 #ifdef QT_DEBUG
     QFile::remove(QDir::homePath().append(QStringLiteral("/gibrievida.log")));

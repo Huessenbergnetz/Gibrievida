@@ -18,6 +18,8 @@ CONFIG += c++14
 
 QT += sql multimedia sensors positioning
 
+DEFINES += GIBRIEVIDA_VERSION=\"\\\"$${VERSION}\\\"\"
+
 contributors.path = /usr/share/harbour-gibrievida/icons/contributors
 contributors.files = images/contributors/*.png
 INSTALLS += contributors
