@@ -73,6 +73,10 @@ void gibrievidaMessageHandler(QtMsgType type, const QMessageLogContext &context,
         fprintf(stderr, "%s: %s: Debug: %s\n", time.constData(), className.constData(), localMsg.constData());
         txt = QStringLiteral("%1: %2: Debug: %3").arg(time, className, msg);
         break;
+    case QtInfoMsg:
+        fprintf(stderr, "%s: %s: Info: %s\n", time.constData(), className.constData(), localMsg.constData());
+        txt = QStringLiteral("%1: %2: Info: %3").arg(time, className, msg);
+        break;
     case QtWarningMsg:
         fprintf(stderr, "%s: %s: Warning: %s\n", time.constData(), className.constData(), localMsg.constData());
         txt = QStringLiteral("%1: %2: Warning: %3").arg(time, className, msg);
