@@ -8,6 +8,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Thu Jun  6 2019 Matthias Fehring <> 0.3.3-1
+- new: Dutch (Belgium) translation by Nathan Follens
+- improved: translation updates
+
 * Thu Sep 22 2016 Matthias Fehring <> 0.3.2-1
 - new: French translation by Jean Clovis
 - improved: translation updates

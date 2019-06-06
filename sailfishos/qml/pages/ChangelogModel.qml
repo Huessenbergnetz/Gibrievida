@@ -29,8 +29,17 @@ import QtQuick 2.2
 
 ListModel {
     ListElement {
+        version: "0.3.3"
+        date: 1559813906000
+        entries: [
+            ListElement { type: 0; issue: ""; description: "Dutch (Belgium) translation by Nathan Follens" },
+            ListElement { type: 1; issue: ""; description: "translation updates" }
+        ]
+    }
+
+    ListElement {
         version: "0.3.2"
-        date: 1474540896800
+        date: 1474540896000
         entries: [
             ListElement { type: 0; issue: ""; description: "French translation by Jean Clovis" },
             ListElement { type: 1; issue: ""; description: "translation updates" }
