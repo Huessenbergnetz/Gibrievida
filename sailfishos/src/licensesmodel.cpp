@@ -83,8 +83,6 @@ LicensesModel::LicensesModel(QObject *parent) : Hbnsc::LicenseModel(parent)
         QUrl(),
         QUrl());
 
-    addSQLite();
-
     sortLicenses();
 }
 
