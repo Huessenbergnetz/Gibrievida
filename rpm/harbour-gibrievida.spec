@@ -32,6 +32,8 @@ BuildRequires:  pkgconfig(Qt5Sensors)
 BuildRequires:  pkgconfig(Qt5Positioning)
 BuildRequires:  pkgconfig(sailfishsilica)
 BuildRequires:  desktop-file-utils
+BuildRequires:  pkgconfig(sqlite3)
+
 
 %description
 Gibrievida helps you tracking your sportive or daily activities.
