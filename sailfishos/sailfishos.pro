@@ -76,3 +76,6 @@ include(../HBN_SFOS_Components/HBN_SFOS_Components.pri)
 HEADERS += \
     src/licensesmodel.h \
     src/languagesmodel.h
+
+OTHER_FILES += \
+    createAppIcons.sh

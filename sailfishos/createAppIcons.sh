@@ -30,8 +30,16 @@ do
             mkdir -p $SIZEDIR
         fi
 
-        FNAME=$(mktemp)
-        inkscape -z -e $FNAME -w $SIZE  -h $SIZE $SVGFILE &> /dev/null
+        echo "building $SIZE"
+        FNAME=$(mktemp).png
+        inkscape -z -o $FNAME -w $SIZE  -h $SIZE $SVGFILE &> /dev/null
+
+        if [ ! -r $FNAME ]
+        then
+            echo "Error creating icon!"
+            exit 1
+        fi
+
         if [ -x /usr/bin/zopflipng ]
         then
             zopflipng -y --iterations=500 --filters=01234mepb --lossy_transparent $FNAME $FULLPATH
